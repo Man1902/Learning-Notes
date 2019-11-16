@@ -1,0 +1,730 @@
+- JVM : Specification(Abstract machine).Task : loads,verifies and executes code.Responsible for converting Byte code to the machine specific code.Provides core 
+  java functions like memory management, garbage collection, security etc.It is customizable and we can use java options to customize it.It is called 
+  virtual because it provides an interface that does not depend on the underlying operating system and machine hardware.
+- JRE : Implementation of JVM.Physically exist.It Contains JVM,libraries classes and other files.It provides a platform to execute java programs.
+- JDK : JRE + development tools(Compiler,Debugger etc).It provides all the tools, executables and binaries required to compile, debug and execute a Java Program.
+-* JVM,JRE and JDK are platform dependent (Config of each OS differs) but java is platform independent.
+- Compile time : A.java -> Comipler -> A.class (byte code)
+- Run time : byte code -> Class loader -> byte code verifier -> interpreter -> Runtime -> hardware.
+-* Class Loder is responsible for loading class files into memory from file system,network or any other source. Built-in ClassLoader  : 
+  1) Bootstrap : It is responsile for loading standard JDK class files from rt.jar.It is parent of all class loaders.
+  2) Extension  : It delegates class loading request to its parent (Bootstrap) and if it is unsuccessful, loads class form jre/lib/ext directory or any other 
+     directory pointed by java.ext.dirs system property. 
+  3) System / Application : It is responsile for loading application specific classes from CLASSPATH environment variable.Child of Extension classloader.
+- Bootstrap classloader is implemented in C while all other classloders are implemented using java.lang.ClassLoader.
+-* ClassLoader works in three principles : 
+  1) delegation : Application -> Extension -> Bootstrap (if class is not found from parent than only child classloader will load class by itself)
+  2) visibility : Child ClassLoader can see class loaded by Parent ClassLoader but reverse is not true.
+  3) uniqueness : class loaded by Parent should not be loaded by Child ClassLoader again.(Though it is possible to violate Delegation and Uniqueness principles 
+     but we should avoid it as it is not beneficial)
+- We can use Class.forName(classname) and Class.forName(classname, initialized, classloader)
+- We can create our own classloader by extending ClassLoader class and overriding loadClass(String name) method.
+-* "ClassNotFoundException" is thrown when JVM  tries to load a particular class and the specified class cannot be found in the classpath.It is a checked 
+   exception and thus, must be declared using throws or handled using try catch block.
+-* While "NoClassDefFoundError"(Error derived from LinkageError) occurs when requested class was present at compile time but not available at runtime
+  (Sometimes due to an exception during class initialization e.g. exception from static block causes NoClassDefFoundError)
+- Object : Entity having state(data) and behaviour (methods acting on data).Class : Collection of objects (logical entity).
+-* Java is pass by value.In method call,java copies and pass references as value,not object.Hence,object state can be modfiy but swap will fail.
+- local variables don’t take default values(before initialization can't be used).But,gloabal variables takes default values. 
+-* Stack memory : used for execution purpose.contains only local primitive values and reference to other objects(passed as an argument). 
+-* Heap memory : used for storage purpose.Used to allocate memory to objects and JRE classes.Garbage Collection runs on the heap memory.
+- Object created in heap memory has glaobal access.
+- After loading static members, SIB are executed(before main).SIBs are not stored in the heap memory.They just come to stack,execute their tasks and leaves the memory. 
+-* All static components are stored inside single "class level object" (of type java.lang.Class).(common for all objects).
+- Non-static components are stored inside the object memory where each object will have their own copy.
+-* In constructor,1st statement must be either super() or this().After executing it,it will invoke IIB and after that remaining statements are executed.
+- OOP principles : 1) Inheritance 2) Polymorphism 3) Abstraction 4) Encapsulation
+1) Inheritance : is used to to reuse already present tried and tested code.
+- Constructors,SIB and IIB of super class will not be inheriting.But they are executed while creating an object to sub class.(Order : SIB,IIB,Constructor)
+- To avoid the ambiguity multiple inheritance through class is not supported in java.(Diamond problem)
+- Access modifiers : are used to control the visibility of a field, method, class and constructor.
+-* Protected member/method is accesible to classes in same package,as well as all sub classes in other package (through inheritance).If outer class is protected,
+ it should be accesible to the current package as well as sub package.There is no concept of sub package in java.Hence,Outer Class can not be protected.
+- Sub class can not be created from class having private constructor only.(as super call as first line is not possible)
+- Sub class can be created from class having protected constructor.But sub class object can't be created outside package.
+- Type casting 1) Primitive (Auto widening and explicit narrowing) 2) Derived (Auto up-cating and explicit down-casting) 
+- Auto-Up Casting : Super class reference sub class object , Explicit down Casting : Sub-class reference Super class object.
+2) Polymorphism : Enity (Method/Constructor) having same name wih multiple behaviour.
+- Compile time Polymorphism : Static/Early binding.(Constructor and method overloading)
+- Run time Polymorphism : Dynamic/Late binding.(Method overriding).Type of object is determined at runtime only.
+-* Method overloading : Class with same method name and different signature.(Doesn't bother about return type and static/final)(int and Integer is also diffrent)
+-* Method overriding : Inherited super(parent) class method is modiefied in sub(child) class.
+-* Covariant return type : Return type of the overrided method must be compatible with super class method.(for primitive same and for derived same or its sub class).
+-* Visibility of overrided method can't be reduce and method signature can not be change.
+-* Static method of CC cannot hide instance method of PC and instance method of CC cannot override a static method of PC. (But static method can be overloded)
+-* Static method is invoked according to the type of reference.(method call is decided at comile time) while instance method is invoked according to the type of 
+  object being referred.(method call is decided at run time)
+- You can not override Base class varaibles in sub class.(Because variables are resolved at compile time. A -> i=1, B -> i=2, A a = new B(); , a.i will give 1)
+- Variable hiding : When Parent and child class both have same variable name (even if their types are diffrent),the child class variable hides the parent class
+  variable (will not override)
+- Variable shadowing : When local variable has the same name as one of the instance variable,Then local variable shadows the instance variable inside method/block.
+- Through inheritance we can reuse already existed code and through method overriding we can modify that reused code.
+3) Abstraction : is used to separate "ideas" from their implementation.(Abstract class : 0 to 100% , Interface : 100%)
+- Class having idea only will inform us "What should be done" while implementing class will tell us "How it should be done"
+-* Object can not be createcd for abstract class/interface(Reason : Abstract class/interface is not a complete class.If we are allowed to have instance of it,
+  than it will throw compilatation error for abstract method as it doesn't have implementation). But, abstract class can have constructor. (Diff)
+- Abstract method must be overrided (so can't be private or static or final). Only class and method can be abstract.
+- SIB and IIB are not allowed in interfaces.
+- super keyword refers parent class member/method while this keyword refers to current instance(object) of class. 
+-* final keyword restricts the further modification of variable,method and class.Class/Method can be either final or abstract(not both).
+-* For Final reference variable, we can change state of object being refered.
+- Marker Interface : interface having no fields and methods(empty).used to notify(give some kind of instruction) JVM. e.g Cloneable,Serializable
+4) Encapsulation : process of wrapping data(variables) and code acting on the data (methods) together into a single unit.It provides control over the data.
+- The data in a class is hidden from other classes,It will not be visible to the user that how the class is storing values in the variables.
+- It gives flexibility to make the variables of the class as read-only or write-only.It improves the re-usability.
+- Nested class 1) Static nested class 2) Non-static nested class/Inner class(Member inner class,Local inner class,Anonymous inner class).
+- Static nested class : can have "static" and "non-static" members. but can access only "static members" of "outer class".
+- Static method can't be abstract but static nested class can be abstract or final.
+- Instantiation : OuterClass.StaticInnerClass obj = new OuterClass.StaticInnerClass();
+- Non-Static nested classe : can have only "non-static" members but can access both "static" and "non-static" members of "outer class".
+- Member inner class (outside method) and Local inner class(inside method or block) can have static field only if that field is final.
+- Instantiation : OuterClass.MemberInnerClass obj =  outerClassObj.new MemberInnerClass();
+- Local Inner Class can’t be static.Because, local inner class is nothing but local variable and local variable can’t be static.
+- Only final local variables of methods or blocks cab be used inside local inner class.But after JDK 1.8, it is possible to access it.
+- Local inner class can not be private, protected and public(same as local variable).But,it can have private, public, protected and default members in them.
+- Nested interface(static implicitely) must be public if it is declared inside the interface but it can have any access modifier if declared within the class.
+- Enums : used for "grouping similar kind of constants" as a one unit. (Introduced in JDK 1.5 onward)
+- Enums can have any number of fields,methods and constructors and Each constant will have their own copy.You can delcare main() method inside Enum also.
+  Enum can have concreate/abstract/static methods.
+- Every enum extends Enum class.So,it could not extend any other class.But can implement any number of interfaces.
+- Enums can be declare otside class or inside class (static implicitly) but not inside method.
+- Enum is type-safe. You can not assign any other value to Enum variable other than Predefined Enum constants.
+- First line of Enum must be constant decalration only.Every Enum constant represents an object of type Enum.
+- Every Enum constant is always public static final (can be treated as static inner classes).Since it is static,You can access it through Enum name.Since it is
+  final,You can not create child Enum.
+- values() method is used to get all value present inside Enum.ordinal() method is used to find index of each Enum constant.
+- Enum can have private/default constructor and it will be exected seprately for each Enum constant at the time of Enum class loading.
+- Enum constant can be declared with parameterized values (for that yo have define parameterized constructor).
+- Wrapper class provides the mechanism to convert primitive into object (Boxing) and object into primitive (Unboxing).Since Java 1.5 , It is happening automatically
+- parse() : object to primitive , valueOf() : primitive to object.
+- When primitive data type passed as method argument,1) compiler first checks method having same data type. 2) It tries to perform 'auto-boxing" of "same type" 
+  only 3)It tries to perform "auto-widening" conversion 4) It checks for the method which takes "super class type" (up casting) 5) gives compile time error.
+- try block is used to enclose the code that might throw an exception and catch block is used to handle the exceptions thrown by try block.
+- finally block will be always execute Whether exception is thrown or not and thrown exception is caught or not.
+- From Java 1.7 onward, Multiple exceptions thrown by the try block can be handled by a single catch block  using pipe (|) operator.
+- Order of catch blocks should be from "most specific" to "most general".(Sub classe Exception first and super class later).
+- If finally block does not return a value then both try and catch blocks must return a value.
+- finally block will be always executed even though try and catch blocks are returning the control.
+- Checked exception : checked at "compile time".Thus, have to handle it using throws or try/catch block to avoid compilation error.
+  (All Sub class of Exception class except RuntimeException class)(e.g SQLException,IOException,InterruptedException)
+- UnChecked exception : checked at run time.(All sub class of RuntimeException and Error class)(e.g ArithmeticException, NumberFormatException, 
+  NullPointerException, ArrayIndexOutOfBoundsException,ClassCastException)
+- Exception Hierarchy : Exception and Error class -> Throwable class -> Object class.
+- An object of Throwable or to it's sub classes can be "explicitly" created and thrown using "throw" keyword.
+- If a method is capable of throwing an exception(propogating an exception) that it could not handle, then it should specify that exception using "throws keyword". 
+- Unchecked exceptions propogate in calling chain automatically while Checked exceptions can't propogate automatically.
+- 	  Super Class						Sub Class
+  1) No Exception				No Exception / Uncheked Exception
+  2) Uncheked Exception         Same / subclass of Uncheked Exception / No Exception
+  3) Checked Exception          Same / subclass of Checked Exception / No Exception
+- We can create our custom exception by exxtenig Exception or it's sub classes.
+- Array is a collection of similar type of elements that have contiguous memory location.Data type of Array can be primitive,object or user defiend.
+- Array copy ways : 1) Direct asign source array reference to dest array ref. 2) Using for loop 3) Using Array.copyOf() 4) Using Objerct class clone() method
+  5) Using System.arraycopy() method.
+- Array can hold the references to any type of objects. Array can contain only references to the objects, not the objects itself.(default is null)
+- Declaration and instantiating of an array strictly must be of same type. No auto-widening, auto-boxing and auto-unboxing is allowed. But only auto-upcasting 
+  is allowed. (An array containing super class reference variables can point to sub class objects.)
+- When an array is passed to a method, reference of an array object is passed not the copy of the object.
+- Size of an array can not be changed once you define it.(drawback)
+- for-each loop in java is the enhanced version of for loop (Java 1.5 Onwards)
+- Thread is a smallest executable unit of a process.Thread shares a common memory of process. Threads of  the same process share the memory address of that 
+  process so, communication between threads (Inter Thread Communication) is fast. Context switching from one thread to another thread is also less expensive.
+- Every thread maintains its own separate stack. It is called Runtime Stack but they share the same memory.
+- Two ways to create threads : 1) By extending Thread class (by overriding run() method) 2) By implementing Runnable interface (by implementing run() method)
+- When multiple threads need to execute same task, then use Runnable interface. If multiple threads need to execute different tasks, then go for Thread class.
+- If you will start already started thread again , It will throw IllegalThreadStateException.
+- If we call run() directly before start(), than object will be treated as normal object not thread object.
+- User threads are created by application/user (High priority) while Daemon threads are created by the JVM (Low priority).JVM will not wait for Daemon thread.
+- You can convert user thread into daemon thread by calling "setDaemon()" method before "start()" method (else IllegalThreadStateException at run time)
+- "currentThread()" static method of Thread class returns the reference of currently executing thread.
+- From Java 1.5 onward, "getId()" method is added into Thread class which returns the unique long number associated with a thread.(To identifier each thread uniqely). 
+- Thread Id remains the same for a thread during its whole life term. It may be reused when the thread is terminated.It doesn't change when the name of a thread is changed. 
+- We can't assign our own Id to the thread. But, we can change the way getId() returns the thread Id as it is not a final method.
+- setPriority() and getPriority() methods are used to get and set the priority of a thread. (MIN_PRIORITY - 1 , NORM_PRIORITY - 5 ,MAX_PRIORITY - 10)
+- Setting Priority of a thread is just an advice to OS not an instruction. It is up to OS to consider this advice.
+- Thread.sleep() method makes the "currently executing thread" (even though you are calling sleep() method on another thread object) to pause its execution for a specified period of time.
+- It is a bad practice to call sleep() method with an instance of Thread class.If you want a particular thread to sleep for a while, then call sleep() method 
+  inside the run() method of that thread.
+- When the thread is going for sleep, it does not release the "synchronized locks" it holds.
+- join() method is used to make currently executing thread to wait for a thread to finish its task "on which it is called".
+- Thread.sleep() / join() method throws InterruptedException (checked type) if a thread is interrupted by other threads. 
+- "Thread interference" is a condition which occurs when more than one threads, executing simultaneously, access same piece of data.(not thread safe code)
+- Synchronization : process to overcome thread interference to any shared resource and protecting the data from inconsistency.(way to make code thread safe)
+- Through synchronization, we can make the threads to execute particular method or block in "sync" not "simultaneously".
+- Synchronization is implemented using synchronized keyword.(can be used with methods or blocks only).
+- Synchronization is built around an entity called "object lock" or "monitor".
+- Whenever an object is created, an "object lock" or "monitor" is created and is stored inside the object.One object will have only one object lock associated with it.
+- To enter into static synchronized methods/blocks, threads have to acquire "class lock" associated with that class.
+- If any thread wants to enter into synchronized methods/blocks of any shared object,they must acquire object lock associated with that shared object and 
+  release the lock after they are done with the execution.
+- Synchronized Blocks are used to synchronized some part of method/block.It takes one argument(mutex).for non-static methods,IIB and constructors,mutex must be 
+  shared object.While for static methods and SIB, mutex must be like ClassName.class.
+- static synchronized and non-static synchronized methods can run simultaneously.
+- Synchronization can be nested.It is Re-entrant in nature (in nested calling,Thread can acquire a lock that it already owns)
+- Deadlock is a condition which occurs when two or more threads get blocked waiting for each other to release the resources(Locks) they hold.
+- Try to avoid nested synchronized blocks to overcome possible deadlock issue.
+- Threads can communicate with each other using wait(), notify() and notifyAll() final methods of Object class.
+- These three methods must be called within synchronized method or block. Any thread which calls these methods must have lock of that object.
+- wait() method tells the currently executing thread to "release the lock" of shared object and wait until some other thread acquires the same lock and notify it 
+  using either notify() or notifyAll() methods. This method throws InterruptedException if waiting thread is interrupted.
+- DIFF: In sleep() method call, thread doesn't release object lock while on wait() method call , thread release the object lock.
+- wait(), notify() and notifyAll() all three methods throw IllegalMonitorStateException if the calling thread does not owns the object lock.
+- Thread "interruption" is a mechanism in which a thread which is either sleeping or waiting can be made to stop sleeping or waiting.
+- Thread State : NEW, RUNNABLE, BLOCKED, WAITING, TIMED_WAITING and TERMINATED (new -> runnable -> running -> non-runnable -> terminated)
+- Before notification thread will be in WAITING state.Once it is notified,it moves to BLOCKED state.It remains in BLOCKED state until it gets the lock.Once it
+  gets the lock,it moves from BLOCKED state to RUNNING state. 
+- ThreadGroup is used to group similar kind of threads into one unit.ThreadGroup can also contain other ThreadGroups.
+- Exception is thread wise not execution wise.exception effects only in the thread in which it occurs.Other threads will execute normally.
+- Ways to stop a thread 1) using boolean variable 2) using interrupt() method
+- volatile variable is used to Read/Write variable value directly from main memory only.(Instead of caching it).It also guarantees visibility and ordering.
+  (provides "happens-beofore" guaranty)
+- Atomic operations are take place in one step.Reading/Writing 64 bit long or double is not atomic(as it occurs in two steps).Hence, it is not thread safe.
+  To ensure atomic/thread safety, it is essential to use volatile (or synchronized block) 
+- The shutdown hook can be used to perform cleanup resource or save the state when JVM shuts down normally or abruptly.
+- Garbage Collection is process to destroy the unused objects("unreferenced").
+- Garbage Collection of JVM collects only those objects that are created by new keyword. So if you have created any object without new, you can use finalize 
+  method to perform cleanup processing.
+- Garbage collection is performed by a daemon thread called Garbage Collector(GC). This thread calls the finalize() method before object is garbage collected.
+- Exceptions occured in finalize() method are not propogated.They are ignore by the garbage collector.
+- Neither finalization nor garbage collection is guaranteed.
+- Java Runtime class is used to interact with java runtime environment.It provides methods to execute a process, invoke GC, get total and free memory etc.There is
+  only one instance of Runtime class is available for one java application.
+
+- Why String class is immutable / final (Once created can't modify it) in java ?
+  * String Pool Requirement : If string is not immutable, changing the string with one reference will lead to the wrong value for the other references.
+  * Hashcode can be cached : Being immutable guarantees that hashcode will always the same.This makes it a great candidate for the key in a Map.
+  * Security : String is widely used as parameter for many java classes.e.g database username, password,url
+  * Can be used in multithreading : Strings are implicitly thread-safe due to immutability.
+  * Strings are used in java classloader and immutability provides security that correct class is getting loaded by Classloader
+- StringBuffer and StringBuilder objects are "mutable". Only String and StringBuffer objects are thread safe (synchronized).
+- Whenever you create a string object using "string literal", that object is stored in the "string constant pool"(cache of string object in Perm gen space.which
+  is now moved to heap memory from 1.7 onwards) and whenever you create a string object using "new keyword", such object is stored in the "heap memory".
+- "==" operator checks the equality based on their "physical existence in the memory"(physical address) while equals() method checks the equality based on their
+  content.("==" operator compares references not values while "equals()" method compares values of string for equality)
+- Object of StingBuffer and StingBuilder are stored in "heap memory" only.
+- Interning is the process of creating a string object in String Constant Pool which will be exact copy of string object in heap memory. 
+
+- How to Create Custom Immutable Class ? 
+  1) final class 2) private final data members 3) getters only 4) parametrized constructor to initialize data members 
+  5)* In the getter method,Perform cloning for object reference data member to return a copy rather than actual object reference.(e.g for Date,other class object) 
+- Generics (introduced in Java 1.5) are used to check the "type compatibility" at the "compile time" and hence removing the chances of occuring
+  "ClassCastException" at "run time".
+- Generics works with "derived type" only (primitive type not allowed).
+- Only "generic classes" can implement "generic interfaces". Normal class can implement generic interface only if type of parameter of generic interface is
+  "wrapper class".
+- Generic class can extend a non-generic class also.
+- Like class or interface, Method and constructor can be generic. Method syntax : <type-Parameters> return_type method_name(parameter list) {}
+- Generic methods can be static or non-static.Generic class as well as non-generic class can have generic methods.
+- Using bounded types, you can make the objects of generic class to have data of "specific derived types". e.g <T extends SuperClass>
+- The types which are used to declare wildcard arguments (?) must be generic types.
+  1) Unknown Type : GenericType<?>		2) Upper Bound  : GenericType<? extends SuperClass>		3) Lower Bound  : GenericType<? super SubClass> 
+- Non-generic class can extend generic class by removing the type parameters. i.e as a raw type. But, it gives a warning.
+- Generic methods of super class can be overrided in the sub class like normal methods.
+- When you compile your java code, compiler removes all generic information mentioned in your code. Compiler replaces all type parameters with their bounded type.
+  The type parameters which don't have bounds will be replaced with "Object" class.
+- You can't create an instance to the type parameters. This is because, the type parameters does not exist at run time.
+- You can't create an array of generic type.(e.g  T[] t = new T[5]).Because,Array carries type information at runtime while for generic type, compiler removes
+  type information at compilation) 
+- You can not create generic exceptions i.e A generic class can not extend Throwable or any of it's sub classes.
+- Diff : arrays are covariant.you can assign subclass type array to its superclass array reference e.g Object a[] = new Integer[10]; // will work
+  While generics are invariant.you cannot assign subclass type generic to its super class generic reference because in generics any two distinct types are 
+  neither a subtype nor a supertype. e.g 1) List<Object> list = new ArrayList<Integer>(); // won't compile
+  2) List<? extends Object> list = new ArrayList<Integer>(); // will work with bounded type
+
+- Collection(I) : root interface in the collection hierarchy.represents a group of objects, known as its elements.JDK does not provide any direct implementations
+  of this interface.
+- equals() and hashCode() method's general contract : c1.equals(c2) implies that c1.hashCode() == c2.hashCode()
+- List(I) represents an ordered or sequential collection of objects.You have the control over where to insert an element and from where to remove an element in
+  the list.(Due to index based IMPL). ArrayList,Vector and LinkedList implements List.
+- ListIterator allows you to traverse the list in both the direction, modify (insert, replace, remove) the list during iteration.
+- Queue(I) is a "data structure" where elements are added from one end (tail) and elements are removed from another end (head).(FIFO except priority queue)
+- Queue properties : 1) can't have null elements 2) can have duplicate elements 3) can't have random access.
+- We can't  get,set or add elements at an arbitrary position in the queues. 
+- Deque(I) (Double Ended Queue) supports insertion and removal of elements from both the ends.(Introduced in Java 1.6)
+- Deque can be used as a both: Queue (FIFO) as well as Stack (LIFO).
+- Deque properties : 1) can have null elements 2) can have duplicate elements 3) can't have random access.
+- Deque as Queue : 1) add() -> addLast(), offer() -> offerLast() 2) remove() -> removeFirst(), poll() -> pollFirst() 3) element() ->  getFirst(),peek() -> peekFirst()  
+- Deque as stack : 1) push() -> addFirst() 2) pop() -> removeFirst() 3) peek() -> peekFirst()
+- Set(I) is a linear collection of objects with no duplicates.Can have only one null element. Random access not allowed.
+- Order of elements in a set is implementation dependent. HashSet elements are ordered on "hash code" of elements. TreeSet elements are ordered according to 
+  supplied Comparator (If not supplied, elements will be placed in ascending order) and LinkedHashSet maintains insertion order. 
+- SortedSet(I) is a Set in which elements are placed according to supplied comparator(default accesnding order if not provided).It can not have null elements as
+  inserted element must be of comparable type)
+- NavigableSet(I) is a SortedSet with navigation facilities.It provides many methods through which you can easily find closest matching of any given element.
+- ArrayList(C) can be defined as "re-sizable" array. 
+- ArrayList properties : 1) can have null elements 2) can have duplicate elements 3) can have random access 4) Maitains insertion order 5) not synchronized.
+- ArrayList internally uses an array to store its elements(Object[] elementData). It provides methods to manipulate the size of this array.
+- Whenever the "size" of the ArrayList exceeds it's "capacity"(internal array size : Default is 10),the capacity is increased by "half" of the "current capacity".
+- Vector(C) : * Legacy class * synchronized(thread safe) * Default initial capacity:10 * capacity will be doubled automatically when size exceed * can traverse
+  using Enumeration
+- ArrayList and Vector implements List,RandomAccess,Cloneable and Serializable interfaces and extends AbstractList class.
+- LinkedList(C) in java is implementation of "doubly Linked List".can be used both as a List and Queue.
+					ArrayList									 						LinkedList
+  * Insertion/Removal is slower of O(n) dueto element shifting		* Insertion/Removal is faster of O(1) due to no element shifting 
+  * Retrival is faster of O(1) due to index based data structure    * Retrival is slower of O(n) due to searching from head/tail till element
+  * Requires less memory as it holds actual data only 				* Requires more memory as each node contains data as well as refrence to prev and next node
+- PriorityQueue(C) is special type of Queue(not FIFO).Elements are placed according to supplied Comparator.Default initial capacity : 11
+- PriorityQueue properties : 1) can't have null elements 2) can have duplicate elements 3) not synchronized 4) unbounded
+- ArrayDeque(C) is resizable array.Implementation of Deque(I).Default initial capacity : 16.It will increase at a power of 2 when size exceeds.
+- ArrayDeque is faster than Stack when used as Stack and faster than LinkedList when used as Queue.
+- ArrayDeque gives performance of O(1) for Insertion/Removal/Retrival operations.
+- Map(I) is a collection of key-value pairs. can't have duplicate key but can have duplicate values.
+- Each key-value pairs are stored as Map.Entry<K,V> objects. Entry is and inner interface of Map interface.
+- HashMap doesn't maintain any order of elements.LinkedHashMap maintains insertion order while TreeMap places elements according to the supplied Comparator.
+- Default initial capacity of HashMap is : 16 (number of bucket/slot).It is doubled each time when reaches the threshold.
+- Load factor is a measure which decides when to increase the capacity of Map.Default load factor is 0.75f (n/m  where n : keys , m : slots)
+- In HashMap each key-value pair is stored as an object of static inner Entry<K,V> class.which contains key(final),value,next node and hash fields.
+- These Entry objects are stored in an internal array called table[](Entry<K,V>[] table).It's initial size is 16.
+- HashSet internally uses HashMap.Elements are stored as a key of HashMap and values are constant called PRESENT.
+- LinkedHashSet is an ordered version of HashSet which internally maintains one "doubly liked list" (responsible for maintaining the insertion order of elements)
+- LinkedHashSet uses LinkedHashMap to store its elements.Each key-value pairs are instance of it's static inner class "Entry<K,V>".(Which extends HashMap.Entry 
+  class).This class contains two additional fields "before" and "after" which makes LinkedHashSet to function as doubly liked list.
+- TreeSet doesn't allow null element.It gives performance of order O(log(n)) for insertion,removal and retrival operations.
+- HashSet and LinkedHashSet uses equals() and hashcode() methods for element comparison while TreeSet uses compare() or compareTo() method.
+- HashMap,LinkedHashMap and TreeMap are not synchronized.
+- Use Collections.synchronizedCollection(c) or Collections.synchronizedList/Set/Map(obj) to make ArrayList/HashSet/HashMap synchronized.
+- HashTable extends Dictoonary class(legacy class) and implements Map,cloneable and Serializable interface.It is internally synchronized. 
+- HashTable does not allow even a single null key and null value.It returns  Iterator as well as Enmeration.
+- Iterator return by HashMap is fail-fast.(It will throw ConcurrentModificationException if modified during iteration other than iterator's remove method) 
+- Fail-safe iterator does not any exception if collection is modified during iteration.Because, it operates on the clone of collection,not on the actual collection.
+- All collection types maintain an internal array of objects (Object[]) to stores the elements.Fail-fast iterators directly fetch the elements from this array.
+  They always consider that this inernal array mst not be changed during iteration. 
+- Enmeration(I) : legacy, fail-safe, can be used with legacy classes only (Vector, HashTable and Stack)
+- Comparable(I) provides single sorting sequence while Comparator provides multiple sorting sequence.Comparable affects the original class while Comparator doesn't.
+- Thread safe and fail-safe iterator implementation concurrent classes : CopyOnWriteArrayList, ConcurrentHashMap, CopyOnWriteArraySet.
+- HashTable uses synchronized methods to achieve thread safety (quite slow due to contention).Perfomance wise Synchronized Map is also not very diffrent than 
+  Hashtable.On the other hand, ConcurrentHashMap allows 16 threads to allow Read and write from Map without any external synchronization.It is also very scalable
+  because of stripped locking technique.It never locks whole Map, instead it divides the Map into segments and locking is done on those.
+- BlocingQueue support operations that will check that Queue is not empty while retrieving and removing and will wailt till space is available while adding.
+  IMPL : ArrayBlockingQueue, LinkedBlockingQueue, PriorityBlockingQueue etc. Usage : to implement producer consumer problem
+- Collections.unmodifiableCollection(Collection c) (unmodifiableList/unmodifiableSet/unmodifiableMap) is used to create read-only collection before passing it 
+  as method argument,this will make sure that any operation to change the collection will throw UnsupportedOperationException.
+- WeakHashMap is almost same as HashMap except in case of WeakHashMap, if object is specified as key which doesn’t contain any references,it is eligible for
+  garbage collection even though it is associated with WeakHashMap.Here,Garbage Collector dominates over WeakHashMap.But this is not applicable in HashMap.
+  Means for HashMap, HashMap dominates over Garbage Collector.
+- IdentityHashMap is used when the user requires the objects to be compared via reference.It uses equality operator “==” instead of the equals method for 
+  comparing keys and values.It doesn’t require keys to be immutable.
+- EnumMap is specialized implementation of Map which contains key of Enum type.
+- In HasMap searching in linkedlist is O(n) in worst case  when all entries are saved in same bucket.To overcome this isssue, from Java 8, linked list is 
+  replaced (after certain limit) by tree to search in O(logN).
+- For financial calculations,One should use "BigDecimal" (as floating point calculation may not be exact).Here, if you use BigDecimal constuctor which accept
+  double as argument,you will get the incorrect result.So alway use BigDecimal with string constuctor.  	 
+- transient keyword is used in serealization.transient data member can not be serealized.For transient varaibles, JVM takes defualt value at the time of 
+  serealization. e.g we don't want to save private data in 	file.
+- static fields are not part of object.so,no use of transient with it.final variables are directly serealized by their value.so no use of transient with 
+  final varaible also.
+----- Java8 -----
+  
+----- JDBC -----
+- Third higest and Third lowest salary
+  SELECT MIN(SALARY) FROM (SELECT DISTINCT SALRY FROM EMPLOYEE ORDER BY SALARY DESC FETCH FIRST 3 ROWS ONLY) ; -- MAX : DB2
+  SELECT MAX(SALARY) FROM (SELECT DISTINCT SALRY FROM EMPLOYEE ORDER BY SALARY) WHERE ROWNUM <= 3 ; -- MAX : ORACLE
+- SQL qery to display current date : 
+  SELECT SYSDATE FROM DUAL ;  OR  SELECT TO_CHAR(SYSDATE,'DD-MM-YYYY HH:MM:SS AM') FROM DUAL ; 
+- SQL query to check whether date passed to query is of given format or not :   
+  SELECT * FROM EMPLOYEE WHERE TRUNC(BIRTH_DATE) = TO_DATE('17-05-2019', 'DD-MM-YYYY') ;
+- How to find duplcate rows in database :  
+  SELECT EMP_ID,EMP_NAME,COUNT(*) FROM EMPLOYEE GROUP BY EMP_ID,EMP_NAME HAVING COUNT(*) > 1 ;
+- How to remove duplcate rows in database :   
+  DELETE FROM EMPLOYEE WHERE ROWID NOT IN (SELECT MIN(ROWID) FROM EMPLOYEE GROUP_BY EMP_ID,EMP_NAME) ; -- ORACLE
+  DELETE FROM (SELECT ROWNUMBER() OVER(PARTITION BY EMP_ID,EMP_NAME) AS PART_WISE_ROW_ID FROM EMPLOYEE) WHERE PART_WISE_ROW_ID > 1 ; -- DB2
+--------------- Servelt ---------------
+- "Servlet" is a "web component" that is deployed on the "server" to create dynamic web page for creating web application.
+- "init", "service" and "destroy" are the life cycle methods of servlet.
+- Life Cylce (Managed by web container) : Servlet class loaded -> Instance created -> init method invoked -> service method invoked -> destroy method invoked-
+- Three states of a servlet: "new", "ready" and "end".
+- Servlet can be created by implementing Servlet interface or by extending GenericServlet or HttpServlet class.
+- Request flow (handled by web container) : 
+  Maps the request with the servlet -> Creates request and response objects -> Calls the service method -> public service method internally calls the protected 
+  service method ->  protected service method calls the doGet/doPost method depending on the type of request -> doGet/doPost method generates the response and 
+  it is passed to the client -> web container deletes the request and response objects
+- The load-on-startup element of web-app (web.xml) loads the servlet at the time of deployment or server start up.
+- ServletRequest is used to provide the client request information to a servlet such as "content type","content length","parameter names and values", "header 
+  informations", "attributes" etc. 
+- "RequestDispatcher" interface provides the facility of dispatching the request to another resource or include the content of another resource.(html/jsp/servlet)
+  include :  Includes the content of a resource   forward : Forwards a request from a servlet to another resource on the server.
+- sendRedirect() method of "HttpServletResponse" interface can be used to redirect response to another resource.It works at client side because it uses the url 
+  bar of the browser to make another request. So, it can work inside and outside the server. It always sends a new request. 
+- Web container creates ServletConfig objcet for "each servlet".It can be used to get configuration information from web.xml file.(init-param)
+- Web container creates One ServletContext object per application. It can be used to get configuration information from web.xml file which are common to all 
+  servlets (context-param). It provides interface between the container and servlet.It can be used to set, get or remove attribute from the "application scope".
+- DIFFERENCE : The servletconfig object refers to the single servlet whereas servletcontext object refers to the whole web application.
+- An attribute in servlet is an object that can be set, get or removed from 1)request scope 2)session scope 3)application scope.
+- Session management is a process of maintaining state (data) of an user.(As HTTP protocol is stateless)
+- Session tracking techniques : 1) Cookies 2) Hidden Form Field 3) URL Rewriting 4) HttpSession
+- Cookie is a small piece of information that is persisted between the multiple client requests.It has a name, a single value.It is maintained from client side.
+- We need to add cookie into response, so that it can be cached in browser and for next similar request we can get it from request and can identify user as old user.
+- Cookie Type : 1) Persistent(valid for multiple session-till log out) 2) non-Persistent (valid for single session -till browser window closer)
+- To delete Cookie use 1) setMaxAge(0) or 2) set value as blank string.
+- In case of Hidden Form Field a hidden (invisible) text field is used for maintaining the state of an user.This approach is better if we have to submit form 
+  in all the pages and we don't want to depend on the browser.
+- In URL rewriting, we append a token or identifier to the URL. e.g url?name1=value1
+- In HttpSession technique, web container creates a unique session id for each user.HttpSession object can be used : 1) bind objects/attributes(in session scope) 
+  2) view and manipulate information about a session, such as the session identifier, creation time, and last accessed time.
+- getSession(false) method of HttpServletRequest will give HttpSession object only if any session is associated with this request else it will retun null value.
+- Filter is invoked at the "preprocessing" and "postprocessing" of a request. It is mainly used to perform filtering tasks (e.g logging,validation etc)
+- Unlike Servlet, One filter doesn't have dependency on another filter.
+- Filter interface provides the life cycle methods for a filter. (init(FilterConfig config), doFilter(ServletRequest request,ServletResponse response,FilterChain chain), destroy() )
+- "FilterChain" object is responsible to invoke the next filter or resource in the chain.
+- "getInputStream()" method of "ServletRequest" interface returns the instance of "ServletInputStream" class.It provides stream to read binary data such as 
+  image etc. from the "request object".
+- "getOutputStream()" method of "ServletResponse" interface returns the instance of ServletOutputStream class.It provides a stream to write binary data into the
+  "response".
+- @WebServlet annotation is used to map the servlet with the specified name. e.g 
+   @WebServlet( name = "servletName", urlPatterns = "/urlPattern", loadOnStartup = 1,
+        initParams = { @WebInitParam(name = "paraName1", value = "value1"), @WebInitParam(name = "paraName2", value = "value2") }
+   )
+- Events are basically occurrence of something. Changing the state of an object is known as an event.
+- Servlet API provides different types of Listener interfaces that we can implement and configure in web.xml to process something when a particular event occurs. 
+- Every method in listener interface takes Event object as input. Event object works as a wrapper to provide specific object to the listeners.  
+- Some Impoertant Listener Interfaces : 
+1) ServletContextListener : for receiving notification events about ServletContext lifecycle changes.
+   Methods :  1) void contextInitialized(ServletContextEvent e) 2) void contextDestroyed(ServletContextEvent e)
+2) ServletContextAttributeListener – for receiving notification events about ServletContext attribute changes.(similar : HttpSessionAttributeListener,ServletRequestAttributeListener)
+   Methods : 1) void attributeAdded(ServletContextAttributeEvent e) 2) void attributeRemoved(ServletContextAttributeEvent e) 3) attributeReplaced(ServletContextAttributeEvent e)
+3) HttpSessionListener – for receiving notification events about HttpSession lifecycle changes.
+   Methods : 1)  void sessionCreated ( HttpSessionEvent e) 2) void sessionDestroyed ( HttpSessionEvent e)
+4) HttpSessionBindingListener – Causes an object to be notified when it is bound to or unbound from a session.
+   Methods : 1) valueBound(HttpSessionBindingEvent e) 2) valueUnbound(HttpSessionBindingEvent e)
+5) ServletRequestListener – for receiving notification events about requests coming into and going out of scope of a web application.
+   Methods : 1) void requestInitialized ( ServletRequestEvent e) 2) void requestDestroyed ( ServletRequestEvent e)
+- We can use @WebListener annotation to declare a class as Listener or we can define listener in web.xml file
+--------------- JSP ---------------
+- JSP can be thought of as an extension to servlet.Apart from all servlet feature,We can use implicit objects, predefined tags, EL and Custom tags in JSP.
+- we can easily separate our business logic with presentation logic.
+- If JSP page is modified, we don't need to recompile and redeploy the project. 
+- Reason : Because by default tomcat is started in development mode.Due to this JSP-derived servlets recompiled when a change is detected.When Tomcat is asked to 
+  execute a JSP,it compares the modification date of the JSP file with the modification time of the compiled class corresponding to this JSP, and if more recent, 
+  it recompiles on the fly before executing it.you can turn off the development option for production.
+  Tomcat is capable of adding/modifying classpath to Web Application classloader at runtime.When a JSP is modified, a new classloader is created for the 
+  JSP with Application classloader as parent classloader . And the new classloader will load the modified class again.
+- JSP Page phases : Translation -> Compilation -> Classloading -> Instantiation -> Initialization -> Request processing -> Destroy
+- jspInit(), _jspService() and jspDestroy() are the life cycle methods of JSP.Here we cannot override _jspService() method.
+- According to the JSP specification, all the generated servlet classes must implement the "JspPage" interface. which provides jspInit() and jspDestroy() two 
+  life cycle methods.
+- "HttpJspPage" interface extends the "JspPage" interface.It provides "_jspService()" the one life cycle method of JSP.
+-* The scripting elements (JSP Scriptlet tag) provides the ability to insert java code inside the jsp. 
+ 1) scriptlet tag -> To write java code. Syntax : <% java Code %>
+ 2) expression tag -> mainly used to print the values of variable or method. Syntax : <%=  statement %>  
+ 3) declaration tag -> used to declare fields and methods. Syntax : <%! statement %>
+- The code written inside the jsp "declaration tag" is placed "outside" the "service()" method of "auto generated servlet". So it doesn't get memory at each request.
+- DIFFERENCE : 1) jsp scriptlet tag can only declare variables not methods.while jsp declaration tag can declare variables as well as methods.
+  2) declaration of scriptlet tag is placed "inside" the "_jspService()" method.while declaration of jsp declaration tag is placed "outside" the _jspService() method. 
+- JSP Implicit objects : 
+  1) out (of type JspWriter) 2) request (of type HttpServletRequest) 3) response (of type HttpServletResponse) 4) config (of type ServletConfig)
+  5) application (of type ServletContext) 6) session (of type HttpSession) 7) pageContext (of type PageContext) 8) page (of type Object)
+  9) exception (of type Throwable)
+- In JSP, page scope is the default scope.
+- JSP directives are "messages" that tells the "web container" how to "translate" a JSP page into the corresponding servlet.
+  1) page directive    syntax : <%@ page attribute="value" %>  
+  2) include directive syntax : <%@ include file="resourceName" %>  
+  3) taglib directive  syntax : <%@ taglib uri="uriofthetaglibrary" prefix="prefixoftaglibrary" %>
+- include directive includes the content at JSP Page "translation time".The jsp page is translated only once so it will be better to include static resource.
+- Exception Handling in JSP : 1) Through declaratrion of error jsp page in all jsp file using "errorPage" attribute of "page directive".
+  2)* By declaring error jsp in web.xml file using <error-page> sub element of <web-app>.(better option)
+- JSP Action Tags are used to control the "flow between pages" and to use Java Bean.
+- JSP Actions : 1) jsp:forward 2) jsp:include 3) jsp:param  4) jsp:userBean 5) jsp:setProperty 6) jsp:getProperty
+- The jsp include action tag includes the resource at "request time" so it is better for dynamic pages because there might be changes in future.
+- DIFFERENCE : include directive includes the original content in the generated servlet.while include action tag calls the include method.
+- Expression Language (EL) simplifies the accessibility of data stored in the Java Bean and other objects like request/session/application.
+  Syntax : ${ expression } e.g ${param.name}
+- Default implicit objects in EL : param, paramValues, pageScope, requestScope, sessionScope, applicationScope, header, headerValues, cookie, 
+  initParam, pageContext
+- JSTL : fast development,Code reusability, no need of scriptlet tags.
+- Custom tags are user defined tags. Eliminates usage of scriptlet tags and seprate the business logic from the JSP page.Increase reusability.
+--------------- Hibernate ---------------
+- ORM : programming technique to map application domain model objects to the relational database tables.(Java Application -> object -> ORM -> Database)
+- Hibernate is open source, lightweight java based ORM framework.It simplifies the development of java application to interact with the database. 
+- Advantages : 
+ 1) Eliminates boiler-plate 2) Provides support for XML as well as JPA annotations (that makes our code implementation independent)
+ 3) HQL support (database independent and object oriented and also understands inheritance,polymorphism and association)
+ 4) Supports lazy initialization using proxy objects 5) Cache support 6) Implicit transaction management 
+ 7) Provides an abstraction layer between application and database
+1) Session factory (I) : factory of session.Client of connection provider.It holds second level cache (optional).Immutable and thread-safe.
+2) Session (I) : Provides an interface between application and data stored in the database.It wraps the JDBC connection.It is a factory of Transaction,Query and 
+   Criteria.It holds a first-level cache (mandatory) of data.It is not thread-safe object.Lifecycle of a session is bound by the beginning and end of a transaction.
+3) Transaction (I): It specify atomic units of work. It abstracts the application from the underlying JDBC or JTA transaction.
+4) getCurrentSession() : returns the session bound to the hibernate context.But for this, we need to configure it (hibernate.current_session_context_class) in 
+   hibernate configuration file.we don’t need to close it explicitly.we should not use it in multi-threaded environment.
+5) openSession() : always opens a new session.We should close it once we are done with all the database operations.For web appication,We should open a new 
+   session for each request/session in multi-threaded environment.(Based on requirment)
+6) openStatelessSession() : Returns instance of StatelessSession.It doesn’t provide any benefits of hibernate (e.g first and second level cache,Collections etc)
+   It can be useful in case where you want load bulk data and you don’t want to cache it in hibernate's first level cache memory.
+7) Persistent : When persistent class(POJO) object is associated with a unique session,it’s in persistent state.Instance returned by a get() or load() method is
+   persistent.
+8) Transient : When an object is never persisted or not associated with any session, it’s in transient state. Transient instances may be made persistent by 
+   calling save(), persist() or saveOrUpdate().Persistent instances may be made "transient" by calling "delete()".
+9) Detached : Once we close the Hibernate Session or use clear()/evict() method, the persistent instance will become a detached instance.Detached instances may
+   be made persistent by calling update(),saveOrUpdate(),lock() or merge().
+10)				session.get()														session.load()
+   * loads the data as soon as it’s called.					   		* Returns a proxy object and loads data only when it’s actually required(support lazy loading)
+   * It returns null if object is not found in cache as well as 	* It throws "ObjectNotFoundException" if object is not found on cache as well as on database
+	 on database													  but never return null.
+   * Use get method to determine if an instance exists or not.		* Use load method only when we know data exists 
+11) save() : It returns the generated id immediately (because primary object is saved as soon as thid method is invoked).We can invoke this method 
+    outside a transaction also, In such case if we have cascading between entities, then only the primary entity gets saved unless we flush/commit the session.
+	For persistent object, save updates the data through update query.
+12) persist() :We can use persist() method only within the boundary of a transaction, so it’s safe and takes care of any cascaded objects. It doesn’t return 
+    anything so we need to use the persisted object to get the generated identifier value.
+13) saveOrUpdate() : results into insert or update queries based on the provided data.Can be used without transaction(which can create issues for mapped objects)
+14) update() : 
+15 merge() : can be used to update existing values,however this method create a copy from the passed entity object and return it.The returned object is part of 
+  persistent context and tracked for any changes, passed object is not tracked.
+- save(),persist() and saveOrUpdate() methods adds the entity object to persistent context and track any further changes.Any further changes are saved at the 
+  time of committing transaction.
+- Java Persistence API (JPA) provides specification for managing the relational data in applications.
+- Hibernate provides implementation of Java Persistence API.Hibernate EntityManager implements the interfaces and life cycle defined by the JPA specification.
+- JPA basic Annotations : @Entity, @Access, @Table, @Id, @EmbeddedId, @Column, @GeneratedValue, @PrimaryKeyJoinColumn, @OneToOne, @OneToMany, @ManyToOne etc
+- Hibernate Annotations : @GenericGenerator, @Cascade
+- Hibernate configuration file contains database specific configurations and used to initialize SessionFactory.It also contains Dialect information, so that 
+  hibernate knows the database type and mapping file or class details.
+- Hibernate mapping file is used to define the entity bean fields and database table column mappings.JPA annotations can be used for mapping but sometimes XML 
+  mapping file comes handy when we are using third party classes and we can’t use annotations.
+- SessionFactory sessionFactory = new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();
+- We can create our own id generator by implementing IdentifierGenerator(I).
+- We can map collection elements (List,Set,Map,Collection) of persistent class in hibernate.
+- List and Map are index based collection, so an extra column will be created in the table for indexing.
+- In case of Map, index column works as the key and element column works as the value.
+- Unidirectional association provides navigational access in one direction only.While Bidirectional association provides navigational access in both directions,
+  so that you can fetch the other side without explicit queries.It also allows you to apply cascading options to both directions.
+- Cascade mechanisam provide abstraction for save/update/delete of assocaiated entries(changes will automatically propagate to the associated entities)
+- In bi-directional relationship, mappedBy attribute is provided on the object which does not contains foreign key.It inidacte that "this entity is not ownwer of
+  the relationship, ownership is governed by other entity".It is the job of other enitiy (who doesn't have mappedBy attribute) to maintain the association.
+- One-to-One Assosiation  : One entity can have only one entity reation.We can map one-to-one mapping using many-to-one tag
+   (foreign key association) or using one-to-one tag (primary key association)
+- In foreign key association one entity will hold primary key of second entity.(e.g User will hold addressId as a foreign key)  
+- In primary key association,  both the tables share same primary key.
+- One-to-Many Mapping : One row in a table can be mapped to multiple rows in another table. (e.g One Cart - Multiple Iteams)
+- Many-to-Many Mapping : This mapping is usually implemented in database using a Join Table.
+- Object of Entity Type : has its own database identity.It has stand alone existance.
+- Object of Value Type (Value Object) : belongs to an entity, and its persistent state is embedded in the table row of the owning entity. Value types don’t have
+  identifier properties.It doesn't have stand alone existance.Its main use is to provide value to entity object.
+- Assosication mapping maps the dependent object as an enitiy (Entity inside Entity).
+- Component mapping maps the dependent object as a component (value object).Component is an object that is stored as an value rather than entity reference.It is
+  used in case of composition (HAS-A relation).
+- <component> sub element of <class> or @Embeddable and @Embedded annotations are used to map component value object inside entity class.
+- Default fetch stratrgy is Lazy initialization. that means while getting data , hibernet will fetch only first level members variables.
+- Hibernet implements lazy initialization using proxy class. when you will call get method on session object,it will return proxy object of proxy class of actual
+  entity.(not object of actual entity class) by populating first level member variables only.so when you will invoke getter collection of object, proxy class 
+  will interact with database and it will get and populate the second level member data.
+- Inheritance strategy : 
+1) SINGLE_TABLE (Single table per hierarchy) : single table is required to map the whole hierarchy, an extra column (discriminator column) is added to identify 
+   the class.But nullable values will be stored in the table. (<subclass>)
+2) TABLE_PER_CLASS ( Table per concrete class ): Contains tables equavalent to no of classes without any relation.So there are no nullable values.
+   But duplicate columns (of super class table) are added in all subclass tables. (<union-subclass>)
+3) JOINED (Table Per Subclass) : Contains tables equavalent to no of classes by primary key and foreign key relationship.no duplicate columns of super class.
+   (<joined-subclass>) (<key> or @PrimaryKeyJoinColumn)
+- HQL is object oriented version of SQL query. Database independent.
+- Criteria is used to fetch results using more object oriented approach.
+- Named qery is used to group queries at central location (in entity class or hbm file).Its syntax is checked when the hibernate session factory is created.
+  Thus,making the application fail fast. Disadvantage : Hard to Debug.
+- First level cache : "Session" object holds the first level cache data.Enbled by default. evict() / clear() can be used to remove object from the cache.
+- Second level cache : "SessionFactory" object holds the second level cache data.It will  be availabe to entire application.
+- Query cache : caches result set of Query.Doesn't cache the state of the actual entities in the cache;it caches only identifier values and results of value type.
+- Second level CacheConcurrencyStrategy : 
+  1) read-only : It should be used for persistent objects that will always read but never updated.It’s good for reading and caching application configuration 
+     and other static data that are never updated.
+  2) nonstrict read-write (but one at a time) : It is used when application occasionally needs to update data and strict transaction isolation is not required.
+  3) read-write (simultaneously) : It’s good for persistent objects that can be updated by the hibernate application.However if the data is updated either 
+     through backend or other application than cache will not work.So while using this strategy, make sure you are using Hibernate API for updating the data.
+  4) transactional : It provides support for fully transactional cache providers such as JBoss TreeCache.It can only be used in a JTA environment and you must 
+     specify hibernate.transaction.manager_lookup_class
+- <cache usage="read-only" region="employee" />  or @Cache(usage=CacheConcurrencyStrategy.READ_ONLY, region="employee")
+- Statistics provides the statistics of Hibernate SessionFactory (e.g  fetch count,second level cache hit, miss and put count etc).It is disabled by default.
+- To clear second level cache data : 
+  Map<String, ClassMetadata> classesMetadata = sessionFactory.getAllClassMetadata();
+  for (String entityName : classesMetadata.keySet()) {
+	sessionFactory.evictEntity(entityName);
+  }
+--------------- Spring ---------------
+- Spring is Java EE framework which is based on two design principles : Dependecy Injection and Aspect oriented programing.
+- Advantages : Lightweight, Loose coupling (DI), Declarative programing (AoP), Eliminates boilerplate code(using templates), Provides declarative supports for
+  caching,validation and transactions.
+- Spring favors interface class separation.
+- By IoC principle, "control of object creation is inverted to framework".Spring IoC container control and manages the lifecyce of spring bean objects.
+- Throgh DI pattern, You can implement IoC to achieve loose coupling.
+- IoC container : 1) BeanFactory 2) ApplicationContext (built on top of BeanFactory with some extra functionalities)
+- Spring Bean : POJO class object that is initialized through Spring container. 
+- Spring Bean scopes : singleton (default), prototype, request, session, global-session.
+-* shared instance variables can create data inconsistency issue in singleton bean.
+- By default container creates and configures all singleton beans during initialization.To stop this we can use "lazy-init" attribute or @Lazy annotation in 
+  bean configuration.
+- For Inner bean (bean inside anothe bean),container ignores id,name and scope values.Inner beans are always anonymous(scoped prototype always) and they are 
+  always created with the outer bean.It is not possible to inject inner beans into other beans excpet its enclosing(parent) outer bean.
+- Bean can be created through Annotation based/XML based/Java based configuration.
+- To handle resource during spring bean life cycle, you can use : 1) InitializingBean (for post-initialization) and DisposableBean (for pre-destroy)
+  2) init-method and destroy-method attibute in Bean tag 3) @PostConstruct and @PreDestroy
+- "BeanPostProcessor" is used to provide some logic beofre or after bean initialization for all beans.It is used to provide common logic for all beans.
+   Method execution seq : BeanPostProcessor's postProcessBeforeInitialization -> init method of indiviual bean -> 
+   BeanPostProcessor's postProcessAfterInitialization -> destroy method of indiviual bean 
+- Spring Aware interfaces (similar to servlet listeners) are used to inject "Spring framework beans" in our custom bean to perform some specific tasks.
+  e.g ApplicationContextAware, ServletContextAware, ServletConfigAware, BeanFactoryAware, BeanNameAware
+- DI types : 1) By constuctor (<constuctor-arg>) 2) By setter method ( <property> )
+- Partial dependency can be injected using setter injection. Setter injection overrides the constuctor injection.
+- Autowiring inject object(reference only) dependency Automatically. Type : 1) byType 2) byName 3) constructor
+- @Autowired annotation by default try to autowire by type.If multiple beans are of same type present, it will try to wire byName.if name is diffrent it will
+  throw error.In this case we can use @Qulifier to inject specific bean.
+- Core Annotation : @Configuration, @ComponentScan, @Component, @Bean, @Scope, @Autowired(default:autowired by type), @Qualifier, @Lazy
+- AoP is sed to used to implement common cross cutting concerns(logging, transaction management, security, validation etc). It takes out the direct dependency
+  of cross cutting tasks and provides pluggable centralized handling to add additional concern before, after or around the actual logic.It prompotes the 
+  sepration of concerns.
+- Spring AOP can be applied only to the beans created through spring context.  
+  1) Aspect (@Aspect) class : implements common concerns  2) Join point : specific point (In Spring AoP method execution only) at which aspect's common concerns
+  can be apply  3) Advice : common task define in aspect class  4) Pointcut (@Pointct) : expressions that matches join points.  5) Target object : on which 
+  advices are applied.Spring AOP is implemented using runtime proxies.so, this    object is always proxied object  6) Interceptor : Aspect having one advice
+  method.
+- Advice types : 1) @Before 2) @After (before returning) 3) @AfterReturning 4) @AfterThrowing 5) @Around
+- In spring AOP, Aspect class can not be target of advice for other aspect class.
+- final method can not be adviced as it can not be overridden.so, spring can not create a proxy for that.
+- JdbcTemplate eliminates boiler plate code.It take care of creation and release of resources.Handles exception and provides the informative exception messages.
+- JdbcTemplate has datasource property (of type DriverManagerDataSource) which contains database realted information (username, password, url etc)
+- Spring ORM is used to to interact with hibernate,JPA. It handles exception in better way. HibernateTemplate provides way to connect spring with ORM in easy manner.
+- LocalSessionFactoryBean has datasource property (of type BasicDataSource) which contains information about hibernateProperties and mappingResources.
+- Spring MVC is used to create flexible loosely coupled web application.
+- DispatcherServlet works as the front controller.It is responsible to manage the flow of the spring mvc application.single web application can have muliple
+  DispatcherServlet (with diffrent name and mapping url)
+- ContextLoaderListener loads root context and defines common spring bean configurations that will be visible to all other contexts.
+- Spring MVC Annotations : @Controller, @RestController, @RequestMapping, @GetMapping, @PostMapping, @RequestParam (to bind request parameter), @PathVaraible
+  (extract parameter value form the URI), @ReqestHeader, @CookieValue, @ModelAttribute (used for data binding), @ControllerAdvice (to add model value globally
+  or can be used to define exception handling globally), @SessionAttribute, @RequestAttribute, @RequestBody, @ResponseBody, @ExceptionHandler, @ResponseStatus
+- We can narrow the request mapping based on consumes/produces, reuqest/header parameter.
+- Exception handling : 1) Controller based : by defining exception handling method using @ExceptionHandler
+  2) Gloabal Exception Handler : by defining global exception handling method using @ControllerAdvice and @ExceptionHandler for all controller.
+  3) HandlerExceptionResolver or SimpleMappingExceptionResolver(C)
+- Interceptor (like servlet filter) are used to intercept client request(HandlerInterceptor(I) or HandlerInterceptorAdapter(C))
+  Methods : 1) preHandle : before handed over to handler method 2) postHandle : called when handler method is invoked but DispatcherServlet is yet to render the 
+  view  3) afterCompletion : called once the handler is executed and view is rendered
+- ViewResolver : InternalResourceViewResolver, ResourceBundleViewResolver (default : views.properties), XmlViewResolver (default : views.xml)
+- If mutliple view resolver are configured, “order” property is used to set priority. (lower value : high priority)
+- LocaleResolver  : SessionLocaleResolver,LocaleChangeInterceptor 
+- BeanNameUrlHandlerMapping and SimpleUrlHandlerMapping.
+- SpringSecurity is used to provide Athentication and Authorization.
+- OAuth is an open authorization protocol,which allows accessing and sharing of resources on one site with another site without using their credentials.
+- Resource Owner, Resource Server, Client Application, Authorization Server
+
+- SpringBoot has been built on top of existing spring framework.Using SpringBoot we can avoid all the boilerplate code and configurations that we have to do in 
+  normal spring application.
+- SpringBoot makes it easy to create stand-alone,production grade spring based application that you can just run.
+- SpringBoot helps us use the existing spring functionalites more robustly and with minimum efforts.
+- SpringBoot favors convention over configration.It provides automatic configuration.  
+- SpringBoot Advantages : 
+ * Embedded servers (Tomcat,Jetty and Undertow) which are easy to deploy with the containers
+ * It helps in monitoring the multiple components
+ * It helps in configuring the components externally
+- Annotations : @SpringBootApplication or @EnableAutoConfiguation, @ComponentScan, @EnableJpaRepositories, @EntityScan
+-  @SpringBootApplication = @EnableAutoConfigueation + @SpringBootConfiguration + @ComponentScan
+- SpringBoot Features : 
+ 1) AutoConfiguration : It detects the presence of certain Class/JAR in the Classpath and then automatically configure it for you.
+ 2) Starter POMs : It take away pain by finding and adding common dependencies in your project.
+ 3) Spring Boot CLI : It allows you to create Spring based web application using Groovy programming language.
+ 4) Actuator : is used to access and monitor current state of running application in production envirornment.By using Actuator you can find out exactly which 
+    beans are configured in the Application context, what are auto-configuration decisions made, what environment variables, system properties, command line 
+	arguments are available to an application and many more.It provides several endpoints to retrieve this data.
+ 5) Spring Boot Initializer : It is a web application that can be used to generate Spring Boot project structure.
+ 
+- Spring Security default behaviour in spring boot (After adding spring-boot-starter-security dependency)
+  * Adds mandatory authentication for all URLs.
+  * Adds login form.
+  * Handle login error
+  * Creates a user and sets a default password. (Spring secrity generates a new password each time you start the app).To overirde this default behaviour,set
+    spring.security.user.name and spring.security.user.password properties in application.properties file.
+  * 
+- 
+  
+ 
+--------------- REST ---------------
+- Web service is a client server communication application.It is language independent.Types : 1) SOAP web services 2) RESTful web services
+- SOAP(Simple Object Access Protocol) is XML based protocol for accessing web services.
+- WSDL(Web Services Description Language) is a xml document containing information about SOAP web services such as method name, method parameter and 
+  how to access it.It acts as an interface between web service applications.
+- SOAP defines its own security.It uses XML format that must be parsed to be read. It defines many standards that must be followed while developing the SOAP applications.
+- REST(REpresentational State Transfer) is an architectural style not a protocol.In REST Architecture everything is a resource(not action).
+- REST Server simply provides access to resources and the REST client can accesse or add the resources. Here each resource is identified by URIs.	
+- RESTful Web Services are fast because there is no strict specification like SOAP.It is Language and Platform independent.
+- RESTful web services can use SOAP web services as the implementation.
+- RESTful web service permits different data format such as Plain Text, HTML, XML and JSON.
+- Service Oriented Architecture or SOA is a design pattern. It is designed to provide services to other applications through protocol. It is a 
+  concept only and not tied to any programming language or platform.
+- JAX-RS common API is designed for RESTful web services.Implementation are : Jersey and RESTeasy.
+- RESTful Web Service Design considerations : Resource based URIs(not action baded),HTTP Methods,HTTP Status codes,Message Headers.
+- Collection resource URIs : /profiles, /messages, /messages/{messageId}/comments
+- Instance resource URIs : /profiles/{profileName}, /messages/{messageId}, /messages/{messageId}/comments/{commentId}
+- GET,PUT, and DELETE are idempotent(can be repeatable) methods while POST is non-idempotent (can't be repeatable will duplcate) method.So,It is better to use 
+  PUT for update operation.
+- GET : /messages (all messages) , POST : /messages (to add new), GET : /messages/{messageId} (single message) , PUT : /messages/{messageId} (to update) , 
+  DELETE : /messages/{messageId} (to delete)
+- HTTP Status Codes : 1XX : Informational , 2XX : Success , 3XX : Redirection , 4XX : Client Error , 5XX : Server Error
+- HATEOAS (Hypermedia As The Engine Of Application State) : With the help of HATEOAS implementation, REST client needs little to no prior knowledge about how to 
+  interacte with REST application.REST client enters a REST application through a simple fixed URL.All future actions the client may take are discovered within 
+  resource representations returned from the server.e.g 
+  {
+	"id" : 1,
+	"content" : "Hi",
+	"links" : [
+				{
+					"href" : "http://localhost:8080/WSUsingJersey/messages/1",
+					"rel" " "self"
+				},
+				{
+					"href" : "http://localhost:8080/WSUsingJersey/messages/1/comments",
+					"rel" " "comments"
+			   }
+			  ]
+  }
+- Richardson Maturity Model : Level 0 : not REST. Level 1 : Resources based URIs.  Level 2 : HTTP methods usage  Level 3 : with HATEOAS implementation
+- Content Negotiation : Client : Accept Header -> Server : @Produces : to define all possible type of content for response. 
+  Client : Content-Type Header -> Server : @Consumes : to allows possible type of content for incoming request.
+- Application class with @ApplicationPath("rest") is used to bootstrap rest web applicatinn without xml configuration(servelt configuration).It will do classpath
+  scan to find all defined resources.
+- Default scope of JAX-RS resource is request scope.Meanse for every new request, new instance for the resource will be created.@Singleton is used to define
+  singleton scope for the resource.
+- In request scope, instance will be created after request call, so we can used path/query param as a member variables. But, for singleton resource,instance
+  will be created before request call.so, we can't use path/query param as a member variables.
+- To convert String value of path/query param into custom type, we have to implement ParamConverterProvider interface.
+- We can implement MessageBodyWriter for converting out custom Java types to a stream.
+- We can define our custom media type by writing custom MessageBodyReader/MessageBodyWriter.
+- Invocation builder is used to prepare client request, which can be latter invoked by client by calling invoke method.
+- GenericType needs to be pass in respective HTTP method call, to get response of that particular type.
+- In JAX-RS,Filters are used to manipulate request and response params(headers,URIs etc).For server side : 1)ContainerRequestFilter 2) ContainerResponseFilter
+  For client side 1) ClientRequestFilter 2) ClientResponseFilter. Example : logging,security
+- In JAX-RS, Interceptors are used to manipulate entities (input and output stream).For Server and client side : 1) ReaderInterceptor 2) WriterInterceptor.
+  Example : Encoding and Entity response.
+  
+          ClientRequestFilter  WriterInterceptor  MessageBodyWriter  |  ContainerRequestFilter  ReaderInterceptor MessageBodyReader
+                   |                    |                 |          |           |                      |                |
+ JAX-RS -------------------------------------------------------------|----------------------------------------------------------------> JAX-RS
+ Client <------------------------------------------------------------|----------------------------------------------------------------- Server          
+                   |                    |                 |          |           |                  |                    |              
+          MessageBodyReader  ReaderInterceptor  ClientResponseFilter |  MessageBodyWriter  WriterInterceptor  ContainerResponseFilter  
+ 
+- Authentication mechanisams : 
+1) Basic authentication : send encrypted username:password as header parameter.e.g  Authorization : Basic YWRtaW46YWRtaW4=
+2) Digest access authentication :  
+3) Asymetric cryptography
+4) OAuth : 
+5) JSON Web Tokens : 
+-------------------------------------------------------------------------------------
+			Spring Rest												JAX-RS Annotation
+@RequestMapping("/getUsers")									@Path("/getUsers")
+@RequestMapping(path="/getUsers",method=RequestMethod.GET)		@GET("/getUsers")
+@RequestMapping(method=RequestMethod.GET)						@GET
+@RequestMapping(method=RequestMethod.POST)						@POST
+@RequestMapping(method=RequestMethod.DELETE)					@DELETE
+@PathVariable("empId")											@PathParam("empId")
+@RequestParam("empId")											@QueryParam("empId")	(starts with ? )									
+@RequestParam(value = "empId")									@FormParam("empId")
+@RequestMapping(produces = "{application/json}")				@Produces({MediaType.APPLICATION_JSON})
+@RequestMapping(consumes = "{application/json}")				@Consumes({MediaType.APPLICATION_XML})
+@RequestBody													NA
+@ResponseBody													NA
+																@MatrixParam : starts with ; (semicolun)
+																@HeaderParam , @CookieParam , 
+																@Context , @BeanParam
+																@Provider
+--------------------------------------------------------------------------------------------
+Boot Principles : 
+----------------------------------------------
+@EnableBinding
+
+@StreamListener(NotificationStreams.INPUT)
+

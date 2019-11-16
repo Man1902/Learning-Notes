@@ -1,0 +1,426 @@
+- Version Info : 
+  1) Java Servlet - 3.0
+  2) JavaServer Pages (JSP) - 2.2
+  3) Expression Language (EL) - 2.2	
+---------- Web Terminology -> Starts ----------
+- Website is a collection of related web pages that may contain text, images, audio and video.
+- Each website has specific internet address (URL-Uniform Resource Locator).
+- Static website is the basic type of website that is easy to create. You don't need web programming and database design to create a static website. 
+  Its web pages are coded in HTML.The codes are fixed for each page so the information contained in the page does not change and it looks like a printed page.
+- Dynamic website is a collection of dynamic web pages whose content changes dynamically. It accesses content from a database. 
+  Therefore, when you alter or update the content of the database, the content of the website is also altered or updated.
+-* Dynamic website uses client-side scripting or server-side scripting, or both to generate dynamic content.
+- Client side scripting generates content at the client computer on the basis of user input. The web browser downloads the web page from the server and 
+  processes the code within the page to render information to the user.
+- In server side scripting, the software runs on the server and processing is completed in the server then plain pages are sent to the user.
+-* HTTP is the data communication protocol used to establish communication between client and server.
+-* HTTP is request/response protocol which is based on client/server based architecture.
+-* HTTP is stateless means each request is considered as the new request. In other words, server doesn't recognize the user by default.
+- HTTP is media independent: It refers to any type of media content can be sent by HTTP as long as both the server and the client can handle the data content.
+-* HTTP is a connectionless approach in which HTTP client i.e., a browser initiates the HTTP request and after the request is sends the client disconnects from server and waits for the response.
+-* The request sends by the web client (Browser) to a web server that contains all sorts of potentially interesting information is known as HTTP requests.
+-* In case of Get request, only limited amount of data can be sent because data is sent in header.Get request is idempotent. It means second request will be ignored until response of first request is delivered.
+- In case of post request, large amount of data can be sent because data is sent in body.
+-* Servlet Container provides the runtime environment for JavaEE (j2ee) applications.
+-* It is the part of a web server that interacts with the servlet for handling the dynamic web pages from the client.
+- Operation of Servlet container : 1) Life Cycle Management 2) Multithreaded support 3) Object Pooling 4)Security
+-* Server is a device or a computer program that accepts and responds to the request made by other program, known as client. 
+-* Web server contains only web or servlet container. It can be used for servlet, jsp, struts, jsf etc. It can't be used for EJB. (e.g Apache Tomcat)
+-* Application server contains Web and EJB containers. It can be used for servlet, jsp, struts, jsf, ejb etc. It is a component based product that lies in the middle-tier of a server centric architecture.
+  (e.g JBoss , Glassfish , Weblogic , Websphere)
+- Content Type is also known as MIME (Multipurpose internet Mail Extension) Type. It is a HTTP header that provides the description about what are you sending 
+  to the browser. (e.g text/html,application/pdf,application/x-zip,images/jpeg,audio/mp3,video/mp4 etc)
+---------- Web Terminology -> Over ----------
+-* Servlet is a web component that is deployed on the server to create dynamic web page for creating web application.
+- Servlets are managed by JVM so we don't need to worry about memory leak, garbage collection etc.
+- The javax.servlet and javax.servlet.http packages represent interfaces and classes for servlet api.
+- Servlet interface provides common behaviour to all the servlets.Servlet interface needs to be implemented for creating any servlet(either directly or indirectly).
+-* There are 5 methods in Servlet interface. The "init", "service" and "destroy" are the life cycle methods of servlet. These are invoked by the "web container". "getServletConfig" and "getServletInfo" are two non-life cycle methods
+-* GenericServlet class implements Servlet, ServletConfig and Serializable interfaces. It provides the implementaion of all the methods of these interfaces except the service method. GenericServlet class can handle any type of request so it is protocol-independent.
+-* The HttpServlet class extends the GenericServlet class and implements Serializable interface. It provides http specific methods such as doGet, doPost, doHead, doTrace etc.
+-* Servlet Life Cycle : The web container maintains the life cycle of a servlet instance.
+ 1) Sevlet class is loaded : The classloader is responsible to load the servlet class. The servlet class is loaded when the first request for the servlet is received by the web container.
+ 2) Servlet instance is created : The web container creates the instance of a servlet after loading the servlet class. The servlet instance is created only once in the servlet life cycle.
+ 3) init method is invoked : The web container calls the init method only once after creating the servlet instance. The init method is used to initialize the servlet.
+ 4) service method is invoked : The web container calls the service method each time when request for the servlet is received. If servlet is not initialized, it follows the first three steps as described above then calls the service method.
+ 5) destroy method is invoked : The web container calls the destroy method before removing the servlet instance from the service. 
+-* there are three states of a servlet: "new", "ready" and "end". 
+- The servlet is in "new state" if servlet instance is created. 
+- After invoking the init() method, Servlet comes in the "ready state". 
+- In the ready state, servlet performs all the tasks. When the web container invokes the destroy() method, it shifts to the "end state".
+-* The servlet example can be created by three ways: By implementing Servlet interface,By inheriting GenericServlet class, By inheriting HttpServlet class.
+- How Servlet works? 
+* The server checks if the servlet is requested for the first time.If yes : 
+  web container does the following tasks: loads the servlet class.instantiates the servlet class.calls the init method passing the ServletConfig object
+* else : calls the service method passing request and response objects
+* The web container calls the destroy method when it needs to remove the servlet such as at time of stopping server or undeploying the project.
+-* The web container is responsible to handle the request. Let's see how it handles the request.
+ (1) Maps the request with the servlet in the web.xml file.
+ (2) Creates request and response objects for this request.
+ (3) Calls the service method on the thread.
+ (4)* The public service method internally calls the protected service method.
+ (5)* The protected service method calls the doGet/doPost method depending on the type of request.
+ (6) The doGet/doPost method generates the response and it is passed to the client.
+ (7) After sending the response, the web container deletes the request and response objects. The thread is contained in the thread pool or deleted depends on the server implementation.
+- web archive (war) file contains all the contents of a web application. It reduces the time duration for transferring file.It may have servlet, xml, jsp, image, html, css, js etc. files
+- The war file combines all the files into a single unit. So it takes less time while transferring file from client to server.
+- A welcome file is the file that is invoked automatically by the server, if you don't specify any file name.
+- The load-on-startup element of web-app (web.xml) loads the servlet at the time of deployment or server start if value is positive. It is also known as pre initialization of servlet. 
+  container loads the servlets in ascending integer value.(0 will be loaded first than 1,2,3 so on..)
+- Here, servlet will be loaded at project deployment time or server start. So, it will take less time for responding to first request.
+- ServletRequest is used to provide the client request information to a servlet such as content type, content length, parameter names and values, header informations, attributes etc 
+- The RequestDispatcher interface provides the facility of dispatching the request to another resource it may be html, servlet or jsp. This interface can also be used to include the content of another resource also. 
+  1) forward : Forwards a request from a servlet to another resource (servlet, JSP file, or HTML file) on the server.
+  2) include : Includes the content of a resource (servlet, JSP page, or HTML file) in the response.
+- getRequestDispatcher() method of ServletRequest interface returns the object of RequestDispatcher.
+- The sendRedirect() method of "HttpServletResponse" interface can be used to redirect response to another resource, it may be servlet, jsp or html file.It accepts relative as well as absolute URL.
+- It works at client side because it uses the url bar of the browser to make another request. So, it can work inside and outside the server.
+- sendRedirect() always sends a new request.
+- An object of ServletConfig is created by the web container for each servlet. This object can be used to get configuration information from web.xml file.
+-* If the configuration information is modified from the web.xml file, we don't need to change the servlet. So it is easier to manage the web application if any specific content is modified from time to time.
+- getServletConfig() method of Servlet interface returns the object of ServletConfig.
+- <init-param> sub-element of servlet is used to specify the initialization parameter for a servlet.
+- Methods of ServletConfig Interface : 
+  1) public String getInitParameter(String name): Returns the parameter value for the specified parameter name.
+  2) public Enumeration getInitParameterNames(): Returns an enumeration of all the initialization parameter names.
+  3) public String getServletName(): Returns the name of the servlet.
+  4) public ServletContext getServletContext(): Returns an object of ServletContext.
+- An object of ServletContext is created by the web container at time of deploying the project. This object can be used to get configuration information from web.xml file. There is only one ServletContext object per web application.
+  If any information is shared to many servlet, it is better to provide it from the web.xml file using the <context-param> sub element of <web-app> .
+-* The object of ServletContext provides an interface between the container and servlet.It can be used to get configuration information from the web.xml file.
+  It can be used to set, get or remove attribute from the web.xml file.It can be used to provide inter-application communication.
+- Methods of ServletContext interface : 
+  1) public String getInitParameter(String name): Returns the parameter value for the specified parameter name.
+  2) public Enumeration getInitParameterNames(): Returns the names of the context's initialization parameters.
+  3) public void setAttribute(String name,Object object): sets the given object in the "application scope".
+  4) public Object getAttribute(String name) : Returns the attribute for the specified name.
+  5) public void removeAttribute(String name): Removes the attribute with the given name from the servlet context.
+- object of ServletContext interface can be get by two ways : 
+  1) by getServletContext() method of ServletConfig interface 
+  2) by getServletContext() method of GenericServlet class
+- The context-param element, subelement of web-app, is used to define the initialization parameter in the application scope.
+- An attribute in servlet is an object that can be set, get or removed from one of the following scopes: 1)request scope 2)session scope 3)application scope
+- attribute specific methods : 
+  1) public void setAttribute(String name,Object object):sets the given object in the application scope.
+  2) public Object getAttribute(String name):Returns the attribute for the specified name.
+  3) public Enumeration getInitParameterNames():Returns the names of the context's initialization parameters as an Enumeration of String objects.
+  4) public void removeAttribute(String name):Removes the attribute with the given name from the servlet context.
+-* DIFFERENCE : The servletconfig object refers to the single servlet whereas servletcontext object refers to the whole web application.
+- Session simply means a particular interval of time.Session Tracking is a way to maintain state (data) of an user. It is also known as session management in servlet.
+- Http protocol is a stateless so we need to maintain state using session tracking techniques. Each time user requests to the server, server treats the request as the new request. So we need to maintain the state of an user to recognize to particular user
+- Session tracking techniques : 1) Cookies 2) Hidden Form Field 3) URL Rewriting 4) HttpSession
+- A cookie is a small piece of information that is persisted between the multiple client requests.It has a name, a single value. Cookies are maintained at client side.
+- In cookies technique, we add cookie with response from the servlet. So cookie is stored in the cache of the browser. After that if request is sent by the user, cookie is added with request by default. Thus, we recognize the user as the old user.
+- Two type of cookie : Persistent(valid for multiple session-till log out) , non-Persistent (valid for single session -till browser window closer)
+- It will not work if cookie is disabled from the browser.Only textual information can be set in Cookie object.
+- Constructor of Cookie class : 1) Cookie() 2) Cookie(String name, String value)
+- Method of Cookie class : 
+  1) public void setMaxAge(int expiry) : Sets the maximum age of the cookie in seconds.
+  2) public void setName(String name) : changes the name of the cookie.
+  3) public String getName() : Returns the name of the cookie. The name cannot be changed after creation.
+  4) public void setValue(String value) : changes the value of the cooki
+  5) public String getValue() : Returns the value of the cookie.
+- Other method to add and get cookie object. 
+  1) public void addCookie(Cookie ck): method of HttpServletResponse interface is used to add cookie in response object.
+  2) public Cookie[] getCookies() : method of HttpServletRequest interface is used to return all the cookies from the browser.
+-  to delete Cookie use 1) setMaxAge(0) or 2) set value as blank string.
+- Advantage : 1) Simplest technique of maintaining the state. 2) Cookies are maintained at client side.
+- Disadvantage : 1) It will not work if cookie is disabled from the browser.  2) It will not work if cookie is disabled from the browser.
+- In case of Hidden Form Field a hidden (invisible) textfield is used for maintaining the state of an user.
+- Hidden Form Field approach is better if we have to submit form in all the pages and we don't want to depend on the browser.
+- Advantage : 1) It will always work whether cookie is disabled or not (browser independent). 
+- Disadvantage : 1) Extra form submission is required on each request  2) Only textual information can be used.
+- In URL rewriting, we append a token or identifier to the URL of the next Servlet or the next resource. We can send parameter name/value pairs using the following format: url?name1=value1&name2=value2&??
+- Advantage : 1) It will always work whether cookie is disabled or not (browser independent). 2) Extra form submission is not required on each pages.
+- Disadvantage : 1) It will work only with links. 2) It can send Only textual information.
+- HttpSession : container creates a session id for each user.The container uses this id to identify the particular user.
+  An object of HttpSession can be used to perform two tasks: 1) bind objects 2) view and manipulate information about a session, such as the session identifier, creation time, and last accessed time.
+- HttpServletRequest interface provides two methods to get the object of HttpSession : 
+  1) public HttpSession getSession(): Returns the current session associated with this request, or if the request does not have a session, creates one. 
+  2) public HttpSession getSession(boolean create) : Returns the current HttpSession associated with this request or, if there is no current session and create is true, returns a new session.
+- Methods of HttpSession Interface : 
+  1) public String getId() : Returns a string containing the unique identifier value.
+  2) public long getCreationTime() : Returns the time when this session was created
+  3) public long getLastAccessedTime() : Returns the last time the client sent a request associated with this session, as the number of milliseconds since midnight January 1, 1970 GMT.
+  4) public void invalidate() : Invalidates this session then unbinds any objects bound to it.
+- A filter is an object that is invoked at the preprocessing and postprocessing of a request. It is mainly used to perform filtering tasks such as conversion, logging, compression, encryption and decryption, input validation etc.
+- filter is pluggable, i.e. its entry is defined in the web.xml file, if we remove the entry of filter from the web.xml file, filter will be removed automatically and we don't need to change the servlet.
+- Unlike Servlet, One filter doesn't have dependency on another filter.
+- For creating any filter, you must implement the Filter interface. Filter interface provides the life cycle methods for a filter.
+  1) public void init(FilterConfig config) : It is invoked only once. It is used to initialize the filter.
+  2) public void doFilter(ServletRequest request,ServletResponse response, FilterChain chain) : It is invoked every time when user request to any 
+     resource, to which the filter is mapped.It is used to perform filtering tasks.
+  3) public void destroy() : It is invoked only once when filter is taken out of the service.
+- The object of FilterChain is responsible to invoke the next filter or resource in the chain.This object is passed in the doFilter method of Filter interface.
+  The FilterChain interface contains only one method:
+  public void doFilter(ServletRequest request, ServletResponse response): it passes the control to the next filter or resource.
+- For mapping filter we can use, either url-pattern or servlet-name.
+- An object of FilterConfig is created by the web container. This object can be used to get the configuration information from the web.xml file.
+- Methods of FilterConfig interface : 
+- 1) public void init(FilterConfig config) : init() method is invoked only once it is used to initialize the filter.
+  2) public String getInitParameter(String parameterName) : Returns the parameter value for the specified parameter name.
+  3) public java.util.Enumeration getInitParameterNames() : Returns an enumeration containing all the parameter names.
+  4) public ServletContext getServletContext(): Returns the ServletContext object.
+- ServletInputStream class provides stream to read binary data such as image etc. from the request object.
+- getInputStream() method of ServletRequest interface returns the instance of ServletInputStream class.
+- Method : int readLine(byte[] b, int off, int len) it reads the input stream.
+- ServletOutputStream class provides a stream to write binary data into the response. 
+- The getOutputStream() method of ServletResponse interface returns the instance of ServletOutputStream class. 
+- ServletOutputStream class provides print() and println() methods that are overloaded.
+- @WebServlet annotation is used to map the servlet with the specified name.
+- If you use annotation, deployment descriptor (web.xml file) is not required. But you should have tomcat7 as it will not run in the previous versions of tomcat. 
+- e.g 1)@WebServlet("/urlPattern")
+  2) @WebServlet(
+		name = "servletName",
+        urlPatterns = "/urlPattern",
+		loadOnStartup = 1,
+        initParams = 
+		{
+            @WebInitParam(name = "paraName1", value = "value1"),
+            @WebInitParam(name = "paraName2", value = "value2")
+        }
+    )
+- Events are basically occurrence of something. Changing the state of an object is known as an event.
+- The ServletContextEvent is notified when web application is deployed on the server.The web container creates the instance of ServletContextEvent after the ServletContext instance.
+- ServletContextEvent class method : 1) ServletContext getServletContext()
+- ServletContextListener interface methods :  1) void contextInitialized(ServletContextEvent e) 2) void contextDestroyed(ServletContextEvent e)
+- HttpSessionEvent is notified when session object is changed. The corresponding Listener interface for this event is HttpSessionListener.
+- HttpSessionListener Method : 1)  void sessionCreated(HttpSessionEvent e) 2)  void sessionDestroyed(ServletContextEvent e) 
+- The servlet programmer should implement "SingleThreadModel" interface to ensure that servlet can handle only one request at a time. It is a marker interface, means have no methods.
+  This interface is currently deprecated since Servlet API 2.4 because it doesn't solves all the thread-safety issues such as static variable 
+  and session attributes can be accessed by multiple threads at the same time even if we have implemented the SingleThreadModel interface. 
+  So it is recommended to use other means to resolve these thread safety issues such as synchronized block etc.
+ ------------ JSP -----------------
+- JSP technology is used to create web application just like Servlet technology. It can be thought of as an extension to servlet because it provides more functionality than servlet such as expression language, jstl.
+- We can use all the features of servlet in JSP. In addition to, we can use implicit objects, predefined tags, expression language and Custom tags in JSP.
+- In JSP, we can easily separate our business logic with presentation logic. In servlet technology, we mix our business logic with the presentation logic.
+- If JSP page is modified, we don't need to recompile and redeploy the project. The servlet code needs to be updated and recompiled if we have to change the look and feel of the application.
+- JSP pages follows these phases:
+	1) Translation of JSP Page (To translate the JSP Page into Servlet)
+	2) Compilation of JSP Page (to generate class file of generated servelt)
+	3) Classloading (class file is loaded by the classloader)
+	4) Instantiation (Object of the Generated Servlet is created).
+	5) Initialization ( jspInit() method is invoked by the container).
+	6) Reqeust processing ( _jspService() method is invoked by the container).
+	7) Destroy ( jspDestroy() method is invoked by the container).
+- jspInit(), _jspService() and jspDestroy() are the life cycle methods of JSP.
+- In _jspService() method , The underscore _ signifies that you cannot override this method.
+- JSP API consists of two packages: 1) javax.servlet.jsp 2) javax.servlet.jsp.tagext
+- According to the JSP specification, all the generated servlet classes must implement the "JspPage" interface. JspPage interface extends the "Servlet" interface. 
+  It provides jspInit() and jspDestroy() two life cycle methods. 
+  1) public void jspInit(): It is invoked only once during the life cycle of the JSP when JSP page is requested firstly. It is used to perform initialization. 
+     It is same as the init() method of Servlet interface.
+  2) public void jspDestroy(): It is invoked only once during the life cycle of the JSP before the JSP page is destroyed. It can be used to perform some clean up operation.
+- "HttpJspPage" interface extends the "JspPage" interface.It provides "_jspService()" the one life cycle method of JSP.
+   public void _jspService(): It is invoked each time when request for the JSP page comes to the container. It is used to process the request. 
+   The underscore _ signifies that you cannot override this method.
+-* The scripting elements (JSP Scriptlet tag) provides the ability to insert java code inside the jsp. 
+- Three Type of JSP Scripting elements : 
+  1) scriptlet tag -> To write java code. Syntax : <% java Code %>
+  2) expression tag -> mainly used to print the values of variable or method. Syntax : <%=  statement %>  
+  3) declaration tag -> used to declare fields and methods. Syntax : <%! statement %>
+-* The code placed within JSP expression tag is written to the output stream of the response. So you need not write out.print() to write data.It is mainly used to print the values of variable or method.
+-* Do not end your statement with semicolon in case of expression tag.
+- The JSP declaration tag is used to declare fields and methods.
+-* The code written inside the jsp declaration tag is placed outside the service() method of auto generated servlet. So it doesn't get memory at each request.
+- DIFFERENCE : 1) jsp scriptlet tag can only declare variables not methods.while jsp declaration tag can declare variables as well as methods.
+  2)  declaration of scriptlet tag is placed inside the _jspService() method.while declaration of jsp declaration tag is placed outside the _jspService() method. 
+- There are 9 jsp implicit objects. These objects are created by the web container that are available to all the jsp pages.
+  1) out (of type JspWriter) : Is is used to write any data to the buffer. (In case of servlet you need to write: PrintWriter out=response.getWriter(); )
+  2) request (of type HttpServletRequest) : It can be used to get request information such as parameter, header information, remote address, server name, server port, content type, character encoding etc.
+     It is created by the web container for each jsp request.It can also be used to set, get and remove attributes from the jsp request scope.
+  3) response (of type HttpServletResponse) : It can be used to add or manipulate response such as redirect response to another resource, send error etc.
+     It is created by the web container for each jsp request 
+  4) config (of type ServletConfig) : It can be used to get initialization parameter from web.xml for a particular JSP page.It  is created by the web container for each jsp page.
+  5)* application (of type ServletContext) : It can be used to get initialization parameter from configuaration file (web.xml). It can also be used to get, set 
+     or remove attribute from the "application scope".This initialization parameter can be used by all jsp pages.It is created only once by the web container when 
+	 application or project is deployed on the server.
+  6) session (of type HttpSession) : It can be used to get, set or remove attribute from the session scope.It can also be used to get session realated information.
+  7) pageContext (of type PageContext) : It can be used to set,get or remove attribute from page or request or session or application scope.
+     e.g pageContext.setAttribute("user",name,PageContext.SESSION_SCOPE);   In JSP, page scope is the default scope.
+  8) page (of type Object) : This object is assigned to the reference of auto generated servlet class.(Object page=this;). For using this object it must be cast 
+     to Servlet type. e.g : <% (HttpServlet)page.log("message"); %>
+  9) exception (of type Throwable) : It can be used to print the exception. But it can only be used in error pages.
+- JSP directives are messages that tells the web container how to translate a JSP page into the corresponding servlet.
+- Three types of directives:
+  1) page directive    syntax : <%@ page attribute="value" %>  
+  2) include directive syntax : <%@ include file="resourceName" %>  
+  3) taglib directive  syntax : <%@ taglib uri="uriofthetaglibrary" prefix="prefixoftaglibrary" %>
+- The page directive defines attributes that apply to an entire JSP page.
+- Attributes of JSP page directive : 
+  1) import : It is used to import class,interface or all the members of a package.It is similar to import keyword in java class or interface.
+  2) contentType : default is "text/html;charset=ISO-8859-1"
+  3) extends : It defines the parent class that will be inherited by the generated servlet.It is rarely used.
+  4) info : It sets the information of the JSP page which is retrieved later by using getServletInfo() method of Servlet interface.
+  5) buffer : It sets the buffer size in kilobytes to handle output generated by the JSP page.The default size of the buffer is 8Kb.
+  6) language : The language attribute specifies the scripting language used in the JSP page. The default value is "java".
+  7) isELIgnored : We can ignore the Expression Language (EL) in jsp by the isELIgnored attribute. (default value is false)
+  8) isThreadSafe : Servlet and JSP both are multithreaded.If you want to control this behaviour of JSP page, you can use isThreadSafe attribute 
+     of page directive.Default is true.If you make it false,the web container will serialize the multiple requests,i.e.it will wait until the 
+	 JSP finishes responding to a request before passing another request to it. If <%@ page isThreadSafe="false" %> than,web container in such 
+	 a case, will generate the servlet as : public class SimplePage_jsp extends HttpJspBase implements SingleThreadModel{...}
+  9) errorPage : It is used to define the error page, if exception occurs in the current page, it will be redirected to the error page.
+  10) isErrorPage : It is used to  declare that the current page(jsp) as error page(error jsp).
+-* The exception object can only be used in the error page.
+- The include directive is used to include the contents of any resource it may be jsp file, html file or text file.
+-** The include directive includes the original content of the included resource at JSP page translation time.The jsp page is translated only 
+   once so it will be better to include static resource.
+-* The include directive includes the original content, so the actual page size grows at runtime.
+- The JSP taglib directive is used to define a tag library that defines many tags. We use the TLD (Tag Library Descriptor) file to define the tags.
+- Exception Handling in JSP : 1) Through declaratrion of error jsp page in all jsp file using "errorPage" attribute of "page directive".
+  2)* By declaring error jsp in web.xml file using <error-page> sub element of <web-app>.(This one is better option)
+  e.g <error-page>  
+		<exception-type>java.lang.Exception</exception-type> OR
+		<error-code>500</error-code>  
+		<location>/error.jsp</location>  
+	 </error-page>  
+- JSP Action Tags are used to control the flow between pages and to use Java Bean.
+- JSp Actions : 1) jsp:forward 2) jsp:include 3) jsp:param  4) jsp:userBean 5) jsp:setProperty 6) jsp:getProperty
+- The jsp:forward action tag is used to forward the request to another resource it may be jsp, html or another resource.
+  Syntax : <jsp:forward page="relativeURL | <%= expression %>" />  
+- The jsp:include action tag is used to include the content of another resource it may be jsp, html or servlet.
+-** The jsp include action tag includes the resource at request time so it is better for dynamic pages because there might be changes in future.
+- The jsp:include tag can be used to include static as well as dynamic pages.
+- Syntax (with parameter) : <jsp:include page="relativeURL | <%= expression %>"> 
+								<jsp:param name="parametername" value="parametervalue | <%=expression%>" />  
+							</jsp:include>
+-* DIFFERENCE between jsp include directive and include action tag : 
+   1) JSP include directive includes resource at translation time.while JSP include action tag includes resource at request time.
+   2) include directive is better for static pages. while include action tag is better for dynamic pages.
+   3) include directive includes the original content in the generated servlet.while include action tag calls the include method.
+- Java Bean is a java class that should follow below things 
+  1) It should have a no-arg constructor.
+  2) It should be Serializable.
+  3) It should provide methods to set and get the values of the properties, known as getter and setter methods.
+-* It is a reusable software component. A bean encapsulates many objects into one object, so we can access this object from multiple places. Moreover, it provides the easy maintenance.
+-* Note : There are two ways to provide values to the object(instant members of javabean), one way is by constructor and second is by setter method.
+- The jsp:useBean action tag is used to instantiate a bean (Java Bean) class.
+- Attributes and Usage of jsp:useBean action tag : 
+  1) id: It is used to identify the bean in the specified scope.
+  2) scope: represents the scope of the bean. It may be page, request, session or application. The default scope is page.
+	 2.1 page: specifies that you can use this bean within the JSP page.
+	 2.2 request: specifies that you can use this bean from any JSP page that processes the same request. It has wider scope than page.
+     2.3 session: specifies that you can use this bean from any JSP page in the same session whether processes the same request or not. It has wider scope than request.
+     2.4 application: specifies that you can use this bean from any JSP page in the same application. It has wider scope than session.
+  3) class: instantiates the specified bean class (i.e. creates an object of the bean class) but it must have no-arg constructor and must not be abstract.
+  4) beanName: instantiates the bean using the java.beans.Beans.instantiate() method.
+  5) type: provides the bean a data type if the bean already exists in the scope. It is mainly used with class or beanName attribute. If you use it without class or beanName, no bean is instantiated.
+- The setProperty and getProperty action tags are used for developing web application with Java Bean.  
+- The jsp:setProperty action tag sets a property value or values in a bean using the setter method.
+- Syntax : <jsp:setProperty name="instatanceOfBean" property="*" />   // To set all the values of incoming request in the bean
+	       <jsp:setProperty name="instatanceOfBean" property="propertyName" />   // To set value of the incoming specific property
+           <jsp:setProperty name="instatanceOfBean" property="propertyName" value="specificVal" />   // To set specific property with specific value
+- The jsp:getProperty action tag returns the value of the property. <jsp:getProperty name="instanceOfBean" property="propertyName" /> 
+- The Expression Language (EL) simplifies the accessibility of data stored in the Java Bean component, and other objects like request, session, application etc.
+- Syntax : ${ expression }  e.g : ${ param.name } ,${ requestScope.name },${ sessionScope.name },${ pageScope.name } 
+- implicit objects in the Expression Language :
+  1) pageScope : it maps the given attribute name with the value set in the page scope
+  2) requestScope : it maps the given attribute name with the value set in the request scope
+  3) sessionScope : it maps the given attribute name with the value set in the session scope
+  4) applicationScope : it maps the given attribute name with the value set in the application scope
+  5) param* : it maps the request parameter to the single value
+  6) paramValues : it maps the request parameter to an array of values
+  7) header : it maps the request header name to the single value
+  8) headerValues : it maps the request header name to an array of values
+  9) cookie : it maps the given cookie name to the cookie value
+  10) initParam : it maps the initialization parameter
+  11) pageContext : it provides access to many objects request, session etc.
+- Reserve words in EL : lt,le,gt,ge,eq,ne,true,false,and,or,not,instanceof,div,mod,empty,null.
+- The JSP Standard Tag Library (JSTL) represents a set of tags to simplify the JSP development.
+- Advantage : 1) Fast Developement : JSTL provides many tags that simplifies the JSP.
+  2) Code Reusability : We can use the JSTL tags in various pages. 3)No need to use scriptlet tag It avoids the use of scriptlet tag.
+- JSTL mainly provides 5 types of tags: 
+  1) Core tags : It provide variable support, URL management, flow control etc.
+  2) Function tags : It provide support for string manipulation and string length.
+  3) Formatting tags : It provide support for message formatting, number and date formatting etc.
+  4) XML tags : It provide flow control, transformation etc.
+  5) SQL tags : It provide SQL support.
+- For creating JSTL application, you need to load jstl.jar file.
+- Custom tags are user-defined tags. They eliminates the possibility of scriptlet tag and separates the business logic from the JSP page.
+  The same business logic can be used many times by the use of custom tag.
+- Advantage : 1) Eliminates the need of scriptlet tag 2) Separation of business logic from JSP 3) Re-usability
+- Syntax : <prefix:tagname attr1=value1....attrn=valuen /> 
+- javax.servlet.jsp.tagext package contains classes and interfaces for JSP custom tag API. 
+- BodyTagSupport(C) implements BodyTag(I) and extends TagSupport(C).
+- BodyTag(I) extends IterationTag(I) and TagSupport(C) extends IterationTag(I).
+- IterationTag(I) extends Tag(I) which extends JspTag (I)
+- The JspTag is the root interface for all the interfaces and classes used in custom tag. It is a marker interface.
+- Tag interface is the sub interface of JspTag interface. It provides methods to perform action at the start and end of the tag.
+- fields defined in the Tag interface : 
+  1) public static int EVAL_BODY_INCLUDE : it evaluates the body content.
+  2) public static int EVAL_PAGE : it evaluates the JSP page content after the custom tag.
+  3) public static int SKIP_BODY : it skips the body content of the tag.
+  4) public static int SKIP_PAGE : it skips the JSP page content after the custom tag.
+- Methods of the Tag interface : 
+  1) public void setPageContext(PageContext pc) : it sets the given PageContext object.
+  2) public void setParent(Tag t) : it sets the parent of the tag handler.
+  3) public Tag getParent() : it returns the parent tag handler object.
+ *4) public int doStartTag()throws JspException : it is invoked by the JSP page implementation object. The JSP programmer should override this 
+     method and define the business logic to be performed at the start of the tag.
+ *5) public int doEndTag()throws JspException : it is invoked by the JSP page implementation object. The JSP programmer should override this 
+     method and define the business logic to be performed at the end of the tag.
+  6) public void release()	it is invoked by the JSP page implementation object to release the state.
+- IterationTag interface is the sub interface of the Tag interface. It provides an additional method to reevaluate the body.
+- field defined in the IterationTag : public static int EVAL_BODY_AGAIN : it reevaluates the body content.
+- One method defined in the IterationTag interface : public int doAfterBody()throws JspException  : It is invoked by the JSP page implementation 
+  object after the evaluation of the body. If this method returns EVAL_BODY_INCLUDE, body content will be reevaluated, if it returns SKIP_BODY, 
+  no more body cotent will be evaluated.
+-* TagSupport class implements the IterationTag interface. It acts as the base class for new Tag Handlers. It provides some additional methods also.
+- Steps to create custom tag : 
+  1) Create the Tag handler class (by extending or implementing any Tag class or interface of Tag hierarchy)and perform action at the start 
+     or at the end of the tag.
+  2) Create the Tag Library Descriptor (TLD) file and define tags  in tld file.
+  3) Create the JSP file that uses the Custom tag defined in the TLD file
+- To write data for the jsp, we need to use the "JspWriter" class.The PageContext class provides "getOut()" method that returns the instance of 
+  JspWriter class. TagSupport class provides instance of "pageContext" bydefault.
+- Tag Library Descriptor (TLD) file contains information of tag and Tag Hander classes. It must be contained inside the WEB-INF directory.
+- You can define any no of attributes for any custom tag. To define the attribute, you need to perform two tasks:
+  1) Define the property in the TagHandler class with the "attribute name" and define the "setter method".
+  2) Define the attribute element inside the tag element in the TLD file.
+- We can iterate the body content of any tag using the doAfterBody() method of IterationTag interface.For iterating the body content, we need 
+  to use the EVAL_BODY_AGAIN constant in the doAfterBody() method.
+- We can use the custom URI, to tell the web container about the tld file. In such case, we need to define the taglib element in the web.xml. 
+  The web container gets the information about the tld file from the web.xml file for the specified URI.
+---------------------------------
+1) Model 1 Architecture :
+- Servlet and JSP are the main technologies to develop the web applications.
+- Servlet technology doesn't create process, rather it creates thread to handle request. The advantage of creating thread over process is that it doesn't allocate separate memory area. 
+- Servlet needs to recompile if any designing code is modified. It doesn't provide separation of concern. Presentation and Business logic are mixed up.
+- JSP overcomes almost all the problems of Servlet. It provides better separation of concern, now presentation and business logic can be easily separated.
+- You don't need to redeploy the application if JSP page is modified. JSP provides support to develop web application using JavaBean, custom tags 
+  and JSTL so that we can put the business logic separate from our JSP that will be easier to test and debug.
+- Flow of Model1 : Client Request (1) ---> JSP (2) <---> Java Bean (3) <---> Database
+                         Resopnse (4) <---
+- Browser sends request for the JSP page.JSP accesses Java Bean and invokes business logic.Java Bean connects to the database and get/save data.
+  Response is sent to the browser which is generated by JSP.
+- Advantage : Easy and Quick to develop web application.
+- Disadvantage : 
+  1) Navigation control is decentralized : since every page contains the logic to determine the next page. If JSP page name is changed that is 
+     referred by other pages, we need to change it in all the pages that leads to the maintenance problem.
+  2) Time consuming : You need to spend more time to develop custom tags in JSP. So that we don't need to use scriptlet tag.
+  3) Hard to extend It is better for small applications but not for large applications.
+2) Model 2 (MVC) Architecture : 
+- Model 2 is based on the MVC (Model View Controller) design pattern. The MVC design pattern consists of three modules model,view and controller.
+- It is a design pattern that separates the business logic, presentation logic and data.
+- Model : It represents the state (data) of the application. It can also have business logic. (Java Bean)
+- View : It represents the presentaion i.e. UI(User Interface). (JSP)
+-* Controller : It acts as an interface between View and Model(Data)."Controller" intercepts all the incoming requests.(e.g Servlet,Filter etc)
+   It receives input from the client and commands Model/View to change accordingly.
+- Flow of Model2 :                            
+				        Controller
+Client Request --->  (Servlet/Filter)
+      Response <---    |           |
+                       |           |				   
+                     View        Model --->  DataBase
+                     (JSP)      (Java Bean)
+- Advantage : Navigation control is centralized as now only controller contains the logic to determine the next page.
+  Easy to maintain,Easy to extend,Easy to test,Better separation of concerns.
+- Disadvantage : We need to write the controller code self. If we change the controller code, we need to recompile the class and redeploy the application.
+---------------------------------
+- jsp comment is called hide comment whereas html comment is called output comment. If user views the source of the page, the jsp comment will not be shown whereas html comment will be shown.
+- You can make your JSPs thread-safe by having them implement the SingleThreadModel interface. This is done by adding 
+  the directive <%@ page isThreadSafe="false" %> within your JSP page.
+- ServletContext gives the information about the container whereas PageContext gives the information about the Request.
+- Can an interface be implemented in the jsp file ? - No
+-  How to disable session in JSP? <%@ page session="false" %>   
+

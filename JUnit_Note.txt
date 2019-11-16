@@ -1,0 +1,170 @@
+----- Junit 5 -----
+- JUnit 5 = JUnit Platform + JUnit Jupiter + JUnit Vintage
+- JUnit Platform : 
+ * To be able to launch junit tests, IDEs, build tools or plugins need to include and extend platform APIs.
+ * It defines the TestEngine API for developing new testing frameworks that runs on the platform.
+ * It also provides a Console Launcher to launch the platform from the command line and build plugins Maven / Gradle.
+- JUnit Jupiter : 
+ * It includes new programming and extension models for writing tests. 
+ * It has all new junit annotations and TestEngine implementation to run tests written with these annotations.
+- JUnit Vintage : 
+ * It’s primarly used for backward compatibility with JUnit 3 and JUnit 4.
+- Annotations :  
+  @BeforeAll : to invoke method(static void method) only once, before starting all the tests. (In JUnit4 : @BeforeClass)
+  @BeforeEach : to invoke method before each test method. (In JUnit4 : @Before)
+  @AfterEach  : to invoke method after each test method. In JUnit4 : @After)
+  @AfterAll : to invoke method(static void method) only once, after finishing all the tests. (In JUnit4 : @AfterClass)
+  @Test : to mark a method as junit test method.
+  @DisplayName : to provide any custom display name for a test class or test method
+  @Disabled : to disable or ignore a test class or method from test suite. (equivalent to @Ignored of JUnit4)
+  @Nested : to create nested test classes
+  @Tag : Mark test methods or test classes with tags for test discovering and filtering
+  @TestFactory : Mark a method is a test factory for dynamic tests
+- @RunWith(JUnitPlatform.class) and @SelectPackages and @SelectClasses annotations are used to create test suits (to run mutliple test classes)
+- @IncludePackages / @ExcludePackages (to filter packages), @IncludeClassNamePatterns / @ExcludeClassNamePatterns (to filter test classes) and 
+  @IncludeTags / @ExcludeTags (to filter test methods) annotations are used to for filtering test packages, classes or test methods.
+-------------------
+
+--- Current Version 4
+- JUnit is an open-source unit testing framework.
+- To perform unit testing, we need to create test cases. The unit test case is a code which ensures that the program logic works as expected.
+- @Test annotation specifies that method is the test method.
+- @Test(timeout=1000) annotation specifies that method will be failed if it takes longer than 1000 milliseconds (1 second).
+- @Test(expected = Exception.class) is used to test whether the code throws a desired exception or not. 
+- @Ignore is used to ignore the test and that test will not be executed.It can be used at class level also.
+- @BeforeClass annotation specifies that method(public static void method) will be invoked only once, before starting all the tests.
+- @Before annotation specifies that method will be invoked before each test.
+- @After annotation specifies that method will be invoked after each test.
+- @AfterClass annotation specifies that method will be invoked only once, after finishing all the tests.
+- "org.junit.Assert" class provides methods to assert the program logic.
+- The common methods of Assert class : 
+  1) void assertEquals(boolean expected,boolean actual): checks that two primitives/objects are equal. It is overloaded.
+  2) void assertTrue(boolean condition): checks that a condition is true.
+  3) void assertFalse(boolean condition): checks that a condition is false.
+  4) void assertNull(Object obj): checks that object is null.
+  5) void assertNotNull(Object obj): checks that object is not null.
+  6) void assertSame(Object expected, Object actual) : tests if two object references point to the same object.
+  7) void assertNotSame(boolean condition) : tests if two object references do not point to the same object.
+  8) void assertArrayEquals(expectedArray, resultArray) : test whether two arrays are equal to each other.
+- Test suite is used to bundle a few unit test cases and run them together. In JUnit, both @RunWith and @Suite annotations are used to run the suite tests. 
+  e.g @RunWith(Suite.class) 
+      @Suite.SuiteClasses({ TestJunit1.class, TestJunit2.class })
+	  public class JunitTestSuite {}  	
+- JUnitCore class is used to run the specified tests from the command line. e.g 
+  Result result = JUnitCore.runClasses(new Class[]{TestJunit1.class,TestJunit2.class});   or   Result result = JUnitCore.runClasses(JunitTestSuite.class);
+- Parameterized tests allow a developer to run the "same test" over and over again using different "values".
+- Steps to create a parameterized test : 
+ 1) Annotate test class with @RunWith(Parameterized.class).
+ 2) Create a public static method annotated with @Parameterized.Parameters that returns a Collection of Objects (as Array) as test data set.
+ 3) Create a public constructor that takes in what is equivalent to one "row" of test data.
+ 4) Create an instance variable for each "column" of test data.
+ 5) Create your test case(s) using the instance variables as the source of the test data.
+----------------------- Mockito ------------------------------------
+- Mockito is a mocking framework, JAVA-based library that is used for effective unit testing of JAVA applications.
+- Mockito is used to mock "interfaces" so that a dummy functionality can be added to a mock interface that can be used in unit testing.
+- Mocking is a way to test the functionality of a class in isolation. Mocking does not require a database connection or properties file read or file server read 
+  to test a functionality.Mock objects do the mocking of the real service. A mock object returns a dummy data corresponding to some dummy input passed to it.
+-* It uses Java Reflection in order to create mock objects for a given interface.Mock objects are nothing but proxy for actual implementations.
+- @RunWith : attaches a runner (MockitoJUnitRunner) with the test class to initialize the test data.
+- @Mock : annotation is used to create the mock object to be injected.(To ineject dependent object). We can also user Mockito.mock(ServiceClass.class) static 
+  method  to inject mock object.
+- @InjectMocks : annotation is used to create and inject the mock object.It will inject the mocks marked with @Mock to this instance when it is created.
+  (To create object of Real application class/service for which test cases are created in test class with dependet objects injection)
+- Mockito adds a functionality to a mock object using the methods Mockito.when(). e.g Mockito.when( mockObj.method ).thenReturn( returnVal ) or 
+  Mockito.doReturn(returnVal).when(mockObj).method 
+  Mockito.when(customerDao.save(customerObj)).thenReturn(true) , Mockito.when(customerDao.save(any(Customer.class))).thenReturn(true) , 
+  Mockito.when(calcService.add(10.0,20.0)).thenReturn(30.0) ,   Mockito.doReturn(30.0).when(calcService).add(10.0,20.0);  
+  Mockito.when(calcService.add(anyDouble(),anyDouble())).thenReturn(30.0), Mockito.when(calcService.add(any(Double.class), any(Double.class))).thenReturn(30.00) 
+- However, when there are multiple parameters to a method, we cannot mix matchers and actual objects.We either have to use matchers for all 
+  parameters or should pass in real values or objects.
+- Mockito can ensure whether a mock method is being called with reequired arguments or not using the verify() method. e.g Mockito.verify(calcService).add(10.0, 20.0)
+- Mockito provides a special check on the number of calls that can be made on a particular method. e.g 
+  Mockito.verify(calcService, times(2)).add(10.0, 20.0) , Mockito.verify(calcService, never()).subtract(10.0, 20.0) , Mockito.verify(calcService, atLeastOnce()).subtract(20.0, 10.0)
+  Mockito.verify(calcService, atLeast(2)).add(10.0, 20.0) , Mockito.verify(calcService, atMost(3)).add(10.0,20.0)
+- Mockito provides the capability to a mock , to throw exceptions, so exception handling can be tested.  e.g 
+  Mockito.doThrow(new Exception("Add operation not implemented")).when(calcService).add(10.0,20.0)
+- Mockito provides Inorder class which takes care of the order of method calls that the mock is going to make in due course of its action. e.g 
+  InOrder inOrder = Mockito.inOrder(calcService);
+  inOrder.verify(calcService).add(20.0,10.0);
+  inOrder.verify(calcService).subtract(20.0,10.0);
+- Mockito provides a Answer interface which allows stubbing with generic interface. e.g 
+  Mockito.when(calcService.add(20.0,10.0)).thenAnswer(new Answer<Double>() {
+	@Override
+	public Double answer(InvocationOnMock invocation) throws Throwable {
+	  Object[] args = invocation.getArguments();
+	  Object mock = invocation.getMock();	
+	  return 30.0;
+	}
+  });
+- Mockito provides option to create spy on real objects. When spy is called, then actual method (not stubbed method) of real object is called. e.g 
+  CalcService calcService Mockito.spy(new CalculatorServiceImpl())
+- in spy , we don't need to stub the method using when() , as it will call actual method of real object.
+- Mockito provides the capability to a reset a mock so that it can be reused later. e.g  Mockito.reset(calcService)
+- Mockito provides a special Timeout option to test if a method is called within stipulated time frame. e.g 
+  Mockito.verify(calcService,timeout(1000)).add(20.0,10.0)
+------------- Power Mockito -------------  
+- Mockito does not allow us to mock private,static and final methods.
+- PowerMock uses a custom classloader and bytecode manipulation to enable mocking of static methods, constructors, final classes and methods,
+  private methods, removal of static initializers and more.
+- PowerMockito is used to mock final method,static method and private method. e.g
+  @PrepareForTest({ FinalMethodClass.class , StaticMethodClass.class , PrivateMethodClass })
+  // Case1 : static method
+  PowerMockito.mockStatic(StaticMethodClass.class);
+  PowerMockito.when(StaticMethodClass.getStaticMethod(Mockito.any(String.class))).thenReturn(1);
+  // Case2 : final method
+  FinalMethodClass finalMethodClassObj = PowerMockito.mock(FinalMethodClass.class);
+  PowerMockito.when(finalMethodClassObj.getStrLength1(Mockito.any(String.class))).thenReturn(1);
+  
+public final class SampleService {
+	public String methodMakingNonVoidPrivateMethodCall(String message) { return nonVoidPrivateMethod(message); }
+	private String nonVoidPrivateMethod(String helloMessage) { return helloMessage + "private metohd content" ; }
+	public void methodMakingVoidPrivateMethodCall() { voidPrivateMethod(); }
+	private void voidPrivateMethod() { System.out.println("voidPrivateMethod stuff"); }
+	public String methodMakingStaticNonVoidMethodCall(String message) { return SampleUtil.sayHello(message); }
+	public String methodMakingStaticVoidMethodCall(String message) {
+		SampleUtil.printHello(message);
+		return "printed " + message;
+	}
+	public final String finalMethodCall(String message) { return message; 	}
+}
+public class SampleUtil {
+	public static String sayHello(String message) { return message + "static metohd content" ; }
+	public static void printHello(String message) { System.out.println("printing .. " + message); }
+}
+
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({SampleService.class,SampleUtil.class})
+public class SampleServiceTest {
+	@Spy
+	private SampleService spySampleService = new SampleService();
+	private SampleService realSampleService = new SampleService();
+	@Test
+	public void testMethodMakingNonVoidPrivateMethodCall() throws Exception {
+		PowerMockito.doReturn("test test").when(spySampleService, "nonVoidPrivateMethod",Mockito.anyString()); // OR
+		//PowerMockito.when(spySampleService, PowerMockito.method(SampleService.class, "nonVoidPrivateMethod", String.class)).withArguments(Mockito.anyString()).thenReturn("test test");
+		Assert.assertEquals("test test", spySampleService.methodMakingNonVoidPrivateMethodCall("test"));
+	}
+	@Test
+	public void testMethodMakingVoidPrivateMethodCall() throws Exception {
+		//PowerMockito.doNothing().when(spySampleService, PowerMockito.method(SampleService.class, "voidPrivateMethod")); // to ignore void private metohd
+		spySampleService.methodMakingVoidPrivateMethodCall();
+		PowerMockito.verifyPrivate(spySampleService, Mockito.times(1)).invoke("voidPrivateMethod");
+	}
+	@Test
+    public void testMethodMakingStaticNonVoidMethodCall() throws Exception {
+		PowerMockito.mockStatic(SampleUtil.class);
+		PowerMockito.when(SampleUtil.sayHello(Mockito.anyString())).thenReturn("test test");
+        Assert.assertEquals("test test", spySampleService.methodMakingStaticNonVoidMethodCall("test")); // realSampleService can also be used
+    }
+    @Test
+    public void testMethodMakingStaticVoidMethodCall() throws Exception {
+    	PowerMockito.mockStatic(SampleUtil.class);
+    	PowerMockito.doNothing().when(SampleUtil.class);
+    	realSampleService.methodMakingStaticVoidMethodCall("test"); 
+    }
+	@Test
+    public void testFinalMethodCall() {
+        Mockito.when(mockSampleService.finalMethodCall(Mockito.anyString())).thenReturn("str from final method");
+        Assert.assertEquals("str from final method", mockSampleService.finalMethodCall("test"));
+    }
+}

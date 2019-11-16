@@ -1,0 +1,378 @@
+- HTML : Content , CSS : Presentation , JavaScript : Behaviour
+- JavaScript is lightweight,interpreted(no compilation),object-based(not class based) scripting language. 
+- Usage : Client side web development,validation,to change HTML content at runtime
+- JavaScript is not compiled but "translated".JavaScript Translator (embedded in browser) is responsible to translate JavaScript code.
+---------- Variable and Function ----------
+- Primitive data type : 1) number : 64 bit double preceision   2) string : Sequences of unicode characters (16 bit) 
+  3) boolean   4) undefined   5) null : of type object
+- Non-primitive (reference) data type : Object, Array , RegExp.
+- Declaration : var a; , Defination : a = 10; (Before assigning value, default value of variable is undefined (of type undefined))
+- JavaScript supports loose/week typing (no type information associated with variables). e.g var a = 10; a = "Hello"; // will not give error
+- typeof operator is used to identify type of variable. e.g typeof varName/varValue 
+- == operator compares  two variables based on it's value.(both varible can be diffrent type also. e.g 10 == "10" will give true).
+- === operator compares two variables based on it's value as well as type(both varible must be of same type only). (precise check)
+- Type coercion : 1) Javascript is flexible with typing. 2) values of all types have an associated Boolean value.(e.g var a = 10; if(a){} for non zero value,it 
+  will return true)
+- JavaScript function : is a block of code, that can be executed when "called".It can return a value(default is undefined).
+- In javascript function can be treated as value(function can be assigned to a variable).Functions are objects.function Overloading not possibble in javascript. 
+  1) function myFn(){ console.log("Hi"); } 			    // Function Declaration  
+  2) var fn = function myFn(){ console.log("Hi"); };	// Function Expression
+  3) var fn = function (){ console.log("Hi"); }; 	    // Anonymous Function Expression
+- function can be passed as an argument to another function. 
+- Implicit arguments availabe to function : arguments, this.
+- Function expressions can be made "self-invoking".A self-invoking expression is invoked automatically, without being called. e.g 
+	(function () {
+		var x = "Hello!!";      // I will invoke myself
+	})();
+- scope in javascript : 1) global scope 2) local scope (inside function only) 
+- When you declare global variable/function,it is implicitaly added into the window object.You can access it through window object also.To declare JavaScript 
+  global variables inside function, you need to use window object. (e.g window.varName = 100;)
+- If you perform Read operation on variable before declaring it,it will result into an error.But,for Write operation it will create a new variable in global scope.
+- Hoisting is JavaScript's default behavior of moving declarations to the top of the current scope.It applies to variable declarations and function 
+  declaration only(not applicabe to function expression.Because, function declaration results in a function object being created in the compilation step itself)
+  Because of this, JavaScript functions can be called before they are declared: e.g 
+	myFunction(5);
+	function myFunction(y) { return y * y; }
+- Any variables declared in a function get created evertime the function is called.
+- strict mode is used to avoid creation of undeclared global varaibles through write operation.can be used inside function also. e.g "use strict";
+- closures : closure gives you access to an outer function’s scope from an inner function.closures are created every time a function is created.Through closure 
+  child function keep the variable of the parent scope even after the parent function has already executed.
+- Closure don’t store the variable value rather it stores the reference of the variable.hence, returns the latest value.
+---------- Object ----------
+- Object : an entity having state(properties) and behavior(functions).It is not bound to class. e.g 
+- Three ways to create objects : 
+  1) var person = {"name" : "Vivek", "age" : 25}  // Using Object literal 
+  2) var objRef = new Object();					  // Using default Object constructor function
+  3) var personObj = new Person("David",26);      // Using custom object constructor function
+- Object property can be accessed directly(no private/public concept)(e.g obj.prop1 or obj["prop1"] ). 
+- New properties can be added on object direclty. Objects can be nested. 
+- To delete property from object : delete person.age;
+- foreach loop can be used to get all properties of object. e.g for (propName in obj){ propVal = obj[propName] }  or (index in obj){ propVal = obj[index] }
+- Every JavaScript object has a prototype. The prototype is also an object (It will be automatically created using "new Object()").All JavaScript objects 
+  inherit their properties and methods from their prototype.e.g Objects created with new Date() inherit the Date.prototype.
+- Objects created using an object literal or with new Object() will refere to Object.prototype object.
+- The Object.prototype is on the top of the prototype chain.All JavaScript objects (Date, Array, RegExp, Function) inherit from the Object.prototype.
+- The standard way to create an object prototype is to use an object constructor function. e.g
+	function Employee(empId,empName){
+		// var this = {}; 	// Implicitly added by Javascript Interpreter
+		this.empId = empId;
+		this.empName = empName;
+		this.getEmpId = function(){ // method as object property
+			return this.empId;
+		}
+		this.getEmpName = function(){
+			return this.empName;
+		}
+		// return this; 	// Implicitly added by Javascript Interpreter
+	}
+	var empObj = new Employee(123456,'Emp1');
+- Calling a regualr function in constructor mode using the new keyword still works.
+- Calling constructor function without the new keyword doesn't work.No new object gets created,and the return value is undefined. 
+- To add a new property to a prototype, you must add it to the constructor function.Or else you have to use "prototype" property to add new property/function to
+  an existing prototype. e.g Employee.prototype.salary = 50000; // can be accessible from all created objects of Employee.
+- Note : function object has "prototype" property to refer it's prototype object while prototype object has "constructor" property to refer it's creator function.
+  If we create object from constructor function,its "__proto__" property is used to refere prototype object.
+
+	Employee function			  Employee's Prototype			  Object's Prototype
+	        prototype ----------->			 __proto__ ---------> 
+										^
+	    empObj							|
+           __proto__ -------------------
+		   
+- Inheritance example in javaScript : 
+	function Company(companyYear){		// Company Constructor
+		this.companyName = 'ABC';
+		this.companyYear = companyYear;
+	}
+	function Employee(empId,empName,companyYear){	// Employee Constructor
+		Company.call(this,companyYear);				// Approach1 : Inheriting companyName,companyYear in Employee
+		this.empId = empId;
+		this.empName = empName;
+	} 
+	var empObj = new Employee(123456,'ABC',2018);
+	var companyName = empObj.companyName , companyYear = empObj.companyYear;
+	// OR Approach2 :	empObj.__proto__.__proto__ = Company.prototype
+
+- Array : Collection of elements.Of type object.Index based. when you access array element by index e.g a[4], interpreter implicitly converts it into a["4"].
+- Three ways to construct array  : 
+  1) var arr = [val1,val2.....valN];   			// By array literal
+  2) var arr = new Array();		   				// Using new keyword
+  3) var arr = new Array(val1,val2,...valN);    // Using an Array constructor
+- Associative Array : Array with "named indexes" are called associative array. e.g var person = []; person["firstName"] = "John";
+  var arrLen = Object.keys(person).length;   
+- Note : In JavaScript, arrays use "numbered indexes". while objects use "named indexes".Arrays are a special kind of objects, with numbered indexes.
+- Array methods : 1) length  2) push() : to add new element at end  3) pop() : to remove  element from end  4) unshift() : to add new element at front 
+  5) shift() : to remove  element from front  6) forEach(item,index,array)  7) toString()  8) join(seprator) : joins all array elements by seprator and converts into a string
+  9) delete arr[index] : to make element undefined   10) : slice()/slice(si)/slice(si,ei) : creates a new array from existing array
+  11) sort() : sorts an array "alphabetically"  12) reverse()  13) concat(arr2)
+- By default,sort() function sorts values as strings.compare() function is used to define an alternative sort order. e.g 
+  1) arr.sort(function(a,b){return a-b});  2) for object arr : arr.sort(function(obj1,obj2){return obj1.prop1 - obj2.prop2});
+- Note : delete operator may leave undefined holes in the array. Use pop() or shift() instead.
+---------- String ---------- 
+- The JavaScript string is an "object" that represents a sequence of characters. 
+- There are 2 ways to create string in JavaScript : 
+  1) By string literal. e.g var strName = "string value";  
+  2) By string object (using new keyword). e.g var strName = new String("string literal");  
+- Yoy can find length of a string usnig built in "length" property  of String.(e.g var strLen = str.length;)
+- The escape character (\) can also be used to insert other special characters in a string.
+-* String which is created using literals is of type "string".While string which is created usnig Object is of type "object".
+
+  hence for var x = "John",y = new String("John") (x === y) will return false becuse type of x is "string" while type of y is "object". and
+  for x = new String("John") , y = new String("John") (x === y) will also retun false as x and y both are two different objects.
+-  String methods : 
+  1) charAt(index) : returns the character at the given index.
+  2) concat(str) : joins two or more strings.It can be used instead of the plus operator.
+  3) indexOf(str) : returns the index position of the "first" occurrence of a specified text in a string.
+  4) indexOf(str,startIndex) : returns the index position of the "first" occurrence of a specified text from the startIndex in a string.
+  5) lastIndexOf(str) : returns the last index position of the "last" occurrence of a specified text in a string.
+  6) search(str) : It searches a string for a specified value and returns the position of the match.
+  7) slice(beginIndex, endIndex) : returns the parts of string from given beginIndex to endIndex.Here endIndex is exclusive.
+  8) slice(beginIndex) : returns the parts of string from given beginIndex to end of string.
+  9) substring(beginIndex, endIndex) : returns the parts of string from given beginIndex to endIndex.Here endIndex is exclusive.It is same as slice(),only deffrence is that it can not accept negative index value.
+  10) replace('oldVal','newVal') : replaces a specified value with another value in a string.It does not change the string on which it is called on. It returns a new string.
+  11) toLowerCase() : returns the given string in lowercase letters.
+  12) toUpperCase() :returns the given string in uppercase letters.
+  13) charCodeAt(index) : returns the unicode of the character at a specified index in a string.
+  14) split(seprator) : convert string to array base on split seprator.
+  15) trim() : removes leading and trailing whitespaces from the string.
+-** All string methods return a "new string". They don't modify the original string.Strings are immutable: It cannot be changed, only replaced.
+-* In slice() method,If a parameter is negative, the position is counted from the end of the string.
+- we can also use regular expression as a first args in replace() method to replace all matched cases.
+- In split() method, If the separator is omitted, the returned array will contain the whole string in index [0].
+- In split() method,If the separator is "", the returned array will be an array of single characters.
+-* The JavaScript compiler works from "left to right". hence for var a = 10,b = 20, c = "30",d = "40",result = a + b + c; result will be 3030 (not 60).
+  but for result = c * d; it will be 1200 (string as number).
+---------- Number ---------- 
+- The JavaScript number object enables you to represent a numeric value. It may be integer or floating-point. 
+-* Normally JavaScript numbers are primitive values created from literals. It's type is "number". But numbers create with Number Objects 
+  (var no = new Number(12);) is of type "object".
+- You can use the isNaN() function to find out if a value is a number or not.typeof NaN is "number".
+- Infinity is the value JavaScript will return if you calculate a number outside the largest possible number.typeof Infinity is "number".
+---------- Date ---------- 
+- The JavaScript date "object" can be used to get year, month and day.It consists of a year, a month, a day, an hour, a minute, a second, and milliseconds.
+- You can display a timer on the webpage by the help of JavaScript date object.
+- Four Constuctor : 
+  1) new Date() 2) new Date(milliseconds) 3) new Date(dateString) 4)new Date(year, month, day, hours, minutes, seconds, milliseconds)
+- Four types of JavaScript date input formats  : 
+  1) ISO Date	"2015-03-25" (The International Standard)
+  2) Short Date	"03/25/2015"
+  3) Long Date	"Mar 25 2015" or "25 Mar 2015"
+  4) Full Date	"Wednesday March 25 2015"
+- JavaScript Date Methods :
+  1)* getDate()	: Get the day as a number (1-31)
+  2) getDay() : Get the weekday as a number (0-6)
+  3) getMonth() : Get the month (0-11).So it is better to use getMonth()+1 in your code.
+  4) getFullYear() : Get the four digit year (yyyy)
+  5) getHours() : Get the hour (0-23)
+  6) getMinutes() : Get the minutes (0-59)
+  7) getSeconds() : Get the seconds (0-59)
+  8) getMilliseconds()	Get the milliseconds (0-999)
+  9) getTime() : Get the time (milliseconds since January 1, 1970) 
+  10) setDate(dayVal) : Set the day as a number (1-31)
+  11) setFullYear(yearVal) : Set the year (optionally month and day)
+  12) setHours(hourVal) : Set the hour (0-23)
+  13) setMilliseconds(millSecVal) : Set the milliseconds (0-999)
+  14) setMinutes(minVal) : Set the minutes (0-59)
+  15) setMonth(monthVal) : Set the month (0-11)
+  16) setSeconds(secVal) : Set the seconds (0-59)
+  17) setTime(timeVal) : Set the time (milliseconds since January 1, 1970)
+- Date.parse() method converts input  date into milliseconds.
+---------- Math ----------
+- JavaScript math "object" provides several constants and methods to perform mathematical operation.
+  1) Math.sqrt(n) : returns the square root of the given number.
+  2) Math.random() : returns the random number between 0 to 1.
+  3) Math.pow(m,n) : returns the m to the power of n.
+  4) Math.floor(n) : returns the lowest integer for the given number. For example 3 for 3.7, 5 for 5.9 etc.
+  5) Math.ceil(n) : returns the largest integer for the given number. For example 4 for 3.7, 6 for 5.9 etc.
+  6) Math.round(n) : returns the rounded integer nearest for the given number. If fractional part is equal or greater than 0.5, it goes to 
+     upper value 1 otherwise lower value 0. For example 4 for 3.7, 3 for 3.3, 6 for 5.9 etc.
+  7) Math.abs(n) : returns the absolute value for the given number. For example 4 for -4, 6.6 for -6.6 etc.
+---------- Boolean ----------
+- JavaScript Boolean is an object that represents value in two states: true or false. You can create the JavaScript Boolean object by Boolean() constructor.
+  e.g Boolean booleanObjRef = new Boolean(value);
+---------- Browser Object Model (BOM) ----------
+-* The Browser Object Model (BOM) is used to interact with the browser.
+-* window object is the default object of "browser" not javascript.
+-* The window object represents a window in browser. An object of window is created automatically by the browser.
+-* if html document contains frame or iframe, browser creates additional window objects for each frame.
+- Methods of window object : 
+  1) alert() : displays the alert box containing message with ok button.
+  2) confirm() : displays the confirm dialog box containing message with ok and cancel button.
+  3) prompt() : displays a dialog box to get input from the user.
+  4) open()	: opens the new window.
+  5) close() : closes the current window.
+  6) setTimeout() : performs action after specified time like calling function, evaluating expressions etc.
+- Below are the objects which are property of window object.
+  1) history object : represents an array of URLs visited by the user. By using this object, you can load previous, forward or any particular page.
+  Methods of history object : 
+   1) forward() : loads the next page.
+   2) back() : loads the previous page.
+   3) go() : loads the given page number.
+  2) navigator object : It is used for browser detection. It can be used to get browser information such as appName, appCodeName, userAgent etc. 
+  3) screen object : holds information of browser screen. It can be used to display screen width, height, colorDepth, pixelDepth etc.
+---------- Document Object Model (DOM) ----------
+-* The "document" object (DOM) represents the whole html document.When html document is loaded in the browser, it becomes a document object. 
+   It is the root element that represents the html document.DOM model is constructed as a tree of Objects.
+- The HTML DOM is a standard for how to get, change, add, or delete HTML elements.
+-* By the help of document object, we can add dynamic content to our web page.It is the object of "window".
+- HTML "DOM methods" are "actions" you can perform on "HTML Elements" and "HTML DOM properties" are "values" of HTML Elements that you can set or change. 
+- Methods of document object : 
+  1) write("string") : writes the given string on the doucment.
+  2) writeln("string") : writes the given string on the doucment with newline character at the end.
+  3) getElementById("elementId") : returns the element reference having the given id value.
+  4) getElementsByName("elementName") : returns all the elements having the given name value.
+  5) getElementsByTagName"tagName") : returns all the elements having the given tag name.
+  6) getElementsByClassName("className") : returns all the elements having the given class name.
+  7)* createElement(element) : Create an HTML element.
+  8)* removeChild(element) : Remove an HTML element.
+  9)* appendChild(element) : Add an HTML element.
+  10)* replaceChild(element) : Replace an HTML element.
+-* innerHTML property can be used to write the dynamic html on the html document.It can be used to get or change any HTML elements.
+- innerText property can be used to write the dynamic text on the html document. Here, text will not be interpreted as html text but a normal text.
+- element.innerHTML = new html property will change the inner HTML content of an element.
+- element.attribute = new value	property will Change the attribute value of an HTML element.
+-* element.setAttribute(attribute, value) Change the attribute value of an HTML element
+-* element.style.property = new style	Change the style of an HTML element.
+-* we can add event for HTML element using documernt object e.g document.getElementById(id).onclick = function(){code}
+---------- Ajax ----------
+-* AJAX (Asynchronous JavaScript And XML) allows web pages to be updated "asynchronously" by exchanging data with a web server behind the 
+  scenes.This means that it is possible to update parts of a web page, without reloading the whole page.
+- It uses a combination of 1) A browser built-in "XMLHttpRequest" object (to request data from a web server) and 
+  2) JavaScript and HTML DOM (to display or use the data)
+- we can do following task with the help of Ajax : 
+  1) Read data from a web server - after the page has loaded
+  2) Update a web page without reloading the page
+  3) Send data to a web server - in the background
+-* The "XMLHttpRequest" object can be used to exchange data with a web server behind the scenes. This means that it is possible to update 
+ parts of a web page, without reloading the whole page.
+-* Syntax : var xhttp = new XMLHttpRequest();
+  for older version : var  xhttp = new ActiveXObject("Microsoft.XMLHTTP");
+hence, if (window.XMLHttpRequest) {
+			xmlhttp = new XMLHttpRequest(); // code for modern browsers
+	   }else {
+			xmlhttp = new ActiveXObject("Microsoft.XMLHTTP"); // code for old IE browsers
+	   }
+-* For security reasons, modern browsers do not allow access "across domains".This means that both the web page and the XML file it tries to 
+ load, must be located on the same server.
+- XMLHttpRequest Object Methods : 
+ 1) new XMLHttpRequest() : Creates a new XMLHttpRequest object
+ 2) abort() : Cancels the current request
+ 3) getAllResponseHeaders() : Returns header information
+ 4) getResponseHeader() : Returns specific header information
+ 5) open(reqType, url, asyncFlag, user, psw) : Specifies the request. here , method: the request type GET or POST , url: the file location
+    async: true (asynchronous) or false (synchronous) , user: optional user name, psw: optional password
+ 6) send() : Sends the request to the server Used for GET requests
+ 7) send(string) : Sends the request to the server.Used for POST requests.
+ 8) setRequestHeader() : Adds a label/value pair to the header to be sent
+--------------------------------------
+- JSON 
+- JSON is a lightweight text format that is independent of any programming Languages thus making it an ideal option for data-interchange.
+- JSON uses arrays and Objects.
+- JSON String : '{"prop1" : val1 , "prop2" : val2 }'
+- Javascript object : {
+						prop1 : val1,
+						prop2 : val2
+					  }
+- JSON.parse(jsonStr); // will return javaScript object
+- JSON.stringify(javascriptObj); // will return json string
+- JSON transfers data faster than XML because XML uses tags to describe data which increases their data size.
+- JSON uses typed Objects, which can be parsed by any standard JavaScript function. Whereas, XML uses type-less strings, which must be parsed 
+  by XML parser (XPath) during run-time, which makes it more complex.
+- JSON cannot handle large data.Not suitable for handling different multimedia formats.
+- JSON does not have a feature to support 'comments'. This could be included as an additional attribute alone.
+- In JSON, values should strictly use one of the following data types : String,Number,Object,Array,Boolean,Null
+- JSON value can not be function,date or undefined.
+- delete keyword is used to delete properties from a JSON object e.g delete myObj.prop1 or delete myObj.arrObj[1]
+--------------------
+TypeScript
+--------------------
+- Cons of Javascript : 1) not typesafe 2) Objects are loosely structured(no concept of class)
+- TypeScript -> TypeScript Compiler -> Javascript -> Browser
+- TypeScript : Javascript + types (and some other stuff)
+- To install TypeScript Compiler : npm install typescript -g
+- Command to compile typescript file : tsc <typescript-file-name>.ts
+- After compilation, type information will be erased and will not reflected in javascript file. 
+- If any type error exist in typescript file,typescript compiler will give only warning and it will still compile into javascript file.
+- By default,typescript enforces that the argument counts in function calls exactly  match function signature.
+- If you don't explicitly declare variable type,but you assign a value with the "declaration",typescript implicitly assumes the type from the value being assigned.
+  var a = 10 ; // number implicitly
+  var b : boolean | number;
+  var c : string;
+  var d; 
+  d = 5; // implicitly any by default  
+  var arr : number[];
+  var tuppleEx : [number,boolean];
+  function add(a : number,b : number, c?, d = 0) : number { // c is optional, d is optional with def val , return type is number
+    return a + b;
+ }
+- Class and Inheritance example : 
+  interface PersonI{
+    getFullName() : string;
+  }
+  class Person{
+     // Approach1
+    private firstName : string; // default is public
+    private lastName : string;
+    constructor(firstName : string, lastName : string){ // special method,Only one constructor is allowed
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+    // OR Approach2 shortcut
+    /* constructor(private firstName : string, private lastName : string){ } */
+	getFirstName(){ return this.firstName; }
+    setFirstName(firstName : string){ this.firstName = firstName; }
+    getLastName(){ return this.lastName; }
+    setLastName(lastName : string){ this.lastName = lastName; }
+    getFullName() : string{     // method 
+        return this.firstName+' '+this.lastName;
+    }
+	greet(){ console.log("Hello from Person"); }
+  }
+  var personObj : PersonI = new Person("kaushik","Vyas");
+  let anoyObj = {
+    firstName : "Test",
+    lastName : "Test",
+    // age : 10 , // still it work with Duck typing
+    getFullName : () => "Test"  
+  };
+  personObj = anoyObj; // Duck typing
+  
+  class Programmer extends Person{ // Inheritance
+    constructor(){
+       super("",""); 
+    }
+    greet(){   // Overrided 
+		super.greet();
+        console.log("Hello from Programmer");
+    }
+  } 
+  var programmer : Person = new Programmer(); // Upcasting
+  programmer.greet();
+
+- Access modifier in typescript : public (default), private and protected  
+- readonly modifier (same as final in java) : can be assigned one time as inline value or from constructor. e.g readonly name = "fixedValue"; 
+- enum : to declare similar kind of elements. e.g 
+  enum Direction{ NORTH, SOUTH, EAST, WEST }
+  let direction = Direction.SOUTH;
+- Generics function :
+  function echo <T> (arg : T) : T {
+    return arg;
+  }
+  var myIntVal = echo(1);
+  //var myStrVal : string = echo(1); // will give error
+  function PersonEcho <T extends Person> (arg : T) : T {
+	return arg;
+  }
+  var programmerObj = PersonEcho(programmer);  
+- Typescript support modular approach for sepration of functionality and reusability.mark class with 'export' keyword to use it in another file.To import it use : 
+  import {Person} from './classes';
+- compiler argument : 
+  1) tsc test.ts --out custTest.js   // --out : to set our custom name for generated js file.
+  2) tsc test.ts --watch  			 // -- watch : to automatically detect the typescript file changes in correspondig js file
+  3) tsc -help
+  4) tsc --init		// to set compiler argument inside tsconfig.json file
+- npm init	// to initialize npm project and genrate package.json file   
+- npm install lodash --save  and  npm install @types/lodash --save-dev : to use lodash module features
+- npm install request --save  and  npm install @types/lodash --save-dev : to use lodash module features
+
+  

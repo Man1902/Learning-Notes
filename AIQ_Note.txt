@@ -1,0 +1,201 @@
+Cybase : R1 : 27-03-2019
+Diffrence between 
+1 ConcurrentHashMap and Collections.SynchronizedMap() - Done
+2 Overloading vs Overriding - Done
+3 Array vs Arraylist - Done
+4 Linkedlist vs Arraylist - Done
+5 Comparable vs Comparator -Done
+6 Iterator vs Enumeration - Done
+7 Checked Vs Unchecked Exception (Which one is better) - Done
+8 Thread Vs Runnable - Done
+9 LinkedHasMap Vs TreeMap - Done
+10 Web vs Application Server - Done
+Imutable class and precautions. - Done
+String pool , heap memory stack memory
+What is Garbage collection ? How we call it ?
+Final finally and Finalize
+Finally will beexecutive always?
+What happen at System.exit() ?
+Static in parent and child ?
+Object class methods 
+Why wait, notify in Object ?
+Why instance method of CC can't override static method of PC
+Why static method of CC can't hide instance method of PC
+What's enum ? can we define as subclass ? If used as member of class what should be taken care?
+In constructor,Why 1st statement must be either super() or this() ?
+
+Can we define multiple Session Factory ?
+What is session factory , session and transaction ?
+Entity type
+How to define mutable entity
+What is proxy ?
+Diff between
+1 load and get
+2 Primary Vs Secondary Caching
+
+Request flow in spring.
+Spring modules
+What is authentication and authorization ?
+Different Annotations
+Precaution in singleton scope
+Diff between
+1 prototype and request scope
+
+Rest Webservice Version and impl
+Different Scope
+ 
+Topics : CoreJava,Spring(week),Hibernate,Rest webservice,Jenkins,Sonar,Angualar Op,Selenium Op
+----------
+Cybase : 19-05-2018
+----------
+- How you will verify that your code is thread safe 
+- Print 5th largest number
+- a[], s, print all pairs having sum s
+- how to avoid deadlock 
+- why default method 
+- N thread N resources, how it will work properly.
+- Which design patterns are used in ur project
+  Direct : 
+  1) Adapter (Bnk-Rec-Rct) 
+  2) Strategy : Accounting and Bank integration based on payment mode (Collections.sort() )
+  3) Prototype  : 
+  Indirect: 
+  - Builder (String builder) 
+  - Observer (HttpSessionAttributeListener)
+  - Iterator (Collection framework)
+  - DAO Pattern
+  - In Spring : DI, Factory, Singleton, Proxy, Template, MVC, Front Controller, 
+  - Hibernate : 
+  
+- Where to use Interface Vs Abstract class
+- How to define Custom Checked Exception 
+- how to handle deadlock 
+- Why wait, notify in Object class ?
+- fromDate - toDate fetch Data , Map<Date,Pojo> , set null for data for which value not found.
+- Sort List<Emp> by age.
+- Java 8 features
+- find common element count of two array (1st array has duplicate also)
+----------
+Cybase : 06-01-2018
+----------
+* Generic non-Generic List Diffrence ?
+* Java design principles (SOLID)
+* input : List<Emp> , return List<Emp> based on different filter criteria. (Kind of statrgy pattern) 
+* Characteristics of String class
+* Diff between App and Web Server ?
+* How to do branching in SVN.
+* What is java generics and when it was introduced ?
+* diff impl of generics. (backward , forward compatibiity)
+* Why we can pass generic type class object in method having input arg is non generic class object ?
+* What precuation should be taken while creating custom inmutable class ?
+* Swap two nos without temp var and arithmetic operation. (use bitwise operator)
+* When to use interface vs abstract class 
+* Array related programing problems (Find mising no of arr having no between 1 to 100)
+* Design online movie booking site.
+* What challeges you have faced till now ?
+* which version control tool is used in your project ?
+----------
+synechron
+----------
+* What is encapsulation and abstraction?
+* Can we create custom marker interface ? Can it be used in real context ?
+* In singleton class how to do lazy initialization ?
+* how to test singleton class ?
+* can we overide static methiod ?
+* What is immutable class ?
+* how to handle collection in immutable class ?
+* Java 7 features ?
+* How try with resource work internally (1.7 feature)?
+* Java 7 feature in map ? 
+* What is Collision in map ?
+* Why HashMap Internally use LinkedList ?
+* What is difference between HashMap and Concurrent HashMap ?
+* what is use of equals and hashcode method in map ? 
+* Fail fast vs Fail safe 
+* Why to use lamda expression ?
+* Can functional interface extend another interface ?
+* Can functinoal interface have static and default method ?
+* Can functinoal interface declare mutliple Object class method as an abstract methods? 
+* Executors framework.
+* Difference between execute and submit
+* What is count down latch ?
+* Diff between callable and runnable, start vs run method.
+* when to extends thread vs impl runnable.
+* what is future in concurreny ?
+* What do you mean by hibernet proxy ?
+* Diff between persist vs save method, get vs load , openSeesion vs getSession
+* How to implement inheritance in hibernate?
+* What are different types of API in hibernate? (e.g criterion , session, query etc)
+* What are different type of exception in hibernate ?
+* What is Spring look up method ?
+* What is Spring Security ?
+* Why to use repository annotation ?
+* Say different spring annotation ?
+* What happens when we pass prototype reference to a singleton class?
+* What is spring AOP and how to impl different advice ?
+* J2EE design pattern. 
+* What is cusor in PL/SQL ?
+* Use of self join (ex emp-manager example)
+----------
+Eclinical
+----------
+- What is Sytstem.out.println() ?
+- Difference between "==" and equals() method.
+- You have one static block,main method, and another static method, is to possible to execute another method before static block and main method ?
+- In java what is default data type of Numeric litteral ?
+- HashMap - how to override equals() and hashCode() method ?
+- Immutable class example.
+- What are defferent Design Pattern in java.
+- How to create dictonary class singletone and threadsafe ?
+- Create custome Singletone class using all possible ways
+- One class, two differnet methods , two threads, can we start both the threas using single object simultaneously?
+- what isjSessionId ?
+- diffrence betwee senRedirect() and jsp:forward ? will req,resp obj will be same for both the cases ?
+- What is ORM ? Why it should be used ?
+- Can we use multiple DispatcherServlet in single application ?
+- If you want to get two context root in single application (e.g MyApp/WEB-INF/abc/ and MyApp/WEB-INF/xyz/) than how we can achive using DispatcherServlet?
+----------
+Elitecore
+----------
+* Why constructor can't be final,abstract or static ?
+* What is RDBMS ?
+* Which one is better Recusion or Iteration ?
+* static fields are stored in which memory ?
+* Type of normalization 
+* Prog : 
+ 1) Remove all consecutive char from String one at a time
+ 2) Fibonacci Series
+ 3) Find Second max no in array
+ 4) Impl binary search tree.
+ 5) Find four digit no , when multiply by 4 , result will be reverse of number. (ABCD * 4 = DCBA) (2178)
+----------
+Cygnet
+----------
+- Expplain flow of request to response in your current project.
+-  In rest web service , How to impl authentication ?
+- In rest web service , how to handle exception ?
+- In rest web service, how to get request and response object in controller method ?
+- In rest web service, how to get session attribute ?
+- In rest web service, explain flow to get all Emp Data ?
+- In hibenet 2nd level cache , is there any memory size limitation ?
+- How to clear 2nd level cache region ?
+- In spring transaction management, type of propogation.
+- Type of trigger in database
+- In srping,if we have two datasource , how to handle it with out qualifier uasage
+- Production env property configuration
+- OOP principal with example in current project.
+- How to do spring declarative txn management.
+- how to print hello with out System.out.println ?
+- In spring transaction management , how to allow half rollback only after certailn level.
+---------
+General
+----------
+* how to resolve cyclic dependecy in spring bean configuration.
+* Impl Observer Pattern.
+* 
+ 
+
+ 
+ 
+ 
+ 

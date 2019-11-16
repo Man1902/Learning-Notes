@@ -1,0 +1,1171 @@
+----------- Design Pattern ----------------------------
+- A design pattern is a general reusable solution to a commonly occurring problem within a given context in software design.
+- A design pattern is not a finished design that can be transformed directly into source or machine code. It is a description or template for 
+  how to solve a problem that can be used in many different situations.
+- The types of design patterns are 1) Creational 2) Structural 3) Behavioral design patterns.
+-------------------------------
+1) Creational design pattern : 
+-------------------------------
+- Creational design patterns are design patterns that deal with "object creation mechanisms", trying to create objects in a manner suitable 
+  to the situation.
+- Types of Creational design pattern are : 
+  1) Singleton Pattern 2) Factory Pattern 3) Abstract Factory Pattern 4) Builder Pattern 5) Prototype Pattern
+1.1) Singleton pattern : Define a class that has only one instance and provides a global point of access to it
+- This pattern involves a single class which is responsible to create an object while making sure that only single object gets created.This 
+  class provides a way to access its only object which can be accessed directly without need to instantiate the object of the class.
+- This pattern restricts the instantiation of a class and ensures that only one instance of the class exists in the java virtual machine.
+- Common concepts to implement Singleton pattern : 
+  * Private constructor to restrict instantiation of the class from other classes.
+  * Private static variable of the same class that is the only instance of the class.
+  * Public static method that returns the instance of the class, this is the global access point for outer world to get the instance of the 
+    singleton class.
+- Three appraoch to create to initialize sinlglton class object : 
+  1) Eager initialization : The instance of Singleton Class is created at the time of class loading.here, drawback of it is that instance is 
+     created even though client application might not be using it. e.g private static final MySingletonClass instance = new MySingletonClass();
+  2) Static block initialization : It is similar to eager initialization, except that instance of class is created in the static block that 
+     provides option for exception handling. e.g 
+     static{
+		instance = new MySingletonClass();
+	 }
+  3) Lazy Initialization : It creates the instance in the global access method at the time of first call to this class.But, this appraoch can 
+     cause issues if multiple threads are inside the if loop at the same time. It will destroy the singleton pattern and both threads will 
+	 get the different instances of singleton class.e.g 
+	 public static MySingletonClass getInstance(){
+		if(instatnce == null){
+			instatnce = new MySingletonClass();
+		}
+		return instatnce;
+	 }
+ 4) The easier way to create a thread-safe singleton class is to make the global access method synchronized or use synchronized block inside global access mrthod, 
+  so that only one thread can execute this method at a time.  e.g 
+	 public static MySingletonClass getInstance(){
+		if(instatnce == null){
+			synchronized (MySingletonClass.class) {
+				if(instatnce == null){
+					instatnce = new MySingletonClass();
+				}
+			}
+		}
+		return instatnce;
+	 }
+ 5) Bill Pugh Singleton Implementation implementation for thread-safe by using static inner class.
+    private static class SingletonHelper{
+        private static final MySingletonClass INSTANCE = new MySingletonClass();
+    }
+	 public static MySingletonClass getInstance(){
+        return SingletonHelper.INSTANCE;
+    }
+ 6) Enum Singleton to avoid issue of Reflection problem
+    public enum EnumSingletonClass {
+		OBJ;
+		public void doTask() {
+			System.out.println("My stuff");
+		}
+	}
+ 7) Serialization and Singleton : We have impement readResolve() method inside Single class to avoid problem during De-Serialization
+1.2) Factory Pattern (Virtual Constructor) :
+- Factory design pattern is used when we have a super class with multiple sub-classes and based on input, we need to return one of the sub-class.
+- It can be implemented by creating objects via a factory method, which is either specified in an interface and implemented in implementing 
+  classes (concrete classes); or implemented in a base class, which can be overridden when inherited in derived classes; rather than by a 
+  constructor.Here, subclasses are responsible to create the instance of the class.
+- It promotes the loose-coupling by eliminating the need to bind application-specific classes into the code.
+- Factory pattern provides abstraction between implementation and client classes through inheritance.
+- java.util.Calendar, ResourceBundle and NumberFormat getInstance() methods uses Factory pattern. e.g 
+  public final class RBIFactory {
+	private RBIFactory() {}
+	public static RBI getInstance(String bankName,double interestRate,double repoRate) {
+		if (bankName.equalsIgnoreCase("SBI")) {
+			return new SBI(interestRate,repoRate);
+		} else if (bankName.equalsIgnoreCase("BOB")) {
+			return new BOB(interestRate,repoRate);
+		}
+		return null;
+	}
+ }
+1.3) Abstract Factory pattern :  
+- It is a factory of factories.In Abstract Factory pattern, we get rid of if-else block and have a factory class for each sub-class.Abstract Factory class will 
+  return the sub-class based on the input factory class. 
+- In Abstract Factory pattern an interface is responsible for creating a factory of related objects without explicitly specifying their classes. Each generated 
+  factory can give the objects as per the Factory pattern.
+- It provides a way to encapsulate a group of individual factories that have a common theme without specifying their concrete classes. e.g 
+  final class RBIAbstractFactory {
+	private RBIAbstractFactory() {}
+	public static RBI getInstance(BankFactory bankFactory) {
+		return bankFactory.getInstance();
+	}
+  }
+  class SBIFactory implements BankFactory{
+	public SBIFactory(double interestRate,double repoRate) {
+		this.interestRate = interestRate;
+		this.repoRate = repoRate;
+	}
+	public RBI getInstance() {
+		return new SBI(interestRate, repoRate);
+	}
+ }
+1.4) Builder pattern : 
+- Builder pattern was introduced to solve some of the problems with Factory and Abstract Factory design patterns when the Object contains a lot of attributes.
+- Some of the parameters might be optional but in Factory pattern, we are forced to send all the parameters and optional parameters need to send as NULL.
+- Builder pattern solves the issue with large number of optional parameters and inconsistent state by providing a way to build the object step-by-step and 
+  provide a method that will actually return the final Object. e.g 
+  class Student {
+	private int studId; // mandatory 
+	private String name; // Optional
+	private Student(StudentBuilder studentBiuilder) {
+		this.studId = studentBiuilder.studId;
+		this.firstName = studentBiuilder.name;
+	}
+	public static class StudentBuilder {
+		private int studId; // mandatory 
+		private String name; // Optional
+		public StudentBuilder(int studId) {
+			this.studId = studId;
+		}
+		public StudentBuilder setName(String name) {
+			this.name = name;
+			return this;
+		}
+		public Student build(){
+			return new Student(this);
+		}
+	}
+ }
+- StringBuilder#append() (unsynchronized) and StringBuffer#append() (synchronized) are example of builder pattern.
+1.5) Prototype pattern : 
+- It is used when the Object creation is a costly and requires a lot of time and resources and you have a similar object already existing. So this pattern 
+  provides a mechanism to copy the original object to a new object and then modify it according to our needs. This pattern uses java cloning to copy the object.
+- Prototype design pattern mandates that the Object which you are copying should provide the copying feature. It should not be done by any 
+  other class. However whether to use shallow or deep copy of the Object properties depends on the requirements and its a design decision. e.g
+  public class Student implements Cloneable{
+	private int id;
+	private String name;
+	public Student(int id,String name){
+		this.id = id;
+		this.name = name;
+	} 
+	@Override
+	public Student clone() throws CloneNotSupportedException {
+		return super.clone();
+	}
+  }
+-------------------------------  
+2) Structural Design Pattern : 
+-------------------------------
+- Structural patterns provide different ways to create a class structure.
+2.1) Adapter Pattern : 
+- Adapter pattern works as a bridge between two incompatible interfaces. The object that joins these unrelated interface is called an Adapter.It has two 
+  approaches – class adapter and object adapter – however both these approaches produce same result.
+- Class Adapter uses "Inheritance"(IS-A) and extends the source interface (adapter interface).While Object Adapter uses "Composition/Aggregation"(HAS-A) and 
+  adapter contains the source object. e.g 
+  class Volt {
+	private int volts;
+	public Volt(int v) { this.volts = v; }
+  }
+  class Socket {
+	public Volt getVolt(){ return new Volt(220); }
+  }
+  interface SocketAdapter {
+	Volt get120Volt();
+	Volt get12Volt();
+  }
+  class SocketClassAdapterImpl extends Socket implements SocketAdapter { // 1) Class Adapter 
+	public Volt get120Volt() { return getVolt(); }
+	public Volt get12Volt() {
+		Volt v = getVolt();
+		return convertVolt(v, 10);
+	}
+	private Volt convertVolt(Volt v, int i) { return new Volt(v.getVolts() / i); }
+  }
+  class SocketObjectAdapterImpl implements SocketAdapter{ // 2) Object Adapter
+	private Socket sock = new Socket(); //Using Aggregation
+	public Volt get120Volt() { return sock.getVolt(); }
+	public Volt get12Volt() {
+		Volt v= sock.getVolt();
+		return convertVolt(v,10);
+	}
+	private Volt convertVolt(Volt v, int i) { return new Volt(v.getVolts()/i); }
+  }
+- Arrays#asList(), InputStreamReader(InputStream) (returns a Reader) , OutputStreamWriter(OutputStream) (returns a Writer) uses Adapter pattern.
+2.2) Composite Pattern : 
+- When we need to create a structure in a way that the objects in the structure has to be treated the same way, we can apply composite design pattern.
+- It consit of following objects : 
+  1) Base Component – It is the interface for all objects in the composition.client program uses base component to work with the objects in the composition. 
+     It can be an interface or an abstract class with some methods common to all the objects.
+  2) Leaf – Defines the behaviour for the elements in the composition. It is the building block for the composition and implements base component. It doesn’t 
+     have references to other Components.
+  3) Composite – It consists of leaf elements and implements the operations defined in base component.A composite object contains group of leaf objects and we should 
+     provide some helper methods to add or delete leafs from the group. We can also provide a method to remove all the elements from the group.
+- Composite pattern should be applied only when the group of objects should behave as the single object.Composite design pattern can be used to create a tree 
+  like structure. e.g 
+  interface Shape { // Base component
+	void fillColor(String color);
+  }
+  class Circle implements Shape { // Leaf object
+	public void fillColor(String color) { System.out.println("Cirlce is filled with " + color + " color."); }
+  }
+  class Triangle implements Shape { // Leaf object
+	public void fillColor(String color) { System.out.println("Triangle is filled with " + color + " color."); }
+  }
+  class Drawing implements Shape { // Composite object
+	List<Shape> lstShape = new ArrayList<Shape>();
+	public void fillColor(String color) {
+		for (Shape shape : lstShape) {
+			shape.fillColor(color);
+		}
+	}
+	public void add(Shape shape) { this.lstShape.add(shape); } // Add new Shape
+	public void remove(Shape shape) { this.lstShape.remove(shape); } // Remove Shape
+	public void clear() { this.lstShape.clear(); } 	// Remove all Shape
+ }
+2.3) Proxy Pattern : 
+- It is used when we want to provide "controlled access" of a functionality.Its common uses are to control access or to provide a wrapper implementation for 
+  better performance. e.g 
+  interface CommandExecutor {
+	void runCommand(String cmd) throws Exception;
+  }
+  class CommandExecutorImpl implements CommandExecutor {
+	public void runCommand(String cmd) throws Exception {
+		Runtime.getRuntime().exec(cmd);
+		System.out.println("'" + cmd + "' command executed.");
+	}
+  }
+  class CommandExecutorProxy implements CommandExecutor {	
+	private boolean isAdmin = false;
+	private CommandExecutor commandExecutor;
+	public CommandExecutorProxy(String user, String pwd) {
+		if ("admin".equals(user) && "password".equals(pwd)) {
+			isAdmin = true;
+		}
+		commandExecutor = new CommandExecutorImpl();
+	}
+	public void runCommand(String cmd) throws Exception {
+		if (isAdmin) {
+			commandExecutor.runCommand(cmd);
+		} else {
+			if (cmd.trim().startsWith("rm")) {
+				throw new Exception("rm command is not allowed for non-admin users.");
+			} else {
+				commandExecutor.runCommand(cmd);
+			}
+		}
+	}
+  }
+2.4) Flyweight Pattern : 
+- Flyweight design pattern is used when we "need to create a lot of Objects" of a class. Since every object consumes memory space that can be crucial for low 
+  memory devices, such as mobile devices or embedded systems, flyweight design pattern can be applied to reduce the load on memory by sharing objects.
+- Flyweight pattern tries to reuse already existing similar kind objects by storing them and creates new object when no matching object is found. e.g
+  interface IShape { void draw(); }
+  class CircleShape implements IShape {
+	private String color;
+	public CircleShape(String color) {
+		this.color = color;
+	}
+	public void draw() { System.out.println("Circle -> draw -> color : " + color); }
+  }
+  class ShapeFactory {
+	   private static final Map<String, IShape> circleMap = new HashMap<String, IShape>();
+	   public static IShape getCircle(String color) {
+		  CircleShape circle = (CircleShape)circleMap.get(color);
+	      if(circle == null) {
+	         circle = new CircleShape(color);
+	         circleMap.put(color, circle);
+	         System.out.println("Creating circle of color : " + color);
+	      }
+	      return circle;
+	   }
+  }  
+2.5) Facade Pattern : 
+- Facade pattern hides the complexities of the system and provides an interface to the client using which the client can access the system. 
+- This pattern involves a single class which provides simplified methods required by client and delegates calls to methods of existing system classes. e.g 
+  class ShapeMaker { // Facade class
+	private Circle circle;
+	private Triangle triangle;
+	public ShapeMaker() {
+		circle = new Circle();
+		triangle = new Triangle();
+	}
+	public void drawCircle() { circle.fillColor("Red"); }
+	public void drawTriangle() { triangle.fillColor("Green"); }
+ }
+2.6) Bridge Pattern : 
+- Decouple an abstraction from its implementation so that the two can vary independently.It's implementation prefers Aggregation over inheitance.
+- This pattern involves an interface which acts as a bridge which makes the functionality of concrete classes independent from interface implementer classes.e.g 
+  interface Color{ void applyColor(); }
+  class RedColor implements Color{
+	public void applyColor(){ System.out.println("red."); }
+  }
+  class GreenColor implements Color{
+	public void applyColor(){ System.out.println("red."); }
+  }
+  abstract class CShape{
+	protected Color color;
+	public CShape(Color c){ this.color = c; }
+	abstract public void applyColor();
+  }
+  class Triangle extends CShape{
+	public Triangle(Color c) { super(c); }
+	@Override
+	public void applyColor() {
+		System.out.print("Triangle filled with color ");
+		color.applyColor();
+	} 
+  }
+  class Pentagon extends CShape{
+	public Pentagon(Color c) { super(c); }
+	@Override
+	public void applyColor() {
+		System.out.print("Pentagone filled with color ");
+		color.applyColor();
+	} 
+  }
+2.7) Decorator Pattern : 
+- Decorator design pattern is used to modify the functionality of an object at runtime. At the same time other instances of the same class will not be affected 
+  by this, so individual object gets the modified behavior. 
+- We use inheritance or Aggregation to extend the behavior of an object but this is done at compile time and its applicable to all the instances of the class. We 
+  can’t add any new functionality or remove any existing behavior at runtime – this is when Decorator pattern comes into picture. e.g 
+  interface Car { // Component interface
+	void assemble();
+  }
+  class BasicCar implements Car { // Component Impl
+	public void assemble() { System.out.print("Basic Car."); }
+  }
+  class CarDecorator implements Car { // Decorator
+	protected Car car;
+	public CarDecorator(Car c) { this.car = c; }
+	public void assemble() { this.car.assemble(); }
+  }
+  class SportsCar extends CarDecorator { //Concrete Decorators
+	public SportsCar(Car c) { super(c); }
+	public void assemble(){
+		super.assemble();
+		System.out.print(" Adding features of Sports Car.");
+	}
+  }
+  class LuxuryCar extends CarDecorator { //Concrete Decorators
+	public LuxuryCar(Car c) { super(c); }
+	public void assemble(){
+		super.assemble();
+		System.out.print(" Adding features of Luxury Car.");
+	}
+  }
+-------------------------------
+3) Behavioral Design Patterns : 
+-------------------------------
+- Behavioral patterns provide solution for the better interaction between objects and how to provide lose coupling and flexibility to extend easily.
+3.1) Template Pattern : 
+- Template Method design pattern is used to create a method stub and deferring some of the steps of implementation to the subclasses. e.g(Buid a house example)
+- It defines the steps to execute an algorithm and it can provide default implementation that might be common for all or some of the subclasses.
+- Templte method should be final method only.
+- Most of the times, subclasses calls methods from super class but in template pattern, superclass template method calls methods from subclasses.
+- Methods in base class with default implementation are referred as Hooks and they are intended to be overridden by subclasses, if you want some 
+  of the methods to be not overridden, you can make them final.
+  abstract class HouseTemplate {
+	public final void buildHouse() { // Template method
+		buildFoundation();
+		buildPillars();
+		buildWalls();
+		buildWindows();
+	}
+	private void buildFoundation() { // default impl
+		System.out.println("Building foundation with cement,iron rods and sand");
+	}
+	public abstract void buildWalls(); // methods to be implemented by subclasses
+	public abstract void buildPillars();
+	public abstract void buildWindows();
+  } 
+- Template Pattern in JDK : All non-abstract methods of InputStream,OutputStream,Writer,AbstractList,AbstractSet and AbstractMap.
+  
+3.2) Mediator Pattern :  
+- Mediator design pattern is used to provide a "centralized communication medium" between different objects in a system.
+- It Allows loose coupling by encapsulating the way different sets of objects interact and communicate with each other.It focuses on providing 
+  a mediator between objects for communication and help in implementing lose-coupling between objects. example : Air traffic controller at Airport
+- The system objects that communicate each other are called Colleagues. e.g 
+  interface ChatMediator {
+	public void sendMessage(String msg, User user);
+	void addUser(User user);
+  }
+  abstract class User { // Colleague class
+	protected ChatMediator mediator;
+	protected String name;
+	public User(ChatMediator med, String name) {
+		this.mediator = med;
+		this.name = name;
+	}
+	public abstract void send(String msg);
+	public abstract void receive(String msg);
+  }
+  // ChatMediatorImpl
+  // UserImpl
+  
+3.3) Chain of Responsibility Pattern :  
+- Chain of responsibility pattern is used to achieve loose coupling in software design where a request from client is passed to a chain of objects to process 
+  them. Then the object in the chain will decide themselves who will be processing the request and whether the request is required to be sent to the next object 
+  in the chain or not. example : ATM Dispense machine. e.g 
+  class Currency {
+        private int amount;
+        public Currency(int amt) { this.amount = amt; }
+        public int getAmount() { return this.amount; }
+    }
+    interface DispenseChain {
+        void setNextChain(DispenseChain nextChain);
+        void dispense(Currency cur);
+    }
+    class Dollar20Dispenser implements DispenseChain { 
+        private DispenseChain chain;
+        @Override
+        public void setNextChain(DispenseChain nextChain) { this.chain = nextChain; }
+        @Override
+        public void dispense(Currency cur) {
+            if (cur.getAmount() >= 20) {
+                int num = cur.getAmount() / 20;
+                int remainder = cur.getAmount() % 20;
+                System.out.println("Dispensing " + num + " 20$ note");
+                if (remainder != 0)
+                    this.chain.dispense(new Currency(remainder));
+            } else {
+                this.chain.dispense(cur);
+            }
+        }
+    }
+    class Dollar10Dispenser implements DispenseChain { // 3rd processor
+        private DispenseChain chain;
+        @Override
+        public void setNextChain(DispenseChain nextChain) { this.chain = nextChain; }
+        @Override
+        public void dispense(Currency cur) {
+            if (cur.getAmount() >= 10) {
+                int num = cur.getAmount() / 10;
+                int remainder = cur.getAmount() % 10;
+                System.out.println("Dispensing " + num + " 10$ note");
+                if (remainder != 0)
+                    this.chain.dispense(new Currency(remainder));
+            } else {
+                this.chain.dispense(cur);
+            }
+        }
+    }
+    class ATMDispenseChain {
+        private DispenseChain c1;
+        public DispenseChain getC1() { return this.c1; }
+        public ATMDispenseChain() {
+            this.c1 = new Dollar20Dispenser(); // initialize the chain
+            DispenseChain c2 = new Dollar10Dispenser();
+            c1.setNextChain(c2);  // set the chain of responsibility
+        }
+    }
+- Chain of Responsibility Pattern in JDK : Logger.log() , Filter.doFilter()
+
+3.4) Observer Pattern :
+- In this pattern, there are many observers (objects) which are observing a particular subject (object). Observers are basically interested and want to be 
+  notified when there is a change made inside that subject. So, they register themselves to that subject. When they lose interest in the subject they simply 
+  unregister from the subject. Sometimes this model is also referred to as the "Publisher-Subscriber" model.e.g
+	interface IObserver {
+        void update(int i);
+    }
+    class Observer1 implements IObserver {
+        public void update(int i) { System.out.println("Observer1: Value in Subject is now : " + i); }
+    }
+    class Observer2 implements IObserver {
+        public void update(int i) { System.out.println("Observer2: Value in Subject is now : " + i); }
+    }
+    interface ISubject {
+        void register(IObserver o);
+        void unregister(IObserver o);
+        void notifyObservers(int i);
+    }
+    class Subject implements ISubject {
+        List<IObserver> observerList = new ArrayList<IObserver>();
+        private int flag;
+        public int getFlag() { return flag; }
+        public void setFlag(int flag) {
+            this.flag = flag;
+            notifyObservers(flag);
+        }
+        public void register(IObserver o) {
+            observerList.add(o);
+        }
+        public void unregister(IObserver o) {
+            observerList.remove(o);
+        }
+        public void notifyObservers(int updatedValue) {
+            for (int i = 0; i < observerList.size(); i++) {
+                observerList.get(i).update(updatedValue);
+            }
+        }
+    }
+- e.g : HttpSessionBindingListener ,HttpSessionAttributeListener	
+
+3.5) Strategy Pattern (Policy Pattern):
+- It is used when we have multiple algorithm for a specific task and client decides the actual implementation to be used at runtime.
+- It is useful when we have multiple algorithms for specific task and we want our application to be flexible to chose any of the algorithm at 
+  runtime for specific task.
+- One of the best example of strategy pattern is Collections.sort() method that takes Comparator parameter. Based on the different implementations 
+  of Comparator interfaces, the Objects are getting sorted in different ways. e.g 
+interface PaymentStrategy { public void pay(int amount); }
+class CreditCardStrategy implements PaymentStrategy {
+	private String cardNumber;
+	private String cvv;
+	public CreditCardStrategy(String cardNumber, String cvv) {
+		this.cardNumber = cardNumber;
+		this.cvv = cvv;
+	}
+	@Override
+	public void pay(int amount) {
+		System.out.println(amount + " paid with credit/debit card");
+	}
+}
+class WalletStrategy implements PaymentStrategy {
+	private String mobileNo;
+	private String password;
+	public WalletStrategy(String mobileNo, String password) {
+		this.mobileNo = mobileNo;
+		this.password = password;
+	}
+	@Override
+	public void pay(int amount) {
+		System.out.println(amount + " paid using Wallet.");
+	}
+}
+class Item {
+	private String upcCode;
+	private int price;
+	public Item(String upc, int cost) {
+		this.upcCode = upc;
+		this.price = cost;
+	}	
+}
+class ShoppingCart {
+	List<Item> items;
+	public ShoppingCart() {
+		this.items = new ArrayList<Item>();
+	}
+	public void addItem(Item item) {
+		this.items.add(item);
+	}
+	public void removeItem(Item item) {
+		this.items.remove(item);
+	}
+	public int calculateTotal() {
+		int sum = 0;
+		for (Item item : items) {
+			sum += item.getPrice();
+		}
+		return sum;
+	}
+	public void pay(PaymentStrategy paymentMethod) {
+		int amount = calculateTotal();
+		paymentMethod.pay(amount);
+	}
+}
+- We could have used composition to create instance variable for strategies but we should avoid that as we want the specific strategy to be 
+  applied for a particular task. Same is followed in Collections.sort() and Arrays.sort() method that take comparator as argument.
+
+3.6) Command Pattern : 
+- Command Pattern is used to implement lose coupling in a request-response model. In command pattern, the request is send to the invoker and 
+  invoker pass it to the encapsulated command object. Command object passes the request to the appropriate method of Receiver to perform the 
+  specific action.
+- The client program create the receiver object and then attach it to the Command. Then it creates the invoker object and attach the command 
+  object to perform an action.when client program executes the action, it’s processed based on the command and receiver object.
+- Here, client is responsible to create the appropriate type of command object. Client program is also responsible to attach receiver to the 
+  command and then command to the invoker class.
+-* Command design pattern is easily extendible, we can add new action methods in receivers and create new Command implementations without 
+ changing the client code. e.g
+ interface FileSystemReceiver {
+        void openFile();
+        void closeFile();
+    }
+    class WindowsFileSystemReceiver implements FileSystemReceiver {
+        @Override
+        public void openFile() { System.out.println("Opening file in Windows OS"); }
+        @Override
+        public void closeFile() { System.out.println("Closing file in Windows OS"); }
+    }
+    class UnixFileSystemReceiver implements FileSystemReceiver {
+        @Override
+        public void openFile() { System.out.println("Opening file in unix OS"); }
+        @Override
+        public void closeFile() { System.out.println("Closing file in unix OS"); }
+    }
+    interface Command {
+        void execute();
+    }
+    class OpenFileCommand implements Command {
+        private FileSystemReceiver fileSystem;
+        public OpenFileCommand(FileSystemReceiver fs) { this.fileSystem = fs; }
+        @Override
+        public void execute() { this.fileSystem.openFile(); }
+    }
+    class CloseFileCommand implements Command {
+        private FileSystemReceiver fileSystem;
+        public CloseFileCommand(FileSystemReceiver fs) { this.fileSystem = fs; }
+        @Override
+        public void execute() { this.fileSystem.closeFile(); }
+    }
+    class FileInvoker {
+        public Command command;
+        public FileInvoker(Command c) { this.command = c; }
+        public void execute() { this.command.execute(); }
+    }
+- Runnable interface uses command pattern.
+
+3.7) State Pattern
+- State design pattern is used when an Object change it’s behavior based on it’s internal state.State design pattern is used to provide a 
+  systematic and loosely coupled way to achieve this through Context and State implementations.
+- State Pattern Context is the class that has a State reference to one of the concrete implementations of the State. Context forwards the 
+  request to the state object for processing. 
+- It helps us avoiding if-else or switch-case conditional logic in this scenario.
+- It is very similar to Strategy Pattern. One of the difference is that Context contains state as instance variable and there can be multiple 
+  tasks whose implementation can be dependent on the state whereas in strategy pattern strategy is passed as argument to the method and context 
+  object doesn’t have any variable to store it. e.g 
+interface State { public void doAction(); }
+class TVStartState implements State {
+	public void doAction() {
+		System.out.println("TV is turned ON");
+	}
+}
+class TVStopState implements State {
+	public void doAction() {
+		System.out.println("TV is turned OFF");
+	}
+}
+class TVContext implements State {
+	private State tvState;
+	public void setState(State state) {
+		this.tvState = state;
+	}
+	public State getState() {
+		return this.tvState;
+	}
+	public void doAction() {
+		this.tvState.doAction();
+	}
+}
+
+3.8) Visitor Pattern : 
+- Visitor pattern is used when we have to perform an operation on a group of similar kind of Objects. With the help of visitor pattern, we can 
+  move the operational logic from the objects to another class.
+- For example, think of a Shopping cart where we can add different type of items (Elements), when we click on checkout button, it calculates the
+  total amount to be paid. Now we can have the calculation logic in item classes or we can move out this logic to another class using this pattern. 
+- The benefit of this pattern is that if the logic of operation changes, then we need to make change only in the visitor implementation rather 
+  than doing it in all the item classes.Another benefit is that adding a new item to the system is easy, it will require change only in visitor
+  interface and implementation and existing item classes will not be affected.
+- The drawback of visitor pattern is that we should know the return type of visit() methods at the time of designing otherwise we will have to 
+  change the interface and all of its implementations. Another drawback is that if there are too many implementations of visitor interface, it 
+  makes it hard to extend. e.g
+  interface ShoppingCartVisitor {
+        int visit(Book book);
+        int visit(Fruit fruit);
+    }
+    class ShoppingCartVisitorImpl implements ShoppingCartVisitor {
+        @Override
+        public int visit(Book book) {
+            int cost = 0;
+            if (book.getPrice() > 50) { // apply 5$ discount if book price is greater than 50
+                cost = book.getPrice() - 5;
+            } else
+                cost = book.getPrice();
+            System.out.println("Book ISBN::" + book.getIsbnNumber() + " cost =" + cost);
+            return cost;
+        }
+        @Override
+        public int visit(Fruit fruit) {
+            int cost = fruit.getPricePerKg() * fruit.getWeight();
+            System.out.println(fruit.getName() + " cost = " + cost);
+            return cost;
+        }
+    }
+
+    interface ItemElement {
+        public int accept(ShoppingCartVisitor visitor);
+    }
+
+    class Book implements ItemElement {
+        private int price;
+        private String isbnNumber;
+        public Book(int cost, String isbn) {
+            this.price = cost;
+            this.isbnNumber = isbn;
+        }
+        public int getPrice() { return price; }
+        public String getIsbnNumber() { return isbnNumber; }
+        @Override
+        public int accept(ShoppingCartVisitor visitor) {
+            return visitor.visit(this);
+        }
+    }
+    class Fruit implements ItemElement {
+        private int pricePerKg;
+        private int weight;
+        private String name;
+        public Fruit(int priceKg, int wt, String nm) {
+            this.pricePerKg = priceKg;
+            this.weight = wt;
+            this.name = nm;
+        }
+        public int getPricePerKg() { return pricePerKg; }
+        public int getWeight() { return weight; }
+        public String getName() { return this.name; }
+        @Override
+        public int accept(ShoppingCartVisitor visitor) {
+            return visitor.visit(this);
+        }
+    }
+
+3.9) Interpreter Pattern : 
+- It is used to defines a grammatical representation for a language and provides an interpreter to deal with this grammar.
+- The best example of interpreter design pattern is java compiler that interprets the java source code into byte code that is understandable by JVM.
+	class InterpreterContext {
+        public String getBinaryFormat(int i) {
+            return Integer.toBinaryString(i);
+        }
+        public String getHexadecimalFormat(int i) {
+            return Integer.toHexString(i);
+        }
+    }
+    interface Expression {
+        String interpret(InterpreterContext ic);
+    }
+    class IntToBinaryExpression implements Expression {
+        private int i;
+        public IntToBinaryExpression(int c) { this.i = c; }
+        @Override
+        public String interpret(InterpreterContext ic) {
+            return ic.getBinaryFormat(this.i);
+        }
+    }
+    class IntToHexExpression implements Expression {
+        private int i;
+        public IntToHexExpression(int c) { this.i = c; }
+        @Override
+        public String interpret(InterpreterContext ic) {
+            return ic.getHexadecimalFormat(i);
+        }
+    }
+    class InterpreterClient {
+        public InterpreterContext ic;
+        public InterpreterClient(InterpreterContext i) { this.ic = i; }
+        public String interpret(String str) {
+            Expression exp = null;
+            // create rules for expressions
+            if (str.contains("Hexadecimal")) {
+                exp = new IntToHexExpression(Integer.parseInt(str.substring(0, str.indexOf(" "))));
+            } else if (str.contains("Binary")) {
+                exp = new IntToBinaryExpression(Integer.parseInt(str.substring(0, str.indexOf(" "))));
+            } else
+                return str;
+            return exp.interpret(ic);
+        }
+    }
+- In JDK : java.util.Pattern
+
+3.10) Iterator Pattern : 
+- It’s used to provide a standard way to traverse through a group of Objects. Iterator pattern is widely used in Java Collection Framework where 
+  Iterator interface provides methods for traversing through a collection.
+- Iterator pattern is not only about traversing through a collection, we can provide different kind of iterators based on our requirements. 
+  Iterator pattern hides the actual implementation of traversal through the collection and client programs just use iterator methods. 
+- Iterator pattern is useful when you want to provide a standard way to iterate over a collection and hide the implementation logic from client program.
+- In JDK : Collection classes and Scanner class.
+enum ChannelTypeEnum {	ENGLISH, HINDI, FRENCH, ALL;}
+class Channel {
+	private double frequency;
+	private ChannelTypeEnum TYPE;
+	public Channel(double freq, ChannelTypeEnum type) {
+		this.frequency = freq;
+		this.TYPE = type;
+	}
+	public double getFrequency() { return frequency; }
+	public ChannelTypeEnum getTYPE() { return TYPE; }
+}
+interface ChannelCollection {
+	public void addChannel(Channel c);
+	public void removeChannel(Channel c);
+	public ChannelIterator iterator(ChannelTypeEnum type);
+}
+interface ChannelIterator {
+	public boolean hasNext();
+	public Channel next();
+}
+class ChannelCollectionImpl implements ChannelCollection {
+	private List<Channel> channelsList;
+	public ChannelCollectionImpl() { channelsList = new ArrayList<>(); }
+	public void addChannel(Channel c) { this.channelsList.add(c); }
+	public void removeChannel(Channel c) { this.channelsList.remove(c); }
+	@Override
+	public ChannelIterator iterator(ChannelTypeEnum type) {
+		return new ChannelIteratorImpl(type, this.channelsList);
+	}
+	private class ChannelIteratorImpl implements ChannelIterator {
+		private ChannelTypeEnum type;
+		private List<Channel> channels;
+		private int position;
+		public ChannelIteratorImpl(ChannelTypeEnum ty, List<Channel> channelsList) {
+			this.type = ty;
+			this.channels = channelsList;
+		}
+		@Override
+		public boolean hasNext() {
+			while (position < channels.size()) {
+				Channel c = channels.get(position);
+				if (c.getTYPE().equals(type)
+						|| type.equals(ChannelTypeEnum.ALL)) {
+					return true;
+				} else
+					position++;
+			}
+			return false;
+		}
+		@Override
+		public Channel next() {
+			Channel c = channels.get(position);
+			position++;
+			return c;
+		}
+	}
+}
+
+3.11) Memento Pattern : 
+- Memento design pattern is used when we want to save the state of an object so that we can restore later on. Memento pattern is used to 
+  implement this in such a way that the saved state data of the object is not accessible outside of the object, this protects the integrity of
+  saved state data.
+- Memento pattern is implemented with two objects – Originator and Caretaker. Originator is the object whose state needs to be saved and restored 
+  and it uses an inner class to save the state of Object. The inner class is called Memento and its private, so that it can’t be accessed from 
+  other objects.
+- Caretaker is the helper class that is responsible for storing and restoring the Originator’s state through Memento object. Since Memento is 
+  private to Originator, Caretaker can’t access it and it’s stored as an Object within the caretaker.
+- One of the best real life example is the text editors where we can save it’s data anytime and use undo to restore it to previous saved state.
+- One of the drawback is that if Originator object is very huge then Memento object size will also be huge and use a lot of memory.
+class FileWriterUtil {
+	private String fileName;
+	private StringBuilder content;
+	public FileWriterUtil(String file) {
+		this.fileName = file;
+		this.content = new StringBuilder();
+	}
+	public void write(String str) {	content.append(str);	}
+	public Memento save() {	return new Memento(this.fileName, this.content);	}
+	public void undoToLastSave(Object obj) {
+		Memento memento = (Memento) obj;
+		this.fileName = memento.fileName;
+		this.content = memento.content;
+	}
+	private class Memento {
+		private String fileName;
+		private StringBuilder content;
+		public Memento(String file, StringBuilder content) {
+			this.fileName = file;
+			this.content = new StringBuilder(content);
+		}
+	}
+}
+class FileWriterCaretaker {
+	private Object obj;
+	public void save(FileWriterUtil fileWriter) {		this.obj = fileWriter.save();	}
+	public void undo(FileWriterUtil fileWriter) {		fileWriter.undoToLastSave(obj);	}
+}
+---------------------------
+Service Locator Pattern : 
+- The service locator pattern is used to encapsulate the processes involved in obtaining a service with a strong abstraction layer. This pattern uses a central
+  registry known as the “service locator” which on request returns the information necessary to perform a certain task.
+- The ServiceLocator is responsible for returning instances of services when they are requested for by the service consumers or the service clients.
+---------------------------- Data Structure ----------------------------
+-* Data Structure is a way of collecting and organising data in such a way that we can perform operations on these data in an effective way. 
+- Data Structures is about rendering data elements in terms of some relationship, for better organization and storage.
+- Data Structures are structures programmed to store ordered data, so that various operations can be performed on it easily. 
+-* It should be designed and implemented in such a way that it reduces the "complexity" and increases the "effieciency".
+-* Anything that can store data can be called as a data strucure, hence Integer, Float, Boolean, Char are Primitive Data Structures.
+- Linked List,Stack, Queue,Tree,Graph etc are Abstract Data Structure. which are used to store large and connected data.
+- Data Structure -> 1) Built in Data Structure 2) User Defined Data Structure
+- Built in Data Structure ->  Integer, Float, Char, Pointer
+- User Defined Data Structure -> 1) Arrays 2) Lists 3) File
+- Lists -> 1) Linear Lists (Stack and Queue) 2) non-Linear Lists (Trees , Graphs)
+- data structures can also be classified on the basis of the following characteristics:
+  1) Linear : In Linear data structures,the data items are arranged in a linear sequence. e.g Array
+  2) Non-Linear : In Non-Linear data structures,the data items are not in sequence. e.g: Tree, Graph
+  3) Homogeneous : In homogeneous data structures,all the elements are of same type. e.g: Array
+  4) Non-Homogeneous : In Non-Homogeneous data structure, the elements may or may not be of the same type. e.g: Structures
+  5) Static : Static data structures are those whose sizes and structures associated memory locations are fixed, at compile time. e.g: Array
+  6) Dynamic : Dynamic structures are those which expands or shrinks depending upon the program need and its execution. Also, their associated memory locations changes. e.g: Linked List
+- An algorithm is a way of solving Well-Specified computational problems.
+-* It is a finit set of rules/instructions that gives a sequence of operations for solving a specific type of problem.
+-* It gives and idea of runnig time.It helps us decide on hardware requirements.It can be use to identify ;What is feasible Vs what is impossible'.
+- Algorithm is not the complete code or program, it is just the core logic(solution) of a problem, which can be expressed either as an informal high level description as pseudocode or using a flowchart.
+-* An algorithm is said to be efficient and fast, if it takes less time to execute and consumes less memory space. 
+-* The performance of an algorithm is measured on the basis of : 1) Time Complexity 2) Space Complexity
+-* Space Complexity is the amount of memory space required by the algorithm, during the course of its execution. It  must be taken seriously for multi-user systems and in situations where limited memory is available.
+- An algorithm generally requires space for theses components : 1)Instruction Space 2) Data Space  3) Environment Space 
+-* Time Complexity is a way to represent the amount of time needed by the program to run till completion.
+- There are three type of analysis for time coomplexity. 1) Worst Case 2) Best Case 3) Average Case
+- RAM model of Computation Assumptions : 
+  * We have infinite memory. 
+  * Each operations (+,,*,/,=) takes unit time. 
+  * For each memory access, unit time is consumed.
+  * Data may be accessed from RAM or disk,it is assumed that data is in the RAM.
+-* The most common metric for calculating time complexity is Big O notation. This removes all constant factors so that the running time can be 
+  estimated in relation to N, as N approaches infinity.
+- O(g(n)) = set of all f(n) ,there exist positive constants c and n0 such that , 0 <= f(n) <= cg(n) for all n > n0.
+  e.g O(n^2) = set of all f(n) ,there exist positive constants c and n0 such that , 0 <= f(n) <= cn^2 for all n > n0. that means for after some 
+  point n0, cn^2 >= f(n)
+- Example : 5n^2 + 6 belong to O(n^2) , as for all value of c and n0, cn^2 >= 5n^2 + 6 (e.g c = 6 , n0 = 3)
+1) Constant O(1) : The running time of the statement will not change in relation to N.Algorithm performance is not affected by the size of the 
+   input data. (e.g fetching array elements as array is index based)
+2) Linear O(N) : The running time of the loop is directly proportional to N. When N doubles, so does the running time.algorithm's performance is directly 
+   proportional to size of the input data(N). (e.g searching element in array)
+3) Quadratic O(N*N) : The running time of the two loops is proportional to the square of N. When N doubles, the running time increases by N * N (N^2).
+   (if length of two loops are N1 and N2 than Quadratic time complexcity is N1 * N2).Algorithm's performance is directly proportional to 
+   square(or multiplication) of the size of the input data. (e.g bubble sort)
+4)* Logarithmic O(log(N)): The running time of the algorithm is proportional to the number of times N can be divided by 2(base).
+   (In Quick Sort, we divide the list into halves every time(pivot logic), but we repeat the iteration N times(where N is the size of list). Hence time complexity will be 
+    N*log( N ). The running time consists of N loops (iterative or recursive) that are logarithmic, thus the algorithm is a combination of linear and logarithmic.)
+-* In general, doing something with every item in "one dimension" is "linear", doing something with every item in "two dimensions" is "quadratic", and 
+   dividing the working area in "half" is "logarithmic".
+-* Order of functin as per time complexcity : (better) 1 <= logn <= SQRT(n) <= n <= nlogn <= n^2 <= n^3 <= 2^n <= n! (worst)
+-* Note: In time complexity notation O(expression), expression represents the number of computations a particular algorithm has to perform to solve a given problem.
+- Time complexity notation : 
+ 1) Big Oh denotes "fewer than or the same as" <expression> iterations.
+ 2) Big Omega denotes "more than or the same as" <expression> iterations.
+ 3) Big Theta denotes "the same as" <expression> iterations.
+ 4) Little Oh denotes "fewer than" <expression> iterations.
+ 5) Little Omega denotes "more than" <expression> iterations
+- O(expression) is the set of functions that grow slower than or at the same rate as expression. It indicates the "maximum time" required by an algorithm for all 
+  input values. It represents the "worst case" of an algorithm's time complexity.
+- Omega(expression) is the set of functions that grow faster than or at the same rate as expression. It indicates the "minimum time" required by an algorithm 
+  for all input values. It represents "the best case" of an algorithm's time complexity.
+- Theta(expression) consist of all the functions that lie in both O(expression) and Omega(expression). It indicates the "average bound" of an algorithm. It 
+  represents the "average case" of an algorithm's time complexity.
+-* O(2^N) : Represents an algorithm whose execution time is doubled for every extra element in the input data. e.g if an algorithm takes 4 seconds to compute 2 
+  elements, then it will take 8 seconds to compute 3 elements.
+-* O(N!) : Represents an algorithm which has to perform N! computations to solve a problem. Where N is the number of elements in the input data. 
+  e.g if an algorithm takes 2 seconds to compute 2 elements, then it will take 6 seconds to compute 3 elements, 24 seconds to compute 4 elements and so on.
+-* Sorting is nothing but storage of data in sorted order, it can be in ascending or descending order.The term Sorting comes into picture with the term "Searching". 
+-* Sorting arranges data in a sequence which makes "searching" easier.
+- Sorting techniques mainly depends on two parameters. 1) Time Complexity(efficiency) 2) Space Complexity
+- 1) Bubble Sort (Coparision sort): 
+- Bubble Sort compares all the element one by one and sort them based on their values.
+-* It is called Bubble sort, because with each iteration(parent loop iteration) the largest element in the list bubbles up towards the last place, just like a water bubble rises up to the water surface.
+- Sorting takes place by stepping through all the data items one-by-one in pairs and comparing adjacent data items and swapping each pair that is out of order.
+- In Bubble Sort, n-1 comparisons will be done in 1st pass, n-2 in 2nd pass, n-3 in 3rd pass and so on. So the total number of comparisons will be
+  (n-1)+(n-2)+(n-3)+.....+3+2+1 = n(n-1)/2   i.e O(n^2)
+- Worst Case Time Complexity : O(n^2)
+- Best Case Time Complexity : O(n)  (when the list is already sorted)
+- Average Time Complexity : O(n^2)
+- Space Complexity : O(1) (As only single additional memory space is required for temp variable)
+- The main advantage of Bubble Sort is the simplicity of the algorithm.
+- 2) Insertion Sort : 
+- It is a simple Sorting algorithm which sorts the array by shifting elements one by one.
+- It is efficient for smaller data sets, but very inefficient for larger lists.
+-* Insertion Sort is adaptive, that means it reduces its total number of steps if given a partially sorted list, hence it increases its efficiency.
+-* It is better than Selection Sort and Bubble Sort algorithms.
+- Its space complexity is less, like Bubble Sorting, inerstion sort also requires a single additional memory space.
+-* It is Stable, as it does not change the relative order of elements with equal key.
+-* Always we start with the second element as the key. (key = arr[i] where i = 1)
+-* Here, we pick up a key, compare it with the elements ahead of it, and put it at the right place.
+- Worst Case Time Complexity : O(n^2)
+- Best Case Time Complexity : O(n)
+- Average Time Complexity : O(n^2)
+- Space Complexity : O(1) 
+- 3) Selection Sort : 
+- Selection sorting is conceptually the most simplest sorting algorithm. This algorithm first finds the smallest element in the array and exchanges it with the 
+  element in the first position, then find the second smallest element and exchange it with the element in the second position, and continues in this way until the entire array is sorted.
+-* Selection sort is an unstable sort i.e it might change the occurrence of two similar elements in the list while sorting. 
+-** Running time is independent of ordering of elements.because we need to perform same number of steps to find smallest element.
+- Worst Case Time Complexity : O(n^2)
+-* Best Case Time Complexity : O(n^2)
+- Average Time Complexity : O(n^2)
+- Space Complexity : O(1)
+- 4) Quick Sort : 
+- It is based on the rule of Divide and Conquer(also called "partition-exchange sort"). This algorithm divides the list into three main parts :
+  1) Elements less than the Pivot element 2) Pivot element 3) Elements greater than the pivot element 
+-* It is not stable search(duplicate elements may not maintain same order), but it is very fast and requires very less aditional space. 
+- Worst Case Time Complexity : O(n^2)
+-* Best Case Time Complexity : O(n log n)
+- Average Time Complexity : O(n log n)
+-* Best case Space Complexity : O(n log n)
+-* Worst case Space Complexity : O(n) (As In the worst case, quicksort will be called one time for every element of the list since a solution could recurse 
+   all the way down to single element lists. So, there must be a call stack entry for every one of these function calls. This means that with a list of n integers, at worst there will be n stack entries created, hence O(n) space complexity.
+-* Quick sort is "in place sorting"(with out using any extra memory space which is proportinal to the elements size).In other word As long as we use constant
+   amount of temporary memory space, the sort is said to be "in place sort".
+- 5) Merge Sort : 
+- It is based on the rule of Divide and Conquer. In merge sort the unsorted list is divided into N sublists, each having one element, because a list consisting 
+  of one element is always sorted. Then, it repeatedly merges these sublists, to produce new sorted sublists, and in the end, only one sorted list is produced.
+- It is a Recusive algoritham which works very well for large amout of elements.
+-* Merge Sort is quite fast. It is also a stable sort, which means the "equal" elements are ordered in the same order in the sorted list.
+-* Worst Case Time Complexity : O(n log n)  (2^ h-1 = n , where h is no of sub layer, hence h = 1+ log2n -> O(n log2n)
+- Best Case Time Complexity : O(n log n)
+- Average Time Complexity : O(n log n)
+ -* Space Complexity : O(n)
+-* Time complexity of Merge Sort is O(n Log n) in all 3 cases (worst, average and best) as merge sort always divides the array in two halves and take linear time to merge two halves.
+-* It requires equal amount of additional space as the unsorted list. Hence its not at all recommended for searching large unsorted lists.
+-* Merge sort is not "in place sorting"(that means we need to use extra memory space which is proportinal to the elements size for temporary array)
+- Java collection framework uses merge sort as its default sorting algoritham. It is the best Sorting technique used for sorting Linked Lists.
+- Searching Algorithms on Array : 
+1) Linear Search : 
+- It searches an element or value from an array till the desired element or value is not found and it searches in a "sequence order". It compares the element 
+  with all the other elements given in the array/list and if the element is matched it returns the value index else it return -1. 
+-* It is applied on the unsorted or unordered list when there are fewer elements in a list.
+-* Worst Case Time Complexity : O(n)
+2) Binary Search : 
+-* Binary Search is applied on the "sorted" array or list. In binary search, we first compare the value with the elements in the middle position of the array. 
+  If the value is matched, then we return the value. If the value is less than the middle element, then it must lie in the lower half of the array and if it's 
+  greater than the element then it must lie in the upper half of the array. We repeat this procedure on the lower (or upper) half of the array. 
+- Binary Search is useful when there are large numbers of elements in an array. 
+-* Worst case time Complexity : O(log2 n) (where 2 is base) (if k = log 2 n then n = 2^k)
+- Data Structures : 
+--------------------------
+1) Stacks Data Structure : 
+--------------------------
+- Stack is an "abstract data type structure" with a bounded(predefined) capacity.(It means it is a coneceptual data structure which are usually 
+  implemented using Array or Linked List as an under line data structure which can hold the real data added in stack). 
+- It is a simple data structure that allows adding and removing elements in a particular order. 
+  You can consider it as a container where you can add as well as remove element from the top only.
+- Every time an element is added, it goes on the top of the stack, the only element that can be removed is the element that was at the top of the stack, just like a pile of objects.
+- Stack is an ordered list of similar data type. Stack is a LIFO structure. (Last in First out).
+- push() function is used to insert new elements into the Stack and pop() function is used to delete an element from the stack.while peak() method
+  is used to retrive top element from the stack. 
+-* Both insertion and deletion are allowed at only one end of Stack called Top.
+- Stack is said to be in "Overflow" state when it is completely full and is said to be in "Underflow" state if it is completely empty.
+- Stack can be easily implemented using an Array or a Linked List. 
+- Algorithm for PUSH operation : 1) Check if the stack is full or not. 2) If the stack is full,then print error of overflow and exit the program. 
+  3) If the stack is not full,then increment the top and add the element .
+- Algorithm for POP operation : 1) Check if the stack is empty or not. 2) If the stack is empty, then print error of underflow and exit the program. 
+  3) If the stack is not empty, then print the element at the top and decrement the top.
+- Position of Top : 1) -1 : Stack is Empty 2) 1 : Only one element in Stack 3) N-1 : Stack is Full 4) N : Overflow state of Stack
+- Time complexities for different operation : 
+  1) Push/Pop/Peak Operation : O(1)  2)* Search Operation : O(n)
+--------------------------
+- 2) Queue Data Structure :  
+--------------------------
+- Queue is also an "abstract data type" or a linear data structure, in which the first element is inserted from one end called REAR(also called tail), and the 
+  deletion of existing element takes place from the other end called as FRONT(also called head). This makes queue as FIFO(First in First Out) data structure, 
+  which means that element inserted first will also be removed first.
+- It can be thought of as container whose front end  is called "Head" and the rear end is called "Tail".
+- The process to add an element into queue is called "Enqueue"(inserts an element in the queue from tail towards the head) and the process of 
+  removal of an element from queue is called "Dequeue" (Removes and element in the queue from the head of the queue).
+- Like Stack, Queue is also an ordered list of elements of similar data types.
+- Once a new element is inserted into the Queue, all the elements inserted before the new element in the queue must be removed, to remove the new element.
+- peek( ) function is oftenly used to return the value of first element (from the head) without dequeuing it.
+- Queue can be implemented using an Array, Stack or Linked List.
+-* Initially the head(FRONT) and the tail(REAR) of the queue points at the first index of the array (starting the index of array from 0). As we add elements to 
+  the queue, the tail keeps on moving ahead, always pointing to the position where the next element will be inserted, while the head remains at the first index.
+- When we remove an element from Queue, we can follow two possible approaches : 
+ 1) we remove the element at head position, and then one by one shift all the other elements in forward position. 
+ 2) we remove the element from head position and then move head to the next position(next index).
+- In approach (1) there is an overhead of shifting the elements one position forward every time we remove the first element. 
+- In approach (2) there is no such overhead, but whenever we move head one position ahead, after removal of first element, the size on Queue is reduced by one space each time.
+- Algorithm for ENQUEUE (Add) operation : 1) Check if the queue is full or not.
+  2) If the queue is full, then print overflow error and exit the program. 3) If the queue is not full, then increment the tail and add the element.
+- Algorithm for DEQUEUE (Remove) operation : 1) Check if the queue is empty or not.
+  2) If the queue is empty, then print underflow error and exit the program. 3) If the queue is not empty, then print the element at the head and increment the head.
+- Analysis of Queue : 1) Enqueue(add) : O(1) 2) Dequeue(Remove) : O(1) 3) Peak : O(1)
+- Queue Data Structure using Stack : 
+  * For performing enqueue we require only one stack as we can directly push data into stack, but to perform dequeue we will require two Stacks, because we need 
+    to follow queue's FIFO property and if we directly pop any data element out of Stack, it will follow LIFO approach.
+  * Adding Data to Queue : Add data into InStack using push() method.
+  * Removing Date from Queue : take the data from InStack using pop() method and add it into OutStack using push() method. Now remove data from OutStack using 
+    pop() method. (It will be as per FIFO )  
+- A queue in which we "Enqueue" elements by bringing the tail back to the 0th endex after it has reached to the maximum index position is called 
+  a "Circular Queue".
+- Double Ended Queue (DE Queue) : It allows us to add or remove the elements from both the ends head and tail. 
+--------------------------
+- 3) Linked List Data Structure : 
+--------------------------
+- Linked List is a linear data structure and it is very common data structure which consists of group of nodes in a sequence which is divided in two parts. 
+  Each node consists of its own data and the address of the next node and forms a chain. Here, last element in sequence will point to null.
+-* Linked List is a "real data type structure" (which can be physically represented in memory and can hold real data).
+- Linked List object itself contains a reference to the first element of the list only which is known as "Head" node.so whenever you will 
+  add first element to the list it will beocome a head Node.
+-* Adding or removing elemet from the head will give O(1) performance. while for searching element in linkedlist, worst case complexcity is O(n).
+- Worst case complexcity to add new node in sorted list is O(n).
+- Linked Lists are used to create trees and graphs.
+- Advantages : 
+- They are a dynamic in nature which allocates the memory when required.
+- Insertion and deletion operations can be easily implemented.
+- Stacks and queues can be easily executed.
+- Linked List reduces the access time. 
+- Disadvantages : 
+- The memory is wasted as pointers require extra memory for storage.
+-* No element can be accessed randomly; it has to access each node sequentially.
+- Reverse Traversing is difficult in linked list.
+- Singly Linked List : It contain nodes which have a data part as well as next node address part.The operations we can perform on singly 
+  linked lists are insertion, deletion and traversal.
+- Doubly Linked List : 
+- Each node contains two references the one rference points to the previous node and the next reference points to the next node in the sequence.
+- It contains two ends. head and tail.head refers to first elemet of the linked list while tail refers to the last element of the link list.
+- Doubly Linked List object has two Node references : head and tail.
+- We can add or delete elements from both the ends(head and tail)
+- Circular Linked List : In the circular linked list the last node of the list contains the address of the first node and forms a circular chain.
+- 4) Hash Tables Data Structure : 
+-* Hash Tables are data strucure which are very useful for very fast insertion and retrival of data with almost constant time.
+- It is collection of key and value pairs.key or value can be any type of object.
+- "Direct Access Tables" are very simple data structure which can store data in key-value pair,but, it does not work in all the cases.It works only when the keys
+  are integers (which are drawn from the set of integers).Each key should be distinct(unique)(no two records can have the same key).
+- Direct Access Tables can be easily implemented using regular array.Here, index of the array can be used as key.
+- In Direct Access Tables, if key set is very large ,than we need a very large set of integers.
+- In Direct Access Tables key must be integer, we can not use string or charcter or any other kind of object as a key. to solve this problems "Hashing" is required.
+- "Hashing" is a way to map keys of any type to a "random array index".(It can be string or character or any other kind of object).
+- A hash function 'h' maps keys randomly into slots (array indices) of table T (array).
+- If we have a key which when hashed and maps to a slot that is already been maped and contains some data, it is known as "collision".
+- One of the ways to resolve the collision can be  not to insert data direcly into the array slot rather we can use list.linked list kind of data structure for
+  each array slot.So,even if multiple keys maps to the same slot the records can be stored as a linked list. here,Each records contains the key as well as data
+  object in a Node of a linked list. So this method of resloving collison is known as method of "Chainig".
+-* In worst case when all the keys mapped to the single slot (h(k1) = h(k2)....h(kn) = i) , than all the records will be saved in sinlge linked list, so if we 
+  we have to find record associated with some key say kj, the Time complexity will be O(n). Find(kj) = O(n)
+- In Average case for Chaining : 
+  1) let say we have "n" keys which need to be maps to "m" slots in the array and we have assumed that hashing is uniform.that is each key is equally likely to 
+     be hashed to any slot in the table independedt of others keys are hashed.We can say that the hashing function is such that the hash values of all the keys 
+	 are sort of evenly distibuted across the slots of the table.
+  2) Than in each slot on and everage no of keys will be : load factor = n /m (n records evenly distrubuted in m slots). here time complexity to find kj is 
+     Find(kj) = O(1 + loadfactor).
+	 here 1 is for Hash function call assuming Hash function call takes constant time and load factor is the average length of the linked list in the chain,
+- here to assume it as Find(kj) = O(1 + loadfactor) = O(1) , there should be n = O(m) -> loadfactor = n /m  = Constant. so with changing "n" , 
+  "m"(capacity of array) needs to be keep up with it atleast by some constant factor.
+-* Therefor in HashMap/HashTable capacity(m) changes when we keep adding records(n will increase) into the HashMap/HashTable so that the loadfactor remains constant.
+- The defalut load factor for HashMap is 0.75.
+- The main idea of hashing is that for any object which is acting as a key, we find some numeric representation of it(hash code).and than hash it so that we can 
+  get to a slot in a array to be able to insert data associated with that key.
+- A good Hash function should be able to distrubute the keys uniformaly into slots of arrary.Keys themselves should represent as "natural numbers"(hash code).
+  possibly large natural numbers which when hashed can map to an index of the array.
+- "Open Addressing"  method is also used for resolving "collision" problem.This method is used specially in context of those application, where one would not
+  like to maintain a link to a list or we are not allowed to read the data of any other elements in the list.So in this way records are direcely inserted in the array.  
+- It requirs n <= m. no of keys(n) should be less than or equal to array size(m).otherwsie table may fill up.
+- Delete is difficut in case of open addressing. 
+- Open Addressing stratorgy : 
+  1) Linear probing : Here, We will start from the base hash index in prob step.that is 0.we will keep increasing the prob index until we find the empty slot. 
+     e.g h(256,0),h(256,1),h(256,2) so and so on -> h(k,i) = (h(k,0)+ i) % m. We can also choose any linear function in place of i.
+	 Problem : Thee could be clustering of records in region of hashtable.If that happen than any key that hashing into that region will have to keep looking 
+     for an empty slot to put the record.which will further increase the size of a local cluster.
+  2) Quadratic probing : In this case instead of adding linear function of the prob step to the base hash index,we can use a quadratic function. 
+     e.g h(256,0),h(256,1),h(256,4) so and so on -> h(k,i) = (h(k,0)+ i^2) % m. We can also choose any other quadratic function in place of i^2. 
+	 It avoid clustering to some extent.but still it is not the best solution.
+  3) Double Hashing : It is the most practical approach. h(k,i) = ( h(k1)+ i h(k2) ) % m. It works very well in distributing the keys evenly across the various
+     slots of the table.
+5) Tree Data Structure : 
+- 
+-----------------------
+- Class Design Principles (SOLID) : 
+1) Single Responsibility Principle : "One class should have one and only one responsibility".
+- you should write, change and maintain a class for only one purpose. If it is model class then it should strictly represent only one 
+  actor/ entity. This will give you the flexibility to make changes in future without worrying the impacts of changes for another entity.
+  Similarly, If you are writing service/manager class then it should contain only that part of method calls and nothing else. Not even utility
+  global functions related to module. Better separate them in another globally accessible class file. This will help in maintaining the class 
+  for that particular purpose, and you can decide the visibility of class to specific module only.
+
+2) Open Closed Principle : "Software components should be open for extension, but closed for modification"
+- Your classes should be designed such a way that whenever fellow developers wants to change the flow of control in specific conditions in 
+  application, all they need to extend your class and override some functions and that’s it.
+- For example, if you take a look into any good framework like struts or spring, you will see that you can not change their core logic and 
+  request processing, BUT you modify the desired application flow just by extending some classes and plugin them in configuration files.
+
+3) Liskov's Substitution Principle : "Derived types must be completely substitutable for their base types"
+- 
+
+4) Interface Segregation Principle : "Clients should not be forced to implement unnecessary methods which they will not use"
+- This will give the flexibility to user to use only required functionality only.
+
+5) Dependency Inversion Principle : Depend on abstractions, not on concretions
+- You should design your software in such a way that various modules can be separated from each other using an abstract layer to bind them together.
+- The classical use of this principle is BeanFactory in spring framework. In spring framework, all modules are provided as separate components 
+  which can work together by simply injected dependencies in other module. 
+- This has been achieved by dependency inversion and open closed principles. All modules expose only abstraction which is useful in extending 
+  the functionality or plugin in another module.
+-----------------------
+- Hollywood Principle – “don’t call us, we’ll call you.”.

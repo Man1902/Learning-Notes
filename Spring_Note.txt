@@ -1,0 +1,89 @@
+- IoC is a design principle that decouples objects of an object-oriented program from their dependencies (collaborators), that is, the objects they work with. 
+  Usually, this decoupling is achieved by externalizing the responsibility of object creation and Dependency Injection to an external component, such as an IoC container.
+- 
+------------
+- Spring is a lightweight framework. It can be thought of as a framework of frameworks.
+- Inversion Of Control (IOC) and Dependency Injection are the design patterns that are used to remove dependency from the programming code(DI).
+- In Spring framework, IOC container is responsible to inject the dependency. We provide metadata to the IOC container either by XML file or annotation.
+- DI makes the code loosely coupled so it can be easy to maintain.
+- In DI ,Object should have dependencies injected into them instead of creating them.
+- Open Close Principle : Object should be open for extention but, close for modification.(using abstraction)
+- Spring modules : 
+  1) Spring Core Container : Core, Beans, Context, Expression
+  2) Web (MVC / Remoting) : Web,Servlet,Portlet,Struts
+  3) Data Access/Inegration  : JDBC,ORM,OXM,JMS,Transactions
+  4) AOP , Aspects , Instrumentation
+  5) Testing
+- The main tasks performed by IoC container are:
+   to instantiate the application class.
+   to configure the object.
+   to assemble the dependencies between the objects.
+- Two types of IoC containers : 1) BeanFactory 2) ApplicationContext
+- Spring framework provides two ways to inject dependency : 1) By Constructor 2) By Setter method.
+- The <constructor-arg> subelement of <bean> is used for constructor injection.
+- If we have dependent object in the collection, we can inject these information by using the "ref" element inside the list, set or map
+- The "entry" attribute of map is used to define the key and value information.
+- By using the parent attribute of bean, we can specify the inheritance relation between the beans. In such case, parent bean values will be inherited to the current bean.
+- The <property> subelement of <bean> is used for setter injection.
+- Partial dependency can be injected using setter injection but it is not possible by constructor.
+-* Setter injection overrides the constructor injection. If we use both constructor and setter injection, IOC container will use the setter injection.
+- We can easily change the value by setter injection. It doesn't create a new bean instance always like constructor. 
+  So setter injection is flexible than constructor injection.
+- Autowiring inject the object dependency "implicitly". It internally uses setter or constructor injection.
+- Autowiring can't be used to inject primitive and string values. It works with reference only.
+- Autowiring Modes :
+  1) byName : Injects the object dependency according to name of the bean. In such case, property name and bean name must be same. It internally calls setter method.
+  2) byType : Injects the object dependency according to type.But there must be only one bean of a type.So property name and bean name can be different. It internally calls setter method.
+  3) constructor : Injects the dependency by calling the constructor of the class. It calls the constructor having large number of parameters.
+- Spring framework provides facility to inject bean using factory method. To do so, we can use two attributes of bean element.
+  1) factory-method: represents the factory method that will be invoked to inject the bean.
+  2) factory-bean: represents the reference of the bean by which factory method will be invoked. It is used if factory method is non-static.
+- A method that returns instance of a class is called factory method.
+- Factory method types : 
+  1) A "static" factory method that returns instance of its "own" class. It is used in singleton design pattern.
+  2) A "static" factory method that returns instance of "another" class.
+  3) A "non-static" factory method that returns instance of another class.
+- Aspect-Oriented Programming (AOP) complements Object-Oriented Programming (OOP) by providing another way of thinking about program structure. 
+  The key unit of modularity in OOP is the "class", whereas in AOP the unit of modularity is the aspect. 
+- AOP breaks the program logic into distinct parts (called concerns). It is used to increase modularity by cross-cutting concerns.
+- A cross-cutting concern is a concern that can affect the whole application and should be centralized in one location in code as possible, such as transaction management, authentication, logging, security etc.
+- It provides the pluggable way to dynamically add the additional concern before, after or around the actual logic.
+- Aspect: A modularization of a concern that cuts across multiple classes. Transaction management is a good example of a crosscutting concern in enterprise Java applications.
+- Join point: a point during the execution of a program, such as the execution of a method or the handling of an exception. In Spring AOP, a join point always represents a method execution.
+- Advice: represents an action taken by an aspect at a particular join point.
+- Pointcut: A predicate that matches join points. Advice is associated with a pointcut expression and runs at any join point matched by the pointcut
+- Target object: object being advised by one or more aspects. Also referred to as the advised object. Since Spring AOP is implemented using runtime proxies, this object will always be a proxied object.
+- AOP proxy: an object created by the AOP framework in order to implement the aspect contracts (advise method executions and so on). 
+- Weaving: linking aspects with other application types or objects to create an advised object. This can be done at compile time (using the AspectJ compiler, for example), load time, or at runtime. Spring AOP, like other pure Java AOP frameworks, performs weaving at runtime.
+- Types of advice:
+1) Before advice: Advice that executes before a join point, but which does not have the ability to prevent execution flow proceeding to the join point (unless it throws an exception).
+2) After returning advice: Advice to be executed after a join point completes normally: for example, if a method returns without throwing an exception.
+3) After throwing advice: Advice to be executed if a method exits by throwing an exception.
+4) After (finally) advice: Advice to be executed regardless of the means by which a join point exits (normal or exceptional return).
+5) Around advice: Advice that surrounds a join point such as a method invocation. This is the most powerful kind of advice.  
+   Around advice can perform custom behavior before and after the method invocation. It is also responsible for choosing whether to proceed to the join point or to shortcut the advised method execution by returning its own return value or throwing an exception.
+- The concept of join points, matched by pointcuts, is the key to AOP which distinguishes it from older technologies offering only interception. Pointcuts enable advice to be targeted independently of the Object-Oriented hierarchy.   
+- Aspect is a class that contains advices, joinpoints etc.
+- Interceptor is an aspect that contains only one advice.
+- To enable @AspectJ support with Java @Configuration add the @EnableAspectJAutoProxy annotation.
+- To enable @AspectJ support with XML based configuration use the aop:aspectj-autoproxy element.
+- Spring AspectJ AOP implementation annotations:
+1) @Aspect declares the class as aspect.
+2) @Pointcut declares the pointcut expression.the method serving as the pointcut signature must have a void return type
+3) @Before declares the before advice. It is applied before calling the actual method.
+4) @After declares the after advice. It is applied after calling the actual method and "before returning result".
+5) @AfterReturning declares the after returning advice. It is applied after calling the actual method and before returning result. But you can get the result value in the advice.
+6) @Around declares the around advice. It is applied before and after calling the actual method.
+7) @AfterThrowing declares the throws advice. It is applied if actual method throws exception.
+- In Spring AOP, it is not possible to have aspects themselves be the target of advice from other aspects. The @Aspect annotation on a class marks it as an aspect, and hence excludes it from auto-proxying.
+- Ex : @Before("execute(* com.learning..*.get*(*))")
+	1st * : any return type  
+	.. : any numbger of subpackage after com.learning
+	2nd * : any class 
+	3rd * : any method starting from get 
+	4th * : any sinlge argument
+- Spring MVC : 
+- In Spring Web MVC, "DispatcherServlet" class works as the front controller. It is responsible to manage the flow of the spring mvc application.
+- @Controller annotation is used to mark the class as the controller in Spring.
+- @RequestMapping annotation is used to map the request url. It is applied on the method.
+- 

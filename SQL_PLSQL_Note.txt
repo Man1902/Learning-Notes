@@ -1,0 +1,387 @@
+- A database is an organized collection of data.
+- The main purpose of database is to operate large amount of information by storing, retrieving and managing.
+- RDBMS (Relational Database Management Systems) data is represented in terms of tuples (rows).
+- RDBMS database uses tables to store data. A table is a collection of related data entries and contains rows and columns to store data.
+- A row of a table is also called record. It contains the specific information of each individual entry in the table. It is a horizontal entity in the table
+- A column is a vertical entity in the table which contains all information associated with a specific field in a table.
+-* In RDBMS term, table is known as relation and row as tuple.
+- SQL stands for "structured query language". It is a database language used for database creation, deletion, fetching rows and modifying rows etc.
+- SQL is used to perform operations on the records stored in database such as updating records, deleting records,creating and modifying tables, views etc.
+- DDL : Data definition language allows you to CREATE, ALTER and DROP database objects such as schema, tables, view, sequence etc.
+- DML : Data manipulation language makes user able to access and manipulate data. It is used to 1) Insert data 2) Retrieve data 3) Update data
+  4) Delete data
+- DCL : Data control language allows you to control access to the database. It includes two commands GRANT and REVOKE.
+-* primary key is a combination of fields which uniquely specify a row. This is a special kind of unique key. Primary key values cannot be NULL.
+- foreign key is related to the primary key of another table. Relationship needs to be created between two tables by referencing foreign key with the primary key of another table.
+- A Unique key constraint uniquely identifies each record in the database. This provides uniqueness for the column or set of columns.
+-* Index is used to increase the performance and allow faster retrieval of records from the table. An index creates an entry for each value and it will be faster to retrieve data.
+- Unique Index does not allow the field to have duplicate values if the column is unique indexed.
+- Clustered index is used to reorder the physical order of the table and search based on the key values. Each table can have only one clustered index.
+  clustered index determines how data is stored physically in table.It stores data in cluster.related data is stored together so it makes simple 
+  to retrieve data.reading from a clustered index is much faster than reading from non clustered index from the same table.
+- NonClustered Index does not alter the physical order of the table and maintains logical order of data.
+- A truncate SQL statement is used to remove all rows (complete data) from a table. It is similar to the DELETE statement with no WHERE clause.
+- Truncate table is faster and uses lesser resources than DELETE TABLE command.
+- "DROP table" statement deletes the table's row together with the table's definition while "TRUNCATE table statemnt deletes only records, the table structure will remains the same.
+-* The rollback process is not possible after truncate table statement. 
+- Inner join(Equi join) : It returns rows when there is at least one match of rows between the tables.
+- Left join : It is used to retrieve rows which are common between the tables and all rows of Left hand side table. It returns all the rows from Left hand side table even though there are no matches in the Right hand side table.
+- Right join : It is used to retrieve rows which are common between the tables and all rows of Right hand side table. It returns all the rows from the right hand side table even though there are no matches in the left hand side table.
+- Full Join : It returns all the rows from the left hand side table and all the rows from the right hand side table.
+- Cross join : It produces a result set which is the number of rows in the first table multiplied by the number of rows in the second table if 
+  no WHERE clause is used along with CROSS JOIN.This kind of result is called as Cartesian Product.If WHERE clause is used with CROSS JOIN, it functions like an INNER JOIN. 
+-* Self join is used to join a table to itself as like if that is the second table.It is used to compare values in a column with other values in the same column in the same table.
+-* A view is a result set of a stored query on the data.The SQL view is a table which does not physically exist. It is only a virtual table.
+- SQL VIEW can be created by a SQL query by joining one or more table.
+- Syntax : CREATE VIEW view_name AS SELECT columns FROM tables WHERE conditions; 
+- DROP VIEW view_name; 
+- Union, Intersect or Minus operators are called set operators.
+- SQL Wildcard Characters : 
+  1) % : A substitute for zero or more characters
+  2) _ : A substitute for a single character
+  3) [charlist]	: Sets and ranges of characters to match
+  4) [^charlist] or [!charlist] : Matches only a character NOT specified within the brackets
+- The UNION operator is used to combine the result-set of two or more SELECT statements.Each SELECT statement must have the same number of columns. The columns 
+  must also have similar data types. Also, the columns in each SELECT statement must be in the same order.
+- The UNION operator selects only "distinct" values.while UNION All allows "duplicate" values.
+
+- CREATE TABLE SECOND_TBL AS (SELECT * FROM FIRST_TBL) WITH NO DATA;
+- INSERT INTO SECOND_TBL SELECT * FROM FIRST_TBL;
+- ALTER TABLE table_name RENAME TO new_table_name; 
+- SELECT TOP 3 * FROM TBL_NAME ; -- first three rows in SQLServer/MS Access
+- SELECT TOP 3 * FROM TBL_NAME ORDER BY COL_NAME DESC ; -- last three rows in SQLServer/MS Access
+- SELECT * FROM TBL_NAME LIMIT 3; -- first three rows in MySql
+- SELECT * FROM TBL_NAME ORDER BY COL_NAME DESC LIMIT 3; -- last three rows in MySql
+- SELECT * FROM TBL_NAME FETCH FIRST 3 ROWS ONLY; -- First three rows in db2
+- SELECT * FROM TBL_NAME ORDER BY COL_NAME DESC FETCH FIRST 3 ROWS ONLY; -- last three rows in db2
+- SELECT * FROM TBL_NAME WHERE rownum <= 3 ORDER BY COL_NAME; -- in oracle
+-* CREATE OR REPLACE SEQUENCE SEQ_NAME START WITH 1 ;
+-* ALTER TABLE TBL_NAME ADD PRIMARY KEY (COL_NAME);
+- ALTER TABLE TBL_NAME DROP PRIMARY KEY;
+-* ALTER TABLE TBL_NAME ADD CONSTRAINT PK_CONST_NAME PRIMARY KEY(COL_NAME);
+- ALTER TABLE TBL_NAME DROP CONSTRAINT PK_CONST_NAME;
+-* ALTER TABLE TBL_NAME ADD PRIMARY KEY (COL1_NAME,COL2_NAME); -- Composit Primary Key
+- ALTER TABLE TBL2_NAME ADD FOREIGN KEY (FK_COL_NAME) REFERENCES TBL1_NAME (PK_COL_NAME);
+- ALTER TABLE TBL_NAME DROP FOREIGN KEY GEN_FK_CON_NAME;
+-* ALTER TABLE TBL2_NAME ADD CONSTRAINT FK_CONST_NAME FOREIGN KEY(FK_COL_NAME) REFERENCES TBL1_NAME (PK_COL_NAME); 
+-* ALTER TABLE TBL_NAME ADD UNIQUE (COL_NAME);
+- ALTER TABLE TBL_NAME DROP UNIQUE UNIQUE_IDX_NAME;
+-* ALTER TABLE TBL_NAME ADD CONSTRAINT UNIQUE_CONST_NAME UNIQUE(COL_NAME);
+- ALTER TABLE TBL_NAME ALTER COLUMN COL_NAME SET NOT NULL;
+- ALTER TABLE TBL_NAME ALTER COLUMN COL_NAME DROP NOT NULL;
+------------------------------------------------------------------------
+- PL/SQL is a block structured language. The programs of PL/SQL are logical blocks that can contain any number of nested sub-blocks. 
+- Pl/SQL stands for "Procedural Language extension of SQL" that is used in Oracle. 
+- PL/SQL is a dialect of SQL which is used to enhance the capabilities of SQL.
+- PL/SQL includes procedural language elements like conditions and loops. 
+- It allows declaration of constants and variables, procedures and functions, types and variable of those types and triggers. 
+-* It can support Array and handle exceptions (runtime errors).
+-* The PL/SQL is known for its combination of data manipulating power of SQL with "data processing" power of procedural languages.
+- PL/SQL is not case sensitive so you are free to use lower case letters or upper case letters.
+- A variable is a meaningful name which facilitates a programmer to store data temporarily during the execution of code. It helps you to manipulate data in 
+  PL/SQL programs. It is nothing except a name given to a storage area. Each variable in the PL/SQL has a specific data type which defines the size and layout of the variable's memory.
+- A variable should not exceed 30 characters. Its letter optionally followed by more letters, dollar signs, numerals, underscore etc.
+-* It needs to declare the variable first in the declaration section of a PL/SQL block before using it.
+- By default, variable names are not case sensitive. A reserved PL/SQL keyword cannot be used as a variable name.
+- Evertime you declare a variable, PL/SQL defines a default value NULL to it. If you want to initialize a variable with other value than NULL value, you can do 
+  so during the declaration, by using 1) DEFAULT keyword or 2) assignment operator
+- Following is the syntax for declaring variable:
+  Eg:- (1) counter binary_integer := 0;  (2) greetings varchar2(20) DEFAULT 'Hello JavaTpoint';
+- DECLARE  
+	   a integer := 30;  
+	   b integer := 40;  
+	   c integer;  
+	   f real;  
+   BEGIN  
+	   c := a + b;  
+	   dbms_output.put_line('Value of c: ' || c);
+	   f := 100.0/3.0;  
+	   dbms_output.put_line('Value of f: ' || f);  
+   END;
+-* PL/SQL allows nesting of blocks. A program block can contain another inner block. If you declare a variable within an inner block, it is not accessible to an outer block. 
+- There are two types of variable scope: 1) Local Variable: Local variables are the inner block variables which are not accessible to outer blocks.
+  2) Global Variable: Global variables are declared in outermost block.
+- A constant is a value used in a PL/SQL block that remains unchanged throughout the program. It is a user-defined literal value. 
+- Syntax : constant_name CONSTANT datatype := VALUE;  e.g pi_value CONSTANT number := 3.14;
+- PL/SQL supports the programming language features like conditional statements and iterative statements.
+- Syntax for IF Statement: 
+1) (IF-THEN statement):
+	IF (condition) THEN   
+		Statement: {It is executed when condition is true}  
+	END IF;  
+2) (IF-THEN-ELSE statement):
+	IF (condition) THEN  
+		{...statements to execute when condition is TRUE...}  
+	ELSE  
+		{...statements to execute when condition is FALSE...}  
+	END IF;
+3)* (IF-THEN-ELSIF statement): Here ELSIF spelling is confusing. so take care of it
+	IF (condition1) THEN  
+		{...statements to execute when condition1 is TRUE...}  
+	ELSIF (condition2) THEN  
+		{...statements to execute when condition2 is TRUE...}  
+	END IF;
+4) IF-THEN-ELSIF-ELSE statement):
+	IF (condition1) THEN
+		{...statements to execute when condition1 is TRUE...}  
+	ELSIF (condition2) THEN   
+		{...statements to execute when condition2 is TRUE...}  
+	ELSE  
+		{...statements to execute when both condition1 and condition2 are FALSE...}  
+	END IF; 
+- The PL/SQL CASE statement facilitates you to execute a sequence of satatements based on a selector. A selector can be anything such as variable, function or 
+  an expression that the CASE statement checks to a boolean value.
+- e.g 
+	DECLARE  
+	   grade char(1) := 'A';  
+	BEGIN  
+	   CASE grade  
+		  when 'A' then dbms_output.put_line('Excellent');  
+		  when 'B' then dbms_output.put_line('Very good');  
+		  when 'C' then dbms_output.put_line('Good');  
+		  when 'D' then dbms_output.put_line('Average');  
+		  when 'F' then dbms_output.put_line('Passed with Grace');  
+		  else dbms_output.put_line('Failed');  
+	   END CASE;  
+	END;  
+- The PL/SQL loops are used to repeat the execution of one or more statements for specified number of times.These are also known as iterative control statements.
+- PL/SQL exit loop is used when a set of statements is to be executed at least once before the termination of the loop. There must be an EXIT 
+  condition specified in the loop, otherwise the loop will get into an infinite number of iterations. After the occurrence of EXIT condition, the process exits the loop.
+- You should use EXIT WHEN statement or EXIT statement without WHEN condition to stop the iteration. 
+	DECLARE  
+		i NUMBER := 1;  
+	BEGIN  
+		LOOP  
+			EXIT WHEN i>10; -- (You can simply use EXIT also to stop the iteration)
+			DBMS_OUTPUT.PUT_LINE(i);  
+			i := i+1;  
+		END LOOP;  
+	END;
+- PL/SQL while loop is used when a set of statements has to be executed as long as a condition is true.The condition is decided at the 
+  beginning of each iteration and continues until the condition becomes false.
+- You can also use EXIT WHEN statements or EXIT statements in While loop to stop the iteration.
+	DECLARE  
+		i INTEGER := 1;  
+	BEGIN  
+		WHILE i <= 10 LOOP  
+			DBMS_OUTPUT.PUT_LINE(i);  
+			i := i+1;  
+		END LOOP;  
+	END;
+- PL/SQL for loop is used when when you want to execute a set of statements for a predetermined number of times. The loop is iterated between 
+  the start and end integer values. The counter is always incremented by 1 and once the counter reaches the value of end integer, the loop ends.
+- You can also use EXIT WHEN statements and EXIT statements in FOR Loops.
+	DECLARE   
+		VAR1 NUMBER;  
+	BEGIN   
+		VAR1:=10;  
+		FOR VAR2 IN 1..10 LOOP  
+			DBMS_OUTPUT.PUT_LINE (VAR1*VAR2);  
+		END LOOP;  
+		
+		FOR VAR2 IN REVERSE 1..10 LOOP   -- Reverse loop
+			DBMS_OUTPUT.PUT_LINE (VAR1*VAR2);  
+		END LOOP; 
+	END;
+- Continue statement is used to skip current execution of loop.It is not supported in Oracle 10g. Oracle 11g supports this as a new feature.
+- In PL/SQL, GOTO statement makes you able to get an unconditional jump from the GOTO to a specific executable statement label in the same subprogram of the PL/SQL block.
+- label declaration which contains the label_name encapsulated within the << >> symbol and must be followed by at least one statement to execute.
+	DECLARE  
+	BEGIN  
+		<<loopstart>>  
+		FOR VAR1 IN 1..10 LOOP
+			IF VAR1 = 5 THEN  
+				GOTO loopstart;  - will skip this iteration
+			END IF;  
+			DBMS_OUTPUT.PUT_LINE (VAR1);  
+		END LOOP; 
+	END;
+- The PL/SQL stored procedure or simply a procedure is a PL/SQL block which performs one or more specific tasks. 
+- A procedure may or may not return any value.
+- function must always return a value.
+- A program or a subprogram can call another subprogram. When a subprogram calls itself, it is called recursive call and the process is known as recursion.
+- PL/SQL Recursion Function:-
+	DECLARE  
+	   num number;  
+	   factorial number;  
+	  
+	FUNCTION fact(x number)  
+	RETURN number   
+	IS  
+	   f number;  
+	BEGIN  
+	   IF x=0 THEN  
+		  f := 1;  
+	   ELSE  
+		  f := x * fact(x-1);  
+	   END IF;  
+	RETURN f;  
+	END;  
+	  
+	BEGIN  
+	   num:= 6;  
+	   factorial := fact(num);  
+	   dbms_output.put_line(' Factorial '|| num || ' is ' || factorial);  
+	END;	
+- When an SQL statement is processed, Oracle creates a memory area known as "context area". A cursor is a pointer to this context area. It contains all 
+  information needed for processing the statement.In PL/SQL, the context area is controlled by Cursor. A cursor contains information on a select statement and the rows of data accessed by it.
+- A cursor is used to referred to a program to fetch and process the rows returned by the SQL statement, one at a time. 
+- There are two types of cursors:(1) Implicit Cursors (2) Explicit Cursors.
+- The implicit cursors are automatically generated by Oracle while an SQL statement is executed, if you don't use an explicit cursor for the statement.
+- These are created by default to process the statements when DML statements like INSERT, UPDATE, DELETE etc. are executed.- -
+- Orcale provides some attributes known as Implicit cursor's attributes to check the status of DML operations. 
+  1) %FOUND : It returns TRUE value if DML statements like INSERT, DELETE and UPDATE affect at least one row or more rows or a SELECT INTO statement returned one or more rows. Otherwise it returns FALSE.
+  2) %NOTFOUND : It returns TRUE value if DML statements like INSERT, DELETE and UPDATE affect no row, or a SELECT INTO statement return no rows. Otherwise it returns FALSE. It is a just opposite of %FOUND.
+  3) %ISOPEN : It always returns FALSE for implicit cursors, because the SQL cursor is automatically closed after executing its associated SQL statements.
+  4) %ROWCOUNT : It returns the number of rows affected by DML statements like INSERT, DELETE, and UPDATE or returned by a SELECT INTO statement.
+- PL/SQL Implicit Cursor Attribute Example:-
+	DECLARE   
+	   total_rows number(2);  
+	BEGIN  
+	   UPDATE  customers  
+	   SET salary = salary + 5000;  
+	   IF sql%notfound THEN  
+		  dbms_output.put_line('no customers updated');  
+	   ELSIF sql%found THEN  
+		  total_rows := sql%rowcount;  
+		  dbms_output.put_line( total_rows || ' customers updated ');  
+	   END IF;   
+	END;
+- The Explicit cursors are defined by the programmers to gain more control over the context area. These cursors should be defined in the declaration section of the 
+  PL/SQL block. It is created on a SELECT statement which returns more than one row.	
+- You must follow these steps while working with an explicit cursor:
+  (1) Declare the cursor to initialize in the memory.
+  (2) Open the cursor to allocate memory.
+  (3) Fetch the cursor to retrieve data.
+  (4) Close the cursor to release allocated memory.
+- Explicit cursor example (1): 
+DECLARE
+  CURSOR CURSOR_NAME IS SELECT COL1,COL2,COL3 FROM TABLE1;
+BEGIN
+  FOR LOOP_VAR IN CURSOR_NAME
+  LOOP
+   INSERT INTO TABLE2 VALUES (LOOP_VAR.COL1,LOOP_VAR.COL2,LOOP_VAR.COL3);
+  END LOOP;
+END;
+- An error occurs during the program execution is called Exception in PL/SQL.There are two type of exceptions: 1) System-defined Exceptions 2) User-defined Exceptions
+- PL/SQL Exception Handling:-
+	DECLARE  
+	   c_id customers.id%type := 8;  
+	   c_name  customers.name%type;  
+	   c_addr customers.address%type;  
+	BEGIN  
+	   SELECT  name, address INTO  c_name, c_addr  
+	   FROM customers  
+	   WHERE id = c_id;  
+	DBMS_OUTPUT.PUT_LINE ('Name: '||  c_name);  
+	 DBMS_OUTPUT.PUT_LINE ('Address: ' || c_addr);  
+	EXCEPTION  
+	   WHEN no_data_found THEN  
+		  dbms_output.put_line('No such customer!');  
+	   WHEN others THEN  
+		  dbms_output.put_line('Error!');  
+	END; 
+- In the case of any internal database error, exceptions are raised by the database server automatically. But it can also be raised explicitly by programmer 
+  by using command RAISE.
+- PL/SQL Raising an Exception:-
+	DECLARE  
+	   exception_name EXCEPTION;  
+	BEGIN  
+	   IF condition THEN  
+		  RAISE exception_name;  
+	   END IF;  
+	EXCEPTION  
+	   WHEN exception_name THEN  
+	   statement;  
+	END;  
+- Triggers are stored programs, which are automatically executed or fired when some event occurs.
+- Triggers are written to be executed in response to any of the following events.
+  1) A database manipulation (DML) statement (DELETE, INSERT, or UPDATE).
+  2) A database definition (DDL) statement (CREATE, ALTER, or DROP).
+  3) A database operation (SERVERERROR, LOGON, LOGOFF, STARTUP, or SHUTDOWN).
+-* Triggers could be defined on the table, view, schema, or database with which the event is associated.
+- Advantages : 1) Trigger generates some derived column values automatically 2) Enforces referential integrity 3) Event logging and storing information on table access
+  4) Auditing 5) Synchronous replication of tables(e.g Histroy table) 6) Imposing security authorizations 7)Preventing invalid transactions
+- Syntax : 
+CREATE OR REPLACE TRIGGER trigger_name   
+{BEFORE | AFTER | INSTEAD OF }   
+{INSERT | UPDATE | DELETE}   
+[OF col_name] 
+ON table_name   
+[REFERENCING OLD AS o_row | NEW AS n_row]   
+[FOR EACH ROW]   
+WHEN (condition)    
+DECLARE  
+   Declaration-statements  
+BEGIN   
+   Executable-statements  
+EXCEPTION  
+   Exception-handling-statements  
+END;  
+- The INSTEAD OF clause is used for creating trigger on a view.
+- [OF col_name]: This specifies the column name that would be updated.
+- [FOR EACH ROW]: This specifies a row level trigger.the trigger would be executed for each row being affected. Otherwise the trigger will 
+  execute just once when the SQL statement is executed, which is called a table level trigger.
+- WHEN (condition): This provides a condition for rows for which the trigger would fire. This clause is valid only for row level triggers.
+-* OLD and NEW references are used for record level(row level) triggers these are not avialable for table level triggers.
+-* If you want to query the table in the same trigger, then you should use the AFTER keyword, because triggers can query the table or change it 
+  again only after the initial changes are applied and the table is back in a consistent state.
+- example : 
+	CREATE TABLE TABLE1_HST AS (SELECT * FROM TABLE1) WITH NO DATA;
+	ALTER TABLE TABLE1_HST ADD COLUMN HST_MODE NUMBER;
+	ALTER TABLE TABLE1_HST ADD COLUMN HST_DATE TIMESTAMP NOT NULL DEFAULT SYSDATE;
+	CREATE OR REPLACE TRIGGER TAB1_INSERT_TRIG AFTER INSERT ON TABLE1 REFERENCING NEW AS N_ROW FOR EACH ROW INSERT INTO TABLE1_HST (COL1,COL2,COL3,HST_MODE) VALUES(N_ROW.COL1,N_ROW.COL2,N_ROW.COL3,1);
+	CREATE OR REPLACE TRIGGER TAB1_UPDATE_TRIG AFTER UPDATE ON TABLE1 REFERENCING NEW AS N_ROW FOR EACH ROW INSERT INTO TABLE1_HST (COL1,COL2,COL3,HST_MODE) VALUES(N_ROW.COL1,N_ROW.COL2,N_ROW.COL3,0);
+	CREATE OR REPLACE TRIGGER TAB1_DELETE_TRIG AFTER DELETE ON TABLE1 REFERENCING OLD AS o_row FOR EACH ROW  INSERT INTO TABLE1_HST(COL1,COL2,COL3,HST_MODE) VALUES(o_row.COL1,o_row.COL2,o_row.COL3,-1);
+------------------
+- Example of Procedure and Function
+CREATE OR REPLACE PROCEDURE PROC_FIND_MAX(INPUTNO1 IN NUMBER,INPUTNO2 IN NUMBER,INPUTNO3 IN NUMBER,OUTMAXNO OUT NUMBER)
+IS
+  NO1 NUMBER := INPUTNO1;
+  NO2 NUMBER := INPUTNO2;
+  NO3 NUMBER := INPUTNO3;
+  MAXNO NUMBER;
+  INVALID_NO_EXCEPTION EXCEPTION; -- User defined exception declaration
+BEGIN
+  IF (NO1 = 0 OR NO2 = 0 OR NO3 = 0) THEN
+    RAISE INVALID_NO_EXCEPTION;
+  END IF;
+  MAXNO := FN_FIND_MAX(NO1,NO2,NO3);
+  OUTMAXNO := MAXNO;
+  
+  -- Exception Handling
+  EXCEPTION
+      WHEN INVALID_NO_EXCEPTION THEN
+        DBMS_OUTPUT.PUT_LINE('Invalid no exception Occured.');
+      WHEN OTHERS THEN  -- To handle all exceptions (general approach)
+        DBMS_OUTPUT.PUT_LINE('Exception Occured.');
+END PROC_FIND_MAX;
+
+CREATE OR REPLACE FUNCTION FN_FIND_MAX(NO1 IN NUMBER,NO2 IN NUMBER,NO3 IN NUMBER)
+RETURN NUMBER
+IS
+    MAXNO NUMBER;
+BEGIN
+    IF NO1 < NO2 THEN
+      IF NO2 < NO3 THEN 
+        MAXNO := NO3;
+      ELSE 
+        MAXNO := NO2;
+      END IF;
+    ELSIF NO1 < NO3 THEN -- ELSIF spelling is confusing. so take care of it
+      MAXNO := NO3;
+    ELSE 
+      MAXNO := NO1;
+  END IF;
+  RETURN MAXNO;
+END;
+
+-- Anonymous block to call procedure
+DECLARE
+    NO1 NUMBER := 10;
+    NO2 NUMBER := 20;
+    OUTMAXNO NUMBER;
+  BEGIN
+    PROC_FIND_MAX(NO1,NO2,OUTMAXNO);
+    DBMS_OUTPUT.PUT_LINE('MAX NO IS : '||OUTMAXNO);
+END;

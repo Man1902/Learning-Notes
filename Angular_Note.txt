@@ -1,0 +1,120 @@
+---------- Angular6 Basics ---------- 
+- It follows Component based approach.Every angular component is a mainly TypeScript class.Where HTML and CSS files are its extra attachments. 
+- Setting up the Local Environment and Workspace
+  1) node -v , npm -v             : Angular requires Node.js version 10.9.0 or later.
+  2) npm install -g @angular/cli  : Install Angular CLI : 
+  3) ng version					  : To check installed Angular CLI version
+  4) ng new my-app                : Create a workspace and initial application : 
+  5) cd my-app , ng serve         : Run the application :   (http://localhost:4200/)
+- Project Structure : 
+my-angular-app
+	node_modules
+	package.json
+	src
+		index.html
+		styles.css		// to add global styles
+		app
+			app.component.ts
+			app.component.html
+			app.component.css
+			my-custom-componets
+- ng generate component home : To create and register angular component,you have to provide metadata to your typescript class. e.g 
+  @Component({
+	selector: 'home',
+	templateUrl: './home.component.html',
+	styleUrls: ['./home.component.css']
+  })
+- Data binding in Angular refers to binding the data in the component instance to the HTML template.Any changes to the data automatically get updated in the view.
+- setInterval is a javascript API that lets you run a function at regular time intervals. setInterval( () => { console.log("Hello") } , 2000);
+- Template interpolation : {{ userName }} , {{ getFullName() }} , {{ count + 1 }}
+- *ngFor directive is used to iterator over array e.g <p *ngFor="let phoneNo of user.phone ">{{ phoneNo }}</p>
+- *ngIf directive is used for conditional check e.g  <div *ngIf="user.phone.length > 0">
+- @Input is used (inside ts file) to bind "attribute" of component selector. e.g 
+  <app-address-card userName="Vishal Gana"></app-address-card> (in html file)
+  @Input('userName') userName: string; (in ts file). 
+  This userName value can't be used inside constructor of ts class. as Angular will populate component's attrribute value after creation of component.
+  However we can use it inside ngOnInit life cycle method. 
+- If you will add style details in component's css file. It will be applied on that component only. To add global styling add it into src/style.css file.
+- One way databinding : <input type="text" [value]="userName" > or <input type="text" [ngModel]="userName" > or <app-address-card [user]="userFromAppComp" />
+- Two way databinding : <input type="text" [(ngModel)]="userName" >  // Syntax : [(ngModel)] or <app-address-card [(user)]="userFromAppComp" />
+- To use ngModel directive for databinding, You have to import "FormsModule" in app.module.ts file.
+- ng generate module view			        :  to create new module
+  ng generate component view/view-component : to create new component in specific module (Here it is view module)
+- If you are creating new module and you want to allow its usage in other module also than you have to export it's component e.g  exports: [ViewModuleComponent] 
+  and in dependent module you have to import that module e.g imports : [ViewModule]
+- ng generate service test		: to create new service 
+- @Component() : Angular component, @NgModule() : Angular module, @Injectable() : Angular service
+- To use service in your module,You have to explicitly decalre it inside module.ts file. e.g  providers: [TestService]. Here, We don't have to declare it for 
+  it's child modules also.(global service space)
+- To use service inside component, You have to define it inside constructor.Angular will automatically inject Service dependency. e.g 
+  constructor(private testService: TestService) { }
+- To use built in HttpClient service, you have to import HttpClientModule.
+  let observableObj = this.http.get('https://api.github.com/users/koushikkothagal');
+  observableObj.subscribe((response) => console.log(response));
+- ng build is used to build and package angular app into dist folder which can later be hosted using http-server. Here we don't need ng serve to start the app.
+  1) ng build or ng build --prod  2) http-server dist/my-app/ 
+- ng new routing-demo --routing		:  to create new project with routing support
+- URL based routing + Component based routing 
+  1) Define your route URLs
+  2) Create Angular components for each view (one for each route)
+  3) Configure Angular to map route URLs to components
+- // Routing config in app-routing.module.ts
+const routes: Route[] = [
+  { path: '', redirectTo: '/home' , pathMatch: 'full' }, // for default routing OR { path: '', component: HomeComponent }, 
+  { path: 'home', component: HomeComponent },
+  { 
+    path: 'settings', 
+    component: SettingsComponent,
+    children : [      // child route
+      { path: '', redirectTo: 'profile' , pathMatch: 'full' },
+      { path: 'profile', component: SettingsProfileComponent },
+      { path: 'contact', component: SettingsContactComponent },
+      { path: '**', component : PageNotFoundComponent } // for error handling
+    ]
+  },
+  { path: '**', component : PageNotFoundComponent } // for error handling
+];
+@NgModule({
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule]
+})
+- In html file you have to add <router-outlet></router-outlet> to render routing view
+- for routing link yo can use : <a *ngFor="let route of routes" [routerLink]="route.url"> {{ route.linkName }} </a>  OR 
+  <a routerLink="homeLink">Settings</a> // value from ts file  OR <a routerLink="home">Home</a> // hardcoded value
+   
+- Commands : 
+  npm install -g @angular/cli 		// To install angular CLI
+  ng version						// to check the installed version
+  ng new first-project				// To create new project
+  ng serve							// to start angualr application on http://localhost:4200/
+  ng generate component hello-world  or ng g c hello-word 	// to create new component 
+  ng generate module view			// to create new module
+  ng generate component view/view-component		//  to create new component in specific module (Here it is view module)
+  ng generate service test 			// to create new service
+  ng build or ng build --prod	  	// To build and package angualr app in one folder (dist) which can be deploy independently (withot angular CLI)
+  npm install http-server -g	  	//  to install http-server which can be used to host local directory. 
+  http-server dist/first-project/	// to run http-server to host application
+  ng new routing-demo --routing		// to create new project with routing support
+----- Angular6 Component In Depth -----   
+ng new component-indepth --style=scss
+ng g class blog-post
+ng g pipe truncate
+
+----------- Unit Testing ----------- 
+1) npm init
+2) npm install angular --save
+3) npm install -g karma --save-dev
+4) npm install karma-jasmine jasmine-core --save-dev
+5) npm install angular-mocks --save-dev
+6) npm install karma-phantomjs-launcher --save-dev
+7) karma init to create karma.conf.js file
+8) Add below line in files array of karma.conf.js file
+   'node_modules/angular/angular.js',
+   'node_modules/angular-mocks/angular-mocks.js',
+   'app/**/*.js',
+   'tests/**/*Spec.js'
+9) karma start
+10) npm install http-server -g
+11) http-server
+
+

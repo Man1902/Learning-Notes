@@ -1,0 +1,229 @@
+- Prerequisites : 
+  * HTML, CSS, Javascripts, ES6
+  * Javascripts : 'this' keyword, filter, map, and reduce
+  * ES6 : let & const, arrow functions, template literals, default parameters, object literals, rest and spread operators, destructuring assignment
+  * Add Simple React Snippets , Prettier formatter, ES7 React/Redux/GraphQL/React-Native snippets extentions in  Visual Studio Code
+  * Add node modules directory in your path. e.g C:\Users\DELL\AppData\Roaming\npm
+- shortcuts : 
+  rce    : for class component
+  rfce   : for functional component
+  rconst : for constructor 
+  rpce   : for pure component
+  
+- React is an open source javascript library for building user interfaces (UI). Not a framework. Focus on UI. Rich echosystem.React is declarative.
+- React has a Component based architecture.Components describe a part of the user interface.They are reusable and can be nested inside other components.
+  e.g Root(App) component, Header, Side Nav, Main Content, Footer
+- Component Types : 
+  1) Stateless functional component : Javascript functions. optionally receives object of properties (props) and return HTML (JSX)
+	function Welcome(props){
+		return <h1>Hello {props.name} </h1>;
+	}
+  2) Statefull class component : Class extending Component class.optionally receives object of properties (props) and return HTML (JSX). Can also maintain 
+     private internal state. e.g  
+    class default export Welcome extends React.component{
+		render(){
+			return <h1>Hello {props.name} </h1>;
+		}
+	}
+			Functional 								Class
+  * Simple functions					* More feature rich
+  * Absence of 'this' keyword			* Maintain their own private data - state
+  * Soltion withot using state			* Complex UI logic
+  * Mainly responsible for the UI		* Provide lifecycle hooks
+  * Stateless/Dumb/Presentational		* Stateful/Smart/Container
+- When you create react app, it will automatically configure Development server, Webpack (for bundling files) , Babel (for compiling JS code)
+- JSX (Javascript XML) - Extention to the javascript language syntax.It help us write XML like code for elements and components.
+- JSX tags have tag name,attributes and children.JSX is not necessary to write React applications.However,it makes your react code simpler and elegant.
+- JSX ultimately traspiles to pure Javascript which is understood by the browsers. e.g 
+  return ( <div id="greetDiv"><h1>Hello Vishal<h1></div>); // with JSX
+  return React.createElement("div" , {id : "greetDiv"} , React.createElement("h1",null,"Hello Vishal")); // without JSX
+- JSX syntax diffrence : 
+  1) class -> className 2) for -> htmlFor 3) onclick -> onClick 4) tabindex -> tabIndex
+				props										state
+  * props get passed to the componet		* state is managed within the component
+  * Function parameters						* Variable declared in the function body
+  * props are immutable						* state can be changed
+  * props - FC , this.props - CC			* useState Hook - FC , this.state - CC
+- setState method considerations : 
+  1) Always make use of setState method and never modify the state directly.
+  2) Code has to be executed after the state has been updated ? Place the code in the call back function which is the second arg to the setState method
+  3) When yo have to update the state based on the the previous state value, pass in a function as an arg instead of  the regular object.
+- Object destructuring   : const { firstName,lastName } = this.props;
+- In list rendering e.g persons.map(p => <Person key={p.id} person={p} /> ) :
+  * "key" is a special string attribute you need to include when creating list of elements.
+  * keys give the elements a stable identity.
+  * keys help React identify which items have changed,are added,or are removed.
+  * Help in efficient update of the user interface.
+  * use index as key only if 1) the items in your list do not have a unique id. 2) list is a static list and will not change. 3) The list will never be reordered or filtered.
+- Styling React componet : 
+  1) CSS stylesheets 
+  2) Inline styling 
+  3) CSS module : availabe with react-scripts version 2 or higher. filename must suffix with .module.css
+  4) CSS in JS libaries (Styled components)
+- Lifecycle Methods: 
+1) Mounting :  
+- When an instance of a component is being created and inserted into the DOM. 
+  1) constructor(props) : 
+     * special function that will get called whenever a new component is created
+	 * Used for initializing state and binding the event handlers
+	 * Do not cause side effects Ex. HTTP requests
+	 * super(props) and Can directlty overwrite this.state
+  2) static getDerivedStateFromProps(props,state)  
+     * rarely used and can be used when the state of component depends on changes in props over time
+	 * Set the state. Do not cause side effects Ex. HTTP requests
+  3) render()							
+     * Only required method. Read props & state and return JSX 
+	 * Don't change state or interact with DOM or make ajax calls 
+	 * Children component lifecycle methods are also executed
+  4) componentDidMount () 
+     * Invoked only once.Invoked immediately after a component and all its children components have been rendered to the DOM.
+	 * Cause side effects. Ex. Interact with the DOM or perform any ajax calls to load data
+2) Updating : 
+- When a component is being re-rendered as a result of changes to either its props or state.
+  1) static getDerivedStateFromProps(props,state)  
+  2) shouldComponentUpdate(nextProps,nextState)
+     * rarely used and Dictate if the component should re-render or not.
+	 * Peformance optimization. Do not cause side effects Ex. HTTP requests or Calling the setState method
+  3) render()
+  4) getSnapshotBeforeUpdate(prevProps,prevState)
+     * rarely used and called right before the changes from the virtual DOM are to be reflected in the DOM
+	 * Capture some information from the DOM.
+	 * Method will either return null or return value.Returned value will be passed as the third parameter to the next method
+  5) componentDidUpdate(prevProps,prevState,snapshot)
+     * Invoked only once..Called after the render is finished in the re-render cycles.
+	 * Cause side effects. Ex. perform any ajax calls to load data
+3) Unmounting : 
+- When a component is being removed from the DOM. 
+  1) componentWillUnmount()
+     * Method is invoked immediately before a component is unmounted and destroyed.
+	 * You can perform some cleanup task like cancelling any network requests,removing event handlers,cancelling any subscriptions and also invalidating timers.
+	 * Do not call the setState method.
+4) Error Handling : 
+- When there is an error during rendedring,in a lifecycle method, or in the constructor of any child component
+  1) static getDerivedStateFromError(error)
+  2) componentDidCatch(error,info)
+- React.Fragment let's you group list of children elments without adding extra node to the DOM. Only "key" attribute can be passed inside React.Fragment element.
+  shortcut of React.Fragment : <> Content </> However key can't be passed with this approach
+- Regular component does not implement the shouldComponentpdate method.It always return true by default.								 
+- Pure component (Works with class component) : 
+  * Pure component implements shouldComponentpdate lifecycle method by performing a shallow comparison on the props and state of the component.															
+  * If there is no differnce, the component is not re-rendered - Performance boost.
+  * It is good idea to ensure that all the children components are also pure to avoid unexpected behaviour.
+  * never muted the state.Always return a new object that reflects the new state. 
+- Shallow comparison (SC) : 1) Primitive types : a (SC) b returns true if a and b have the same value and are of the same type
+  2) Complex types : a (SC) b returns true if a and b reference the exact same object.	
+- React.memo(funcComp) introduced in react version 16.6.0 is used to make function compoment as pure component. (To avoid re-rendering if there is no diffrence)
+- Refs (React.createRef()) is used to access DOM nodes directly within React. refs attribute can not attach to fn component.
+- React.forwardRef is used to forward ref to the child fn component.
+- React Portals provides way to render children into a DOM node that exists outside the DOM hierarchy of the parent component (other than root element node).
+  It used mainly to deal with parent component's CSS when it' child component is modal , popup or tooltip.
+  e.g  return ReactDOM.createPortal( <h1>PortalDemo</h1> , document.getElementById("portal-root") );
+- Error Boundary : 
+  * Error Boundaries are React components that catch Javascript error in their child component tree, log those errors, and display a fall-back UI.
+  * class component becomes an Error Boundary by defining either one or both of the lifecycle methods static getDerivedStateFromError(error) or
+    componentDidCatch(error,info).The static method getDerivedStateFromError is used to render a fallback UI after an error is thrown and the componentDidCatch 
+    method is used to log the error information.
+  * The placement of Error Boundary also matters as it controls if the entire app should have the fall-back UI or just the component causing the problem.
+  * Provide a way to gracefully handle error in application code.
+- Higer order component pattern : is a pattern where a function takes a component as an argument and return a new enhanced component. e.g 
+  const EnhancedComponent = higerOrderComponent(originalComponent) ; It is used to share common functionality between components.
+- Render props pattern : refers to a technique for "sharing code" between react components using "prop whose value is a function".
+- Context provides way to pass data through the component tree without having to pass props down manually at every level.
+  1) Create the Context. (using React.createContext() ) 
+  2) Provide a context value. (using Provider component e.g <UserProvider value="Vishal"> <ComponentC /></UserProvider> )
+  3) Consume the context value (using Consumer component e.g <UserConsumer>{ (username) => { return <div>Hello {username}</div>;} }</UserConsumer> )
+---------- React Hooks  ----------
+- Hooks are new feature addition in React version 16.8 which allow you to use React features without having to write a class. e.g state of a component
+- Hooks don't work inside classes.
+- Hooks avoid the whole confusion with 'this' keyword. Allow you to reuse stateful logic.Organize the logic inside a component into reusable isolated units.
+- Only call Hooks at the Top level : Don't call Hooks inside loops,conditions,or nested functions
+- Only call Hooks from React functions (React functional component): Don't call it from any regular javascript function
+1) useState() Hook : 
+  * useState hook lets you add state to functional components
+  * In classes, the state is always an object. With the useState hook, the state doesn't have to be an object (It can be normal variable or object or array)
+  * useState hook returns an array with 2 elements. The first element is the current value of the state, and  the second element is a state setter function.
+  * If new state value depends on the previous state value, you can pass a function to the setter function.
+  * When dealing with objects or arrays,always make sure to spread your state variable and then call the setter function.
+- Difference : setState() merge and update the object state automatically while useState() Hooks setter function does not merge and update the object state 
+  automatically. You have to do it manually (using ES6 spread operator ...) e.g  
+  <input type="text" value={name.firstName} onChange={e => setName({ ...name, firstName: e.target.value })} />
+2) useEffect Hook : 
+- The Effect Hook lets you perform side effects in functional components.
+- It is a close replacement for componentDidMount,componentDidUpdate and componentWillUnmount lifecycle methods.
+- You can logically group related side effects in useEffect hook and can also define muliple useEffects.
+3) useContext Hook : const employee = useContext(EmployeeContext)
+4) useReducer Hook : 
+- useReducer hook is used for state management.It is an alternative to useState. useState is built using useReducer.
+- useReducer is related to reducer functions. useReducer(reducer,initialState) and reducer(currentState,action)
+		Scenario							useState 						useReducer
+  Type of state							Number,String,Boolean			Object or Array
+  Number of state transitions			One or Two						Too Many
+  Related state transition?				No								Yes
+  Business logic						No business logic				Complex business logic
+  Local vs Global						Local							Global
+5) useCallback Hook :
+- useCallback is a hook that will return a memorized version of the callback function that only changes if one of the dependencies has changed.
+- It is useful when passing callbacks to optimized child components that rely on reference equality to prevent unnecessary renders.
+6) useMemo Hook :
+- Difference : useCallback caches the provided function instance itself where as useMemo invokes provided function and caches its result.
+7) useRef Hook :  
+- useRef hook makes it possible to access DOM nodes directly within functional components.
+8) Custom Hook : 
+- A Custom hook is basically a Javascript function whose name starts with "use".
+- A Custom hook can also call other hooks if required.
+- It is used to share logic - Alternative to HOCs and Render Props 
+---------- Redux ----------
+- Redux is predicatable state container for Javascript apps. Can be used with React, Angular Vue or Vanila Javascript.
+- Redux stores the state of your application.State of an app is the state represented by all the individual components of that app.
+- Redux will store and manage the application state.
+- In Redux, all state transitions are explicit and it is possible to keep track of them.
+- Three core concept in Redux : 
+1) Store : holds the state of your application
+   * Allows access to state via getState()
+   * Allows state to be updated via dispatch(action) 
+   * Registers listeners via subscribe(listener)
+   * Handles unregistering of listeners via function returned by subscribe(listener) 
+2) Action : describes the changes in the state of the application. 
+   * The only way your application can interact with the store.
+   * Carry some information from your app to the redux store. 
+   * Plain javaxript object.
+   * Have a type property that indicates the type of action being performed
+   * The type property is tyhpically is defined as string constants.
+3) Reducer : Carries out the state trasition depending on the action
+   * Specify how the app's state changes in response to actions sent to the store
+   * Function that accepts state and action as args, and returns the next state of the app. (prevState, action) => newState e.g
+	 const reducer = (state,action) => {
+		switch(action.type) {
+			case BUY_CAKE : 
+				return { numberOfCakes : state.numberOfCakes - 1 } 
+		}
+    }
+- Three Principles : 
+1) The state of your application is stored in an object tree within a single store.
+-  Maintain our application state in single object which would be managed by the Redux store. e.g for Cake Shop App , { numberOfCakes : 10 }
+2) The only way to change the state is to dispatch (emit) an action,an object describing what happened.
+-  To update the state of your app, you need to let Redux know about that with an action. Not allowed to directly update the state object. e.g 
+   Let the shopkeeper (reducer) know about our action - BUY_CAKE. { type : BUY_CAKE }
+3) To specify how the state tree is trasformed by actions, you write pure reducers.
+- Middleware is the suggested way to extend Redux with custom functionality.
+  * Provides a third-party extention oint between dispatching an action, and the moment it reaches the reducer
+  * Use middleware for logging,crash reporting,performing asynchronous tasks etc  
+- redux-thunk Middleware is used to define async action creators 
+
+
+- commands 
+npm i -g create-react-app@1.5.2			// To install react js
+create-react-app my-app					// To create react app  OR npx create-react-app my-app  // will be handle by npm package runner hence no need to install create-react-app package. 
+npm start								// To starts the development server
+npm i axios								// for HTTP requests 
+npm i react-router-dom					// for routing
+npm init --yes							// to initialize package.json
+npm i react-redux						// to install react-redux lib
+npm i redux								// to install redux lib
+npm i redux-logger						// to install logger Middleware
+npm i redux-thunk						// to install thunk Middleware						
+npm run build							// Bundles the app into static files for production.
+npm test								// Starts the test runner.
+npm run eject							// Removes this tool and copies build dependencies, configuration files and scripts into the app directory. If you do this, you can’t go back!
+npm i --save-dev enzyme enzyme-adapter-react-16
+npm i --save-dev react-test-renderer

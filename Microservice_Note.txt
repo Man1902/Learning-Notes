@@ -1,0 +1,188 @@
+- Design pattern used in Microservice Architecture (e.g Service Discovery and Registry)
+- Distributed transactions management in microservices(Patterns for distributed transactions within a microservices architecture)
+- Fault toerance
+- Security across distributed services
+- Configuration Server
+----------------------------
+- Monolitihc Architecture is like a big container wherein all the software components of an application are assembled together and tightly packaged.  
+- Monolitihc Architecture Cons / Problems  : 
+ * Large and complex application : modularity breaks down.Difficult to understand and implement the new changes. Qality of code decline over time.
+ * Slow development : As application grow in size,it is difficult to understand and modify. Makes developer less productive.
+ * Block continuous deployment : In order to update one component, need to redploy whole application.
+ * Unscalable (as some compoments are CPU insentive and some are Memory insentive).Each components can not be scale individually.
+ * Unreliable (as all component are tighly coupled).If one service fails, It will lead down fall of the entire application.
+ * Inflexible (Difficult to adopt new framewrok/language)
+- Service-Oriented Architecture (SOA) is a collection of services which communicate with each other. The communication can involve either simple data passing or 
+  it could involve two or more services coordinating some activity.
+
+- Microservices is an architectural style that structures an application as a collection of small autonomous services, modelled around a business domain.
+- In Microservices Architecture,each service is self-contained and implements a single business capability.
+- Advantages of Microservices Architecture :
+ * Independent Development (Easy to build and Maintain)
+ * Independent Deployment (Continuous Delievery)
+ * Fault Isolation
+ * Mixed technology stack
+ * Granular scaling (single service can be easily scale up without having to scale the entire a application)
+- Features of Microservices Architecture : 
+  1) Small Focused (Componentization)
+  2) Loosely coupled (Decoupling) 
+  3) Langauage Neutral 
+  4) Bounded context
+  5) Business Capabilities
+  6) Autonomy (less dependent on cross team solution)
+  7) Continous Delievery
+  8) Responsibility (single business capability)
+  9) Decentralized Governance
+ 10) Agility 
+- Characteristics  of Microservices : 
+ * Organized on business capabilities
+ * Products not projects
+ * Smart endpoints and dump pipes
+ * Decentralized Governance
+ * Decentralized Data Management
+ * Infrastructure Automation
+ * Design for failure 
+- Best practices to design microservices : 
+ * Seprate data store for each microservices
+ * Keep code at a similar level of maturity
+ * Seprate build for each microservices
+ * Deploy in container
+ * Treat servers a stateless
+- Challangges with Microservices : 
+ * Bounded Context
+ * Perceptibility 
+ * Configuration management
+ * Debugging 
+ * Consistency
+ * Automating the components
+ * Dynamic Scale Up and Scale Down
+ * Visibility
+ * Fault Tolerance
+ 
+				SOA																Microservices
+* Follows “share-as-much-as-possible” architecture approach		* Follows “share-as-little-as-possible” architecture approach
+* Importance is on business functionality reuse					* Importance is on the concept of “bounded context”
+* They have common governance and standards						* They focus on people collaboration and freedom of other options
+* Uses Enterprise Service bus (ESB) for communication			* Simple messaging system
+* They support multiple message protocols						* They use lightweight protocols such as HTTP/REST etc.
+* Multi-threaded with more overheads to handle I/O				* Single-threaded usually with the use of Event Loop features for non-locking I/O handling
+* Maximizes application service reusability						* Focuses on decoupling
+* Traditional Relational Databases are more often used			* Modern Relational Databases are more often used
+* A systematic change requires modifying the monolith			* A systematic change is to create a new service
+* DevOps / Continuous Delivery is becoming popular, but not  	* Strong focus on DevOps / Continuous Delivery
+  yet mainstream
+* Uses Middleware for communication (Messaging Middleware)		* Uses API layer for communication (e.g REST)
+- Cohesion refers to the degree to which the elements inside a module belong together.Good design has high cohrsion and low coupling.
+
+- Spring cloud Netflix : 
+1) Eureka : Service Registry and Discovery : @EnableEurekaServer and @EnableEurekaClient
+2) Hystrix (Latency and Fault tolerance)(Circuit braker) : 
+- @EnableCircuitBreaker OR @EnableHystrix and @EnableHystrixDashboard (for monitoring)
+- @HytrixCommand(fallbackMethod="failoverMethod") or 
+   @HytrixCommand(fallbackMethod="failoverMethod", commamndProperties={
+		@HytrixProperty(name="execution.isolation.thread.timeoutInMilliseconds", value=500)
+   })
+3) Ribbon (Client side Load balancing) : 
+- @RibbonClient(name="my-microservice-name", configuration=RibbonConfig.class)   and configuration in property file
+ 
+4) Zuul Proxy (API Gateway / Edge Service and Routing) : 
+- @EnableZuulProxy
+
+- Spring Cloud security using OAuth : @EnableAuthorizationServer, @EnableResourceServer, @EnableOAuth2Client
+
+
+- Patterns for distributed transactions within a microservices architecture : 
+1) 2pc (two-phase commit) : 
+- It has two phases: A prepare phase and a commit phase.
+- In the prepare phase, all microservices will be asked to prepare for some data change that could be done atomically. Once all microservices are prepared, the 
+  commit phase will ask all the microservices to make the actual changes.
+- Normally, there needs to be a global coordinator to maintain the lifecycle of the transaction, and the coordinator will need to call the microservices in the 
+  prepare and commit phases.
+- Advantage : very strong consistency protocol. allows read-write isolation
+- Disadvantage : It is synchronous (blocking).
+2) Saga pattern : 
+- It is asynchronous and reactive.In this pattern, the distributed transaction is fulfilled by asynchronous local transactions on all related microservices. The
+  microservices communicate with each other through an event bus.
+- Whenever first Microservice receives a request to update/create a data, It first starts a local transaction to update/create data and then emits an Created 
+  event.The second Microservice listens for this event and updates its data once the event is received.If updation is successfully,Updated event will then be 
+  emitted, which in this example means the end of the transaction.
+- If any microservice fails to complete its local transaction, the other microservices will run compensation transactions to rollback the changes. 
+- Advantages : support for long-lived transactions.
+- Disadvantages  : difficult to debug when many microservices are involved.Event messages could become difficult to maintain if the system gets complex.
+  It does not have read isolation.
+- To address the complexity issue of the Saga pattern, it is quite normal to add a process manager as an orchestrator. The process manager is responsible for 
+  listening to events and triggering endpoints.
+  
+
+---------- Exampe ----------
+1) Movie-Catalog-Service
+@SpringBootApplication
+@EnableEurekaClient
+public class MovieCatalogApp {
+	public static void main(String[] args) {
+		SpringApplication.run(MovieCatalogApp.class, args);
+	}
+	@Bean
+	@LoadBalanced
+	public RestTemplate getRestTemplate() {
+		return new RestTemplate();
+	}
+}
+
+- application.properties
+server.port=8081
+spring.application.name=Microservice-MovieCatalog
+
+- POM.xml 
+<dependency>
+	<groupId>org.springframework.cloud</groupId>
+	<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+</dependency>
+
+@RestController
+@RequestMapping("/moviecatalogs")
+public class MovieCatalogController {
+	@Autowired
+	private RestTemplate restTemplate;
+
+	@RequestMapping("/{userId}")
+	public List<MovieCatalog> getMovieCatalogDtls(@PathVariable int userId) {
+		//UserRating userRating = restTemplate.getForObject("http://localhost:8082/ratings/users/" + userId, UserRating.class); // with hardcoded link
+		UserRating userRating = restTemplate.getForObject("http://Microservice-Ratting/ratings/users/" + userId, UserRating.class); // with service registry
+
+		List<MovieCatalog> listMovieCatalog =  userRating.getRatings().stream().map(rating -> {
+			// Approach 1 : Using RestTemplate (deprecated in latest version)
+			Movie movie = restTemplate.getForObject("http://Microservice-Movie/movies/" + rating.getMovieId(), Movie.class);
+			
+			// Approach 2 : Using WebClient (Reactive way)
+			/*Movie movie = webClientBuilder.build()
+					.get()
+					.uri("http://localhost:8083/movies/" + rating.getMovieId())
+					.retrieve()
+					.bodyToMono(Movie.class)
+					.block();*/
+			return new MovieCatalog(movie.getMovieName(), rating.getRating());
+		}).collect(Collectors.toList());
+		return listMovieCatalog;
+	}
+}
+
+2) Eureka-Catalog-Service
+@SpringBootApplication
+@EnableEurekaServer
+public class EurekaDiscoveryServerApp {
+	public static void main(String[] args) {
+		SpringApplication.run(EurekaDiscoveryServerApp.class, args);
+	}
+}
+
+- application.properties
+server.port=8761
+eureka.client.register-with-eureka=false
+eureka.client.fetch-registry=false
+
+- POM.xml 
+<dependency>
+	<groupId>org.springframework.cloud</groupId>
+	<artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
+</dependency>  

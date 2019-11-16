@@ -1,0 +1,1539 @@
+-------------------------------------------------- Java Concept Of The Day -> Start --------------------------------------------------
+- When you compile a java file, the number of .class files generated will be equal to number of class definitions in it.
+- In your .java file if you have two class with default access modifier , you can save your file with any of one class name.But if any one class is public , than 
+  you must have to save your file with that public class name only.
+-* One java file should contain only one or zero public class. It should not contain more than one public class.
+-* If the local variables are not initialized explicitly, they don’t take default values. That’s why we can’t use local variables before they are initialized.
+- If we don’t initialize global variables explicitly, they take default values.
+----- Memory Management -----
+- Whenever We trigger a java command, it divides allocated memory into two parts – Stack and Heap. Stack is used only for execution purpose. Heap is used for storage purpose.  
+-* After loading all static members, SIB – Static initialization Blocks are executed(before main method 1st line). Remember, SIBs are not stored in the heap 
+   memory. They just come to stack, execute their tasks and leaves the memory. 
+- Non-static components are stored inside the object memory. Each object will have their own copy of non-static components. But,static components are common to all objects of that class.
+- If we keep return type for the constructor, it will be treated as another method.But compiler gives a warning saying that this method has a constructor name.
+-* If we don’t write constructor for our class, compiler will give default constructor. Default constructor is always public and it has no arguments
+- If we declare constructor as private, we can’t use it outside that class(can only use inside class).
+-* Only public, protected and private keywords are allowed before a constructor name. 
+-* First statement in a constructor must be either super() or this().
+- Recursive or Cylic calling of constructor is not allowed.
+-* First statement of constructor is super() or this().After executing first statement, IIB(Instance Initialization Block) blocks are called. After executing IIB blocks, remaining statements are executed.
+-* IIB blocks will not be called from the constructor in which this() statement is written as a first statement.
+- Object-oriented paradigm supports four major principles: 1) Inheritance 2) Polymorphism 3) Abstraction 4) Encapsulation
+----- 1) Inheritance -----
+- Inheritance is used to reuse the present tried and tested code so that you may not have to write them and compile them again.
+-* Constructors, SIB and IIB of super class will not be inheriting to its sub class.But they are executed while creating an object to sub class.(Order : SIB,IIB,Constructor)
+-* If superclass doesn't have implicit default constructor, then Compiler will force you to write sub class constructor by calling super() as first line explicitly. 
+  Because, if we are not defining constructor for sub class, compiler will be providing default constructor. In that default constructor, first statement is 
+  super() – it is a calling statement to default constructor of super class. But it is not defined in Super class.Therefore you will get a compile time error.
+- By default, every class is a sub class of java.lang.Object class.
+- Any class can not extend itself.
+-* Private members can be used wit in the class only It can not be inherited to sub class.
+-* Default members can be used with in same package only.It can be inherited to sub class within same package only.
+-* Protected member can be used within the same package only.But it can be inherited to any sub class(same package as well as other package).
+- public members are inherited to all sub classes.
+-* To avoid the ambiguity, complexity and confusion, multiple inheritance through class is not supported in java.(Any class can not extend more than one class)
+----- Packages -----
+- Packages in java are used to organize related or similar classes, interfaces and enumerations into one group.
+- Package name should start with a alphabets or underscore but not with a number.
+----- Access Modifiers -----
+- Access modifiers in java are used to control the visibility of a field, method, class and constructor.
+- Private members of a class whether it is a field or method or constructor can not be accessed outside the class.
+-* Outer Class can not be a private or protected except inner classes. Inner classes are nothing but again members of outer class. So members of a class 
+   (field, method, constructor and inner class) can be private or protected. that means visibility of outer class can be set by default or public only.  
+-* We can’t create sub classes to that class which has only private constructors.(as super call as first line in sub clsss constructor is not possible)
+-* We can create sub classes to a class which has only protected constructors but we can’t create objects to that class outside the package.
+- Access Modifier	Usage/Access/Visibility		Inheritance
+	private			Within Class Only			Can not be inherited
+	Default			Within Package Only			Can be inherited to sub class within package
+	Protected		Within Package Only			Can be inherited to any subclass
+	Public			Anywhere					To any subclass
+-* We can’t use a field before it is defined(Only declare field)(Illegal Forward Reference Error) but we can initialize a field before it is defined.
+- In the assignment statement, you can use undefined field on LHS only but not on RHS.
+- Illegal forward reference is nothing but you are referring to something in advance that does not exist yet.
+-* In the case of local variables, neither you can use it nor you can initialize it before it is defined.
+----- Type Casting -----
+- Type casting is used to convert data from one data type to another data type. Two type : 1) Primitive casting 2) Derived Casting
+- primitive data type in increasing order of their memory size : byte < short < int < long < float < double.
+- Two types of Primitive casting. 1) Auto Widening 2) Explicit Narrowing
+- When you are converting data from small sized data type to big sized data type, i.e when you are converting data from left-placed data type to right-placed 
+  data type in the above order, auto widening will be used.(e.g short to int) 
+- When you are converting data from big sized data type to small sized data type, i.e when you are converting data from right-placed data type to left-placed 
+  data type in the above order, explicit narrowing will be used.(e.g int to short) 
+- Derived casting is used to change the type of object from one user defined data type to another user defined data type in the class hierarchy.
+- Two types of Derived Casting. 1) Auto-up casting 2) Explicit Down Casting.
+-* Auto-Up Casting is used to change the type of object from sub class type to super class type. i.e an object of sub class type is automatically converted to 
+   an object of super class type. (Super class reference sub class object)
+-* Explicit down Casting is used to change the type of object from super class type to sub class type. i.e you have to explicitly convert an object of super 
+   class type to an object of sub class type. (Sub-class reference Super class object)
+-* ClassCastException occurs when code has attempted to cast an object to a type of which it is not an object.
+-* Sub-class type object is also of its super class type object but reverse is not true.
+----- 2) Polymorphism -----
+- Polymorphism in java refers to any entity whether it is an "operator" or a "constructor" or any "method" which takes many forms or can be used for 
+  multiple tasks either while compiling or while running a java program. 1) Static Polymorphism 2) Dynamic Polymorphism
+-* Any entity which shows polymorphism during compile time is called static polymorphism. Operator Overloading, Constructor Overloading and method overloading 
+   are best examples of static polymorphism. 
+- In static polymorphism, object used is determined during compilation itself. So, it is called static binding or Early Binding.
+-* Any entity which shows polymorphism during run time is called dynamic polymorphism. Method Overriding is the best example of dynamic polymorphism. It is also 
+  called dynamic binding or late binding, because type of the object used will be determined at run time only.
+-* When a class has more than one method with same name and different "signature" then we call that method is overloaded.
+-* Overloaded methods may have same return types or different return types. It does not effect method overloading.
+-* Compiler will check only method signature for method overloading or for duplicate methods. It does not check return types, access modifiers and static or non-static.
+-* When a inherited super class method is modified in the sub class, then we call it as method is overrided. Through method overriding, we can modify super class 
+  method according to requirements of sub class.
+-** Through inheritance we can reuse already existed code and through method overriding we can modify that reused code according to our requirements.
+-* The return type of the overrided method must be compatible with super class method. If super class method has primitive data type as its return type, then 
+ overrided method must have same return type in sub class also.If super class method has "derived or user defined data type" as its return type, then return type 
+ of sub class method must be of same type or "its sub class" only.
+-* You can keep same visibility or "increase the visibility" of overrided method but you can’t "reduce the visibility" of overrided methods in the subclass.
+-* Method signature can not be change for method overriding.
+----- 3) Abstraction -----
+-* Abstraction is used to separate "ideas" from their implementation. Abstraction in java is used to define only ideas in one class so that the idea can be 
+   implemented by its sub classes according to their requirements. 
+-** Class which contains only idea will inform us that "What should be done" while implementing class will tell us "How it should be done"
+-* Abstraction in java is implemented using Abstract classes(0 to 100% Abstraction) and interfaces (100% Abstraction).
+-* We can’t create objects to those classes which are declared as an abstract. 
+-* It is not compulsory that abstract class must have abstract methods. It may or may not have abstract methods. But the class which has at least one abstract method must be declared as abstract.
+- Abstract Class can be a combination of concrete and abstract methods(ideas).
+- Any class extending an abstract class must implement all abstract methods. If it does not implement, it must be declared as abstract.
+-* Inside abstract class, we can keep any number of constructors. If you are not keeping any constructors, then compiler will keep default constructor.
+-* Abstract methods can not be private. Because, abstract methods must be implemented somehow in the sub classes. If you declare them as private, then you can’t use them outside the class.
+-* Constructors and fields can not be declared as abstract.Only class and method can be declared as abstract.
+-* Abstract methods can not be static.
+- Interfaces contain only abstract methods(ideas). (100% Abstraction)
+- By default, Every field of an interface is public, static and final (constant)
+- By default, All methods of an interface are public and abstract.
+- Like classes, for every interface .class file will be generated after compilation.
+-* While implementing any interface methods inside a class, that method must be declared as public. Because, according to method overriding rule, you can’t 
+   reduce visibility of super class method. By default, every member of an interface is public and while implementing you should not reduce this visibility.
+-* SIB and IIB are not allowed in interfaces.
+-* Class can implement more than one interfaces. This is how multiple inheritance is implemented in java
+- super keyword is used to access super class members inside the sub class.
+- If you want same implementation as that of super class method in the sub class, but want to add some more features to it, in such cases, super keyword will be very useful
+- this keyword is used to access other members of the same class. this refers to "current instance" of the class.
+-* We can’t use super and this keywords in a "static method" and in a "SIB" even though we are referring static members.
+-* final keyword restricts the further modification. 
+-* We can’t create a subclass to the class or we can’t extend a class or we can’t modify a class which is declared as final.(To restrict inheritance)
+-* We can’t override a method or we can’t modify a method in the sub class which is declared as final in the super class. (To restrict metohd overriding)
+-* The value of a final variable can not be changed in the whole execution once it got initialized.
+-** Any class or any method can be either abstract or final but not both. abstract and final are totally opposite. 
+-* final method can be overloaded and that overloaded method can be overridden in the sub class.
+- final variable can not be re-initialized but final variable can be used to initialize other variables.
+-* When an array reference variable is declared as final, only variable itself is final but not the array elements.
+-* When a reference variable is declared as final, you can’t re-assign a new object to it once it is referring to an object. But, you can change the state of an object to which final reference variable is referring.
+-* Static variables, non-static variables and local variables all can be final. once the final variables are initialized, even you can’t re-assign the same value.
+- final global variables don’t get default value and they must be "explicitly initialized" at the time of object creation. Uninitialized final field is called Blank Final Field.
+-* final non-static global variable must be initialized at the time of declaration or in all constructors or in any one of IIB.
+-* final static global variable must be initialized at the time of declaration or in any one of SIB.(final static global variable can’t be initialized in constructors)
+-* local varible can not be static.
+----- 4) Encapsulation -----
+- Encapsulation in java is a process of wrapping data(variables) and code acting on the data (methods) together into a single unit.It is also known as "data-hiding".
+- We can create a fully encapsulated class in java by making all the data members of the class private. Now we can use setter and getter methods to set and get the data in it.(e.g Java bean)
+- By providing only setter or getter method, you can make the class read-only or write-only.It provides you the control over the data.
+- java bean encapsulates many objects into one object, so we can access this object from multiple places. Moreover, it provides the easy maintenance.
+----- Nested Classes -----
+- Nested classes in java can be defined as classes within the class. i.e A class can be a member of another class. 
+- There are 2 types of Nested Classes : 1) Static Nested Classes 2) Non-Static Nested Classes or Inner Classes
+- If nested class is declared as static, then that nested class is called as static nested class.
+-* Static nested classes can contain both "static" and "non-static" members.
+-* We can access only "static members" of "outer class" inside a static nested class. 
+-** We have seen that static methods can’t be abstract but static nested classes can be abstract.
+- Static nested class can be final.
+- Constructors and methods of nested classes can be overloaded.
+- Instantiation of static inner class : OuterClass.StaticIneerClass obj = new OuterClass.StaticIneerClass();
+- Nested classes which are declared as "non-static" inside outside class are called non-static nested classes or Inner Classes.
+- non-static nested classes or Inner Classes are of three types : 1) Member Inner Classes 2) Local Inner Classes 3) Anonymous Inner classes
+- Member Inner Classes are non-static nested classes which are declared as "non-static members of outer class.
+-* Member inner classes must contain only "non-static members". Static members are not allowed inside member inner classes.
+-** We can declare a static field inside a member inner class if the field is final.
+- Member inner class may contain any number of IIB’s but should not contain any SIB’s.
+-* We can access both "static and non-static members" of "outer class" inside a member inner class.
+- Instantiation of Member inner class : OuterClass.MemberIneerClass obj = outerClassObj.new MemberIneerClass();
+- Local inner class in java is non-static nested class which is declared inside a "method or a block" (SIB or IIB).
+-* Local Inner Classes can’t be static. Because, local inner classes are nothing but local variables and local variables can’t be static.
+-* Only non-static members are allowed inside local inner classes. But local inner classes can contain static and final field.
+- Local inner classes are local to a method or a block in which they are defined. i.e you can’t use local inner classes outside the method or block in which they are defined.
+-* Only final local variables of methods or blocks containing local inner class can be used inside local inner class.
+-* Local inner classes can not be private, protected and public. But they can have private, public, protected and default members in them.
+- Local inner classes can be abstract or can be final but not both.
+- Anonymous inner classes don’t have name. They are nameless.
+- Global variables may be static or non-static.
+- A variable is hidden or shadowed, if there is another variable exist with the same name in the nearer scope (In Local scope compare to Global scope).
+-* One inner class can extend another inner class of the same class.
+----- Enums -----
+- Enums in java are mainly used for "grouping similar kind of constants" as a one unit. (Introduced in JDK 1.5 onward)
+- Duplicate enum constants are not allowed.
+-* Every constant of enum is public, static and final by default. 
+-* Enums can have any number of fields,methods and constructors and Each constant will have their own copy of fields and methods.
+-* Every enum extends Enum class, it should not extend any other class.But enums can implement any number of interfaces.
+-* Enums can be declared inside a class. If declared inside a class, they are static by default and can be accessed directly by Class name.
+- Enum constants can override generalized method defined in the enum body.
+- Enum can have abstract method declared in it’s body provided each enum constants must implement it.
+- Enum Constants can have their own fields and method defined in their body, but these fields and methods are visible only within the constant body.
+-* After compilation, .class files are generated for all enums.You can treat enum constants as static inner classes of enums as they can be referred directly 
+  using enum name and they can hold fields and methods in them.
+- VarArgs internally behave like array. 
+- Even constructors can have VarArgs as an argument.
+- VarArgs, if used in the method, must be the last argument.
+----- Wrapper class -----
+- Wrapper class in java provides the mechanism to convert primitive into object and object into primitive.
+- Wrapping primitive content into an object is called boxing. The reverse process i.e  unwrapping the object into corresponding primitive data is called Unboxing.
+- Since J2SE 5.0, autoboxing and unboxing feature converts primitive into object and object into primitive automatically. The automatic conversion of primitive into object is known as autoboxing and vice-versa unboxing.
+- Every wrapper class in java has two constructors,First constructor takes corresponding primitive data as an argument while Second constructor takes string as an argument.
+- Wrapper Class Character has only one constructor which takes char type as an argument. Because, String can not be converted into Character.
+- Wrapper class Float has three constructors. The third constructor takes double type as an argument.
+- If you pass a string other than true or false to the second constructor of Boolean wrapper class, the object is initialized with false.
+- All parsing methods (to parse the given string to corresponding primitive data) of wrapper classes are static i.e you can refer them directly using class name.
+- The valueOf() methods are mainly used to wrap or box the primitive content into wrapper class objects.
+- All wrapper classes which represent numeric values i.e Byte, Short, Integer, Long, Float and Double are sub classes of Number class and they implement all four abstract methods of Number class.
+-* If you are passing primitive data type as an argument to the method call, 
+	1) compiler first checks for a method definition which takes same data type as an argument.
+	2) If such method does not exist, It tries to perform "auto-widening" conversion of passed data type.
+	3) If auto-widening conversion is not possible, It tries to perform 'auto-boxing" conversion of "same type" only.
+	4) If such method does not exist, then it checks for the method which takes "super class type" (Number or Object type) as an argument.
+	5) If such method also does not exist, then compiler gives compile time error.
+----- Exception handing -----
+- An exception is an abnormal condition which occurs during run time and disrupts the normal flow of the program.
+- Exception handing in java is the mechanism to handle run time exception.It is handle using five keywords : try,catch,finally,throw and throws
+- try block : In try block, keep those statements which may throw exceptions during run time.
+- catch block : This block handles the exceptions thrown by try block. It takes one argument of type java.lang.Exception.
+- finally block : Whether exception is thrown or not and thrown exception is caught or not, this block will be always executed.
+- From Java 7 onward, there is one more way for handling multiple exceptions. Multiple exceptions thrown by the try block can be handled by a single catch block 
+  using pipe (|) operator.
+-* The order of catch blocks should be from "most specific" to "most general" ones. i.e Sub classes of Exception must come first and super classes later.If you 
+  keep the super classes first and sub classes later, you will get compile time error : Unreachable Catch Block.
+- If the exception thrown by the inner try block can not be caught by it’s catch block, then this exception is propagated to outer try blocks. Any one of the 
+  outer catch block should handle this exception otherwise program will terminate abruptly.
+- If finally block returns a value then try and catch blocks may or may not return a value.
+-* If finally block does not return a value then both try and catch blocks must return a value.
+- If try-catch-finally blocks are returning a value according to above rules, then you should not keep any statements after finally block.
+- finally block overrides any return values from try and catch blocks.
+-* finally block will be always executed even though try and catch blocks are returning the control.
+- Checked exceptions (Compile time exceptions) are the exceptions that are checked at compile time. (All Sub class of Exception class except RuntimeException class) (
+  e.g SQLException,IOException,InterruptedException,.ParseException ) These exceptions must be handled either using try-catch blocks or using throws clause. 
+  If not handled properly, they will give compile time error.
+- UnChecked exceptions (Run time exceptions) are the exceptions that are checked at run time. (All sub class of RuntimeException and Error class) 
+ (e.g ArithmeticException, NumberFormatException, NullPointerException, ArrayIndexOutOfBoundsException,ClassCastException)
+- Exception Hierarchy : Object class <-- Throwable class <-- Exception and Error class.
+- Error is the super class for all types of errors in java.(e.g VirtualMachineError).All sub classes of Error class are "unchecked type" of exceptions.
+-* An object to Throwable or to it’s sub classes can be "explicitly" created and thrown by using "throw" keyword.Such explicitly thrown exception must be handled
+   some where in the program, otherwise program will be terminated.
+- If a method is capable of throwing an exception(propogating an exception) that it could not handle, then it should specify that exception using "throws keyword". 
+  It helps the callers of that method in handling that exception. 
+-* Even constructor can use throws keyword.For this, object creation statement must be enclosed in try-catch blocks.
+-* When a method is throwing "unchecked type" of exceptions, then you need not to mention it using throws keyword (unchecked exceptions propogate automatically). 
+   But for a method throwing checked type of exceptions, you must declare it with throws keyword or enclose the statement which is throwing an exception in 
+   try-catch block. (checked exceptions can't propogate automatically)
+-* If super class method is not throwing any exceptions, then it can be overrided with any "unchecked type" of exceptions (RuntimeException), but can not be 
+   overrided with "checked type" of exceptions.
+-* If a super class method is throwing "unchecked exception", then it can be overrided in the sub class with "same exception" or any other "unchecked exceptions" 
+   but can not be overrided with "checked exceptions".
+-* If super class method is throwing "checked type" of exception, then it can be overrided with "same exception" or with it’s "sub class exceptions" but 
+   can not be overrided with it’s "super class" exceptions.
+- User defined exceptions(Customized exceptions) must extend any one of the classes in the hierarchy of exceptions.
+- Chained exceptions are introduced from JDK 1.4. To implement chained exceptions in java, two new constructors and two new methods are added in the Throwable class.
+- Throwable(Throwable cause) —-> where cause is the exception that causes the current exception
+- Throwable(String msg, Throwable cause) —-> where msg is the exception message and cause is the exception that causes the current exception.
+- getCause() method : This method returns actual cause of an exception.
+- initCause(Throwable cause) method : This method sets the cause for the calling exception.
+----- Arrays -----
+- Array is a collection of similar type of elements that have contiguous memory location.
+- Java array is an "object" that contains elements of similar data type.
+- Syntax : 1) Data_Type[] Variable_Name = new Data_Type[size]; 2) Data_Type Variable_Name[] = new Data_Type[size]; 
+  3) Data_Type[] Variable_Name = new Data_Type[] {Value0, Value1, Value2, Value3 ….. }; (Delcaration,instantiation and initialization all combine) 
+  Or Data_Type[] Variable_Name = {Value0, Value1, Value2, Value3 ….. };
+-* Here,data type of Array can be primitive,object or user defiend.
+- When you create an array object of specified type and length with new operator, by default all array elements in the array object are initialized with default values.
+- Array can be copied using four way.
+-* 1) Direct asign source array reference to destination array reference. But here both array reference varibles will share common objects. Change by one 
+      reference will also get reflected in another reference also.
+- 2) Using for loop. create two seprate objects for source and destination arrays.assign elements of source array to destination array one by one in for loop.
+- 3) Using copyOf() Method of java.util.Array Class.Syntax : Arrays.copyOf(sourceArr, length)
+- 4) Using clone() method (inherited method from java.lang.Object class).
+- 5) Using arraycopy() Method Of System Class.Here we can copy a part of an array into another array. 
+     Syntax : System.arraycopy(sourceArr,sourceArrStartIndex,destArr, destArrStartIndex, lenToWhichArrEleCopied)
+-* Array can hold the references to any type of objects. It is important to note that array can contain only references to the objects, not the objects itself.
+   that means when you creates an array of ‘UserDefinedType’,it can hold references to objects of ‘UserDefinedType’ but it does not create objects of 
+   ‘UserDefinedType’.We have to explicitly create the objects and assign to each element of the array. Otherwise, It gives NullPointerException at run time.
+-* An array containing super class reference variables can point to sub class objects.
+- Arrays are like objects. Array objects can hold two types of data. 1) primitive type of data 2) References to derived type of data (Refernces to objects)
+-* When an array is passed to a method, reference of an array object is passed not the copy of the object. So, Any changes made to object in the method will be reflected in the actual object.
+- Multidimensional arrays in java can be seen as arrays of arrays. i.e an array containing references of other array objects. data is stored in row and column based index (also known as matrix form).
+- Two dimensional array is an array containing references of one dimensional arrays.
+- Three dimensional array is an array containing references of two-dimensional arrays.
+- Jagged arrays in java are arrays containing arrays of different length. Jagged arrays are also multidimensional arrays. Jagged arrays in java sometimes are also called as ragged arrays.
+- While instantiating a jagged array using new operator, you need not to mention the size of it’s contained arrays. It indicates that array contains the arrays of varied length.
+-* java.util.Arrays class in java is used to perform some operations like copying, sorting and searching on the arrays. 
+- toString() method : It is used to display all elements of an array. This method returns string representation of all elements of an array.
+-* sort() method :  It sorts elements of an array in ascending order. This method internally uses "quiksort algorithm" to sort the elements.
+- binarySearch() method of Arrays class Searches the specified value in the specified array using the binary search algorithm.The array must be sorted before 
+  calling this method. If it is not sorted, the results will be undefined.If the value is found in the array, it returns index of that value in the array. 
+  If not found, it returns (-n-1). Where, n is called insertion point. The insertion point is the point at which the specified value would be inserted into the 
+  sorted array. For example, it will be the index of the first element greater than the specified value or it will be the length of the array if all elements in the array are less than the specified value.
+  If the array contains multiple elements same as specified value, there is no guarantee which one will be found.
+-* There is no sort() and binarySearch() method in Arrays class which sorts boolean type of array. 
+- fill() Method : This method assigns specified value to each element of an array. This method is useful in initializing all elements of an array with one value
+- copyOf() Method : This method copies the specified array into new array of same type. While copying, the new array may be truncated or padded with default values so that it has the specified length.
+- copyOfRange() Method : This method is used to copy some part of an array into another array of same type. While copying the new array may be truncated or padded with default values to obtain the required length.
+-* If you give size of an array as negative, you don’t get any errors while compliing. But, you will get NegativeArraySizeException at run time.
+-* The size of an array must be an integer or an expression which results an integer. Auto-widening is also allowed.
+-* Declaration and instantiating of an array strictly must be of same type. No auto-widening, auto-boxing and auto-unboxing is allowed. But only auto-upcasting is allowed.
+- The type of elements of an array must be compatible with type of the array object. If you try to store non-compatible element in an array object, 
+  you will get ArrayStoreException at run time.
+- If you are supplying the contents to the array without new operator, then it should be at the time of declaration only. Not at any other places.
+- While creating multi dimensional arrays, you can not specify an array dimension after an empty dimension.
+- You can create an anonymous array i.e an array without reference.
+-* While assigning one array reference variable to another, compiler checks only type of the array not the size.
+-* The size of an array can not be changed once you define it. You can not insert or delete array elements after creating an array. Only you can change is the 
+   value of the elements. This is the main drawback of arrays.
+------------
+-* Using import statement, you can import only members of a package like classes, interfaces etc into the current file.
+-* Using static import, you can import only static members of a class like fields, methods etc into the current file.we can import the static members from 
+   a class rather than the classes from a given package.
+- Using static import, you can access static members of a class without referring them through their class name.
+-* instanceof operator in java is a binary operator which checks whether an object is of specified type.
+- for-each loop in java is the enhanced version of for loop. It is introduced from JDK 5. It is used to iterate all elements of an array or Collection.
+- Advantage of for-each loop : 1) You need not to specify the initialization, condition and increment or decrement as you specify in the normal for loop.
+							   2) It increases the readability of the code.
+-* Disadvantage of for-each loop : You can’t iterate only few elements of an array or collection using for-each loop.
+- Every statement in any java program must be reachable i.e every statement must be executable at least once in any one of the possible flows. If any code can 
+  not be executable in any of the possible flows, then it is called unreachable code. Unreachable code in java is a compile time error.
+- Dead code is also unreachable code, but dead code doesn’t give compile time error. It just gives you a warning.
+----- Threads -----
+- Application is a program which is designed to perform a specific task.
+- Process is an executing instance of an application.Processes are heavy weight operations that they require their own separate memory address in operating system. 
+  Because of the processes are stored in separate memory, communication between processes (Inter Process Communication) takes time. Context switching from one 
+  process to another process is also expensive.
+-* Thread is a smallest executable unit of a process.Thread shares a common memory of process.A process can have multiple threads. Threads of the same process 
+  share the memory address of that process. i.e threads are stored inside the memory of a process. As the threads are stored in the same memory space, 
+  communication between threads (Inter Thread Communication) is fast. Context switching from one thread to another thread is also less expensive.
+- Multitasking is an operation in which multiple tasks are performed simultaneously. Multitasking is used to utilize CPU’s idle time.
+- 1) Process based multitasking  (Multiprocessing ) : Multiple processes are executed simultaneously.
+- 2) Thread-based Multitasking (Multithreading) : Multiple threads in a process are executed simultaneously. 
+- Two ways to create threads in java : 1) By extending java.lang.Thread class (by overriding run() method) 
+  2) By implementing java.lang.Runnable interface (by implementing run() method)
+- There are two types of Threads in java. 1) User Thread 2) Daemon Thread
+-* User threads are threads which are created by the application or user. They are high priority threads. JVM (Java Virtual Machine) will not exit until all user 
+  threads finish their execution. JVM wait for these threads to finish their task. These threads are "foreground" threads.
+- Daemon threads are threads which are mostly created by the JVM. These threads always run in background. These threads are used to perform some background tasks 
+  like garbage collection and house-keeping tasks. These threads are less priority threads. JVM will not wait for these threads to finish their execution. 
+  JVM will exit as soon as all user threads finish their execution. JVM doesn’t wait for daemon threads to finish their task.
+- You can convert user thread into daemon thread explicitly by calling "setDaemon()" method of the thread.
+-* You can’t set a daemon property after starting the thread. If you try to set the daemon property when the thread is active, It will throw a "IllegalThreadStateException" at run time.
+- You can check whether the thread is user thread or a daemon thread by using "isDaemon()" method of Thread class.
+- Daemon property of a thread is inherited from it’s parent thread. i.e The thread created by user thread will be user thread and the thread created by daemon thread will be a daemon thread.
+-* The main thread or primary thread created by JVM is an user thread.
+- You can give a name to a thread by using "setName()" method of Thread class. You can also retrieve the name of a thread using "getName()" method of a Thread class.
+- You can change the name of a thread at any state of the thread.
+- Default name of the thread will be consist of a word “Thread”, followed by hyphen (-) and followed by an integer number starting with 0.
+- more than one threads can have the same name.
+-* "currentThread()" method of Thread class returns the reference of currently executing thread.
+-* You can pass name of the thread while creating the object to thread. There is a constructor in Thread class which takes name of the thread as an argument.
+-* From JDK 1.5 onward, One more method added to Thread class. That is "getId()" method. This method returns the unique long number associated with a thread. 
+  That can be used as an identifier of a thread. 
+- Thread Id remains the same for a thread during its whole life term. It may be reused when the thread is terminated.
+- Thread ID doesn’t change when the name of a thread is changed. 
+-* We can’t assign our own Id to the thread. But, we can change the way getId() returns the thread Id as it is not a final method.
+- There are two methods in Thread class related to priority of a thread. They are "setPriority()" and "getPriority()" methods. 
+- There are three constant fields in Thread class related to priority of a thread : 
+  1) MIN_PRIORITY   —> It defines the lowest priority that a thread can have and It’s value is 1.
+  2) NORM_PRIORITY  —> It defines the normal priority that a thread can have and it’s value is 5.
+  3) MAX_PRIORITY  —> It defines the highest priority that a thread can have and it’s value is 10.
+-* setPriority() method may throw IllegelArgumentException if supplied priority is not in the range of MIN_PRIORITY and MAX_PRIORITY.
+-* The priority of a main thread, if explicitly not set, is always 5 i.e NORM_PRIORITY.
+- The default priority of a thread is same as that of it’s parent.
+-* Thread.sleep() method makes the "currently executing thread" to pause it’s execution for a specified period of time. 
+  1) Thread.sleep(long millis)  2) Thread.sleep(long millis,int nanos)
+- Thread.sleep() method throws InterruptedException if a thread in sleep is interrupted by other threads. InterruptedException is a checked type of exception. 
+  That means, “Thread.sleep()” statement must be enclosed within try-catch blocks or it must be specified with throws clause.
+-** It is always current thread that is going to sleep.Always currently executing thread is going to sleep even though you are calling sleep() method on another thread object.
+-** It is a bad practice to call sleep() method with an instance of Thread class.If you want a particular thread to sleep for a while, then call sleep() method 
+  inside the run() method of that thread.
+- Thread.sleep() method may also throws IllegalArgumentException if miilis value is negative or nanos value is not in the range.
+-* When the thread is going for sleep, it does not release the synchronized locks it holds.
+- join() method of Thread class is used to mantain the order of execution of threads. 
+- Using join() method, you can make the currently executing thread to wait for the some other threads to finish their task. 
+  1) join() : Currently executing thread waits for a thread to finish it’s task "on which it is called".
+  2) join(long millis) :  currently executing thread waits at most millis milliseconds for a thread to finish it’s task on which it is called.
+  3) join(long millis, int nanos) : Currently executing thread waits at most millis milliseconds plus nanos nanoseconds for a thread to finish it’s task on which it is called.
+- Like sleep() method, join() method also throws InterruptedException. Therefore, you have to keep calling statement to join() method in try-catch blocks or else propagate the exception with throws clause.
+- Thread interference in java is a condition which occurs when more than one threads, executing simultaneously, access same piece of data. When more than one 
+  threads have access to same data, it is possible that data may get corrupted or one may not get the desired output. Thread interference occurs when code written is not thread safe.
+-* Thread "interference" occurs when sequence of steps of more than one threads overlap. 
+-* Synchronization in java is a strategy or a method to avoid thread interference and hence protecting the data from inconsistency. synchronization is also one 
+  of the way to make code thread safe. 
+-* Through synchronization, we can make the threads to execute particular method or block in "sync" not "simultaneously".
+-* Synchronization in java is implemented using synchronized keyword. synchronized keyword can be used with methods or blocks but not with the variables.
+- When a method or block is declared as synchronized, only one thread can enter into that method or block. When one thread is executing synchronized method or 
+  block, the other threads which wants to execute that method or block wait or suspend their execution until first thread is done with that method or block. 
+  Thus avoiding the thread interference and achieving thread safeness.
+-* The synchronization in java is built around an entity called "object lock" or monitor.
+  * Whenever an object is created to any class, an object lock is created and is stored inside the object.
+  * One object will have only one object lock associated with it.
+  * Any thread wants to enter into synchronized methods or blocks of any object, they must acquire object lock associated with that object and release the lock after they are done with the execution.
+  * The other threads which wants to enter into synchronized methods of that object have to wait until the currently executing thread releases the object lock.
+  * To enter into static synchronized methods or blocks, threads have to acquire class lock associated with that class as static members are stored inside the class memory.
+- Synchronized Blocks are used to synchronized  some part of  method or block.
+- Synchronized blocks must be defined inside a definition blocks like methods, constructors, static initializer or instance initializer.
+-* synchronized block takes one argument and it is called mutex. if synchronized block is defined inside non-static definition blocks like non-static methods,
+  IIB or constructors, then this mutex must be an instance of that class. If synchronized block is defined inside static definition blocks like static methods or 
+  SIB, then this mutex must be like ClassName.class.
+-* You can use synchronized keyword only with methods but not with variables, constructors, SIB and IIB.
+- Constructors, SIB and IIB can’t be declared with synchronized keyword, but they can contain synchronized blocks.
+- Both static and non-static methods can use synchronized keyword. For static methods, thread need class level lock and for non-static methods, thread need object level lock.
+-* It is possible that both static synchronized and non-static synchronized methods can run simultaneously. Because, static methods need class level lock and non-static methods need object level lock.
+- Synchronization blocks can be nested.
+-* Lock acquired by the thread before executing a synchronized method or block must be released after the completion of execution, no matter whether execution is completed normally or abnormally (due to exceptions).
+- Synchronization in java is Re-entrant in nature. A thread can not acquire a lock that is owned by another thread. But, a thread can acquire a lock that it 
+  already owns. That means if a synchronized method gives a call to another synchronized method which needs same lock, then currently executing thread can directly enter into that method or block without acquiring the lock.
+- synchronized method or block is very slow. They decrease the performance of an application. So, special care need to be taken while using synchronization.Use synchronization only when you needed it the most.
+- Use synchronized blocks instead of synchronized methods. Because, synchronizing some part of a method improves the performance than synchronizing the whole method.
+-* Deadlock in java is a condition which occurs when two or more threads get blocked waiting for each other for an infinite period of time to release the 
+  resources(Locks) they hold. Deadlock is the common problem in multi threaded programming which can completely stops the execution of an application. 
+- Deadlock is the condition which occurs when two or more threads wait for each other forever.
+- Try to avoid nested synchronized blocks. Nested synchronized blocks makes a thread to acquire another lock while it is already holding one lock. This may 
+  create the deadlock if another thread wants the same lock which is currently held by this thread.
+- If you needed nested synchronized blocks at any cost, then make sure that threads acquire the needed locks in some predefined order.
+-* Threads can communicate with each other using wait(), notify() and notifyAll() methods. These methods are final methods of java.lang.Object class.
+- wait() method tells the currently executing thread to "release the lock" of this object and wait until some other thread acquires the same lock and notify it 
+  using either notify() or notifyAll() methods. This method throws InterruptedException if waiting thread is interrupted.
+- notify() method wakes up one thread randomly that called wait() method on this object. 
+- notifyAll() method wakes up all the threads that called wait() method on this object. But, only one thread will acquire lock of this object depending upon the priority.
+-* These three methods must be called within synchronized method or block. Any thread which calls these methods must have lock of that object.
+-* When you call sleep() method on a thread, thread goes to sleep with "holding the object lock" with it. But, if you call wait() method, thread releases the 
+   object lock and goes for sleep. This is the main difference between wait() and sleep() methods.
+-* wait(), notify() and notifyAll() – all these three methods throw IllegalMonitorStateException if the calling thread does not owns the object lock.
+- wait() method is overloaded in Object class. : 1) wait(long millisecond) 2) wait(long millisecond,int nanosecond)
+-* Thread "interruption" in java is a mechanism in which a thread which is either sleeping or waiting can be made to stop sleeping or waiting. Thread 
+  interruption is like telling the thread that it should stop waiting or sleeping and return to running status.
+- Thread interruption is programmatically implemented using "interrupt()" method of java.lang.Thread class. 
+- The whole thread interruption mechanism depends on an internal flag called "interrupt status". The initial value of this flag for any thread is false. When you 
+  call interrupt() method on a thread, interrupt status of that thread will be set to true. When a thread throws InterruptedException, this status will be set to false again. 
+- Remember, InterruptedException is thrown when a thread is interrupted while it is sleeping or waiting. Many methods of Thread class like sleep(), wait(), join() throw InterruptedException.
+-* You can check whether a particular thread is interrupted or not using "isInterrupted()" method of Thread class. 
+- Interrupted thread will not be eligible to go for sleep. i.e If you call interrupt() method on a thread which is not yet slept but running, such thread will 
+  throw InterruptedException while going to sleep. 
+- A thread can interrupt itself. i.e a thread can call interrupt() method on it’s own.
+-* There is one more method to check interrupt status of a thread, called "interrupted()" method. It is a static method of Thread class. It also returns the 
+  current interrupt status of a thread like isInterrupted() method. But, it clears interrupt status of a thread. i.e if interrupt status of a thread is true, 
+  then it will set the status to false.
+- interrupt() method will throw SecurityException if current thread can not interrupt a calling thread.
+- There are six thread states. They are NEW, RUNNABLE, BLOCKED, WAITING, TIMED_WAITING and TERMINATED.
+- At any point of time, thread will be in any one of these states. "getState()" method is used to check current status of thread.
+  1) NEW : A thread will be in this state before calling start() method.
+  2) RUNNABLE : A thread will be in this state after calling the start() method.
+  3) BLOCKED : A thread will be in this state when a thread is waiting for object lock to enter into synchronized method/block or a thread will be in this state if deadlock occurs.
+  4) WAITING : A thread will be in this state when wait() or join() method is called.
+  5) TIMED_WAITING : A  thread will be in this state when thread is sleeping. i.e A thread will be in this state when sleep() or wait() with timeOut or join() with timeOut is called.
+  6) TERMINATED : A thread will be in this state once it finishes it’s execution. 
+- Thread group in java is used to group similar threads into one unit. A thread group can also contain other thread groups. Thread groups are constructed 
+  using java.lang.ThreadGroup class.
+- While creating the threads itself, you can specify it’s group using constructor which takes ThreadGroup and name of a thread as arguments.
+  e.g Thread t1 = new Thread(parentGroupObj, "Thread 1");
+- Some Useful Methods Of ThreadGroup : 
+  1) getParent() : It returns the parent of the thread group.
+  2) setDaemon() And isDaemon(): It is used to set the daemon property of a thread group and used to check whether a thread group is daemon or not.
+  3) setMaxPriority() And getMaxPriority() : 
+  4) activeCount() and activeGroupCount() : activeCount() returns the number of active threads in a specified group and it’s subgroups. activeGroupCount() 
+     returns the numbers of active thread groups in a specified group and it’s subgroups.
+  5) interrupt() : to interrupt all threads in a group.
+  6) destroy() : To destroy the whole thread group and it’s subgroups. Before calling this method, thread group must be empty i.e all threads in a group must be exited.  
+  7) enumerate() :  
+  enumerate(Thread[] list) : It copies all active threads of a group into specified array of threads.
+  enumerate(Thread[] list, boolean recurse) : It copies all active threads of a group into specified array of threads. If recurse is true, subgroups are also enumerated.
+  enumerate(ThreadGroup[] list) : It copies all active subgroups of a thread group into specified array of ThreadGroup.
+  enumerate(ThreadGroup[] list, boolean recurse) : It copies all active subgroups of a thread group into specified array of ThreadGroup. If recurse is true, subgroups of subgroups are also enumerated.
+-* If you start a thread that is already started, you will get IllegalThreadStateException at run time.
+-* Exception is thread wise not execution wise.exception effects only in the thread in which it occurs.Other threads will execute normally. 
+- When you call run() method of a thread directly, calling thread(currently executiong thread) will execute the task defined in the run() method. 
+-* When multiple threads need to execute same task, then use Runnable interface. If multiple threads need to execute different tasks, then go for Thread class.
+-* Setting Priority of a thread is just an advice to OS not an instruction. It is up to OS to consider this advice.
+- Every thread in java is a member of a thread group. When a java application first starts up, Java runtime system creates a thread group called main. main thread is also member of this group.
+-* A thread is a permanent member of a thread group to which it joins during creation. You can’t move a thread to a new group after creating it.
+- “Implements Runnable” is the preferred method to create the threads in java.
+- There are two ways through which you can stop a thread in java. One is using boolean variable and second one is using interrupt() method. 
+-* volatile keyword in variable declaration is used whenever you want application read variable value from the main memory.
+- Before notification, the thread will be in WAITING state. Once it is notified, it will move to BLOCKED state. It remains in BLOCKED state until it gets the 
+  lock. Once it gets the lock, it moves from BLOCKED state to RUNNING state.
+-* A thread will be in WAITING state if it is waiting for notification from other threads. A thread will be in BLOCKED state if it is waiting for other thread 
+  to release the lock it wants.
+----- Strings -----
+- In java, strings are treated as "objects".
+-* String objects are immutable in java. (Once created we can't modify it). While StringBuffer and StringBuilder objects are "mutable".
+-* Only String and StringBuffer objects are thread safe.
+-* Whenever you create a string object using "string literal", that object is stored in the special meomry area known as "string constant pool" and whenever you 
+ create a string object using "new keyword", such object is stored in the "heap memory".
+-* There can not be two string objects with same content in the string constant pool. But, there can be two string objects with the same content in the heap memory.
+- Immutability is the fundamental property of string objects. In whatever way you create the string objects, either using string literals or using new operator, 
+  they are immutable.
+-* When you want to check the equality of two string objects on their "physical existence in the memory"(physical address), then use “==” operator. 
+  If you want to check the equality of two string objects depending upon their "contents", then use equals() method. 
+- In other word ,  "==" operator compares references not values while "equals()" method compares values of string for equality.
+-* It is recommended not to use hashCode() method to check the equality of two string objects. You may get unexpected result.
+-* Object of StingBuffer and StingBuilder are stored in "heap memory" only.
+- "String intern" or simply "intern" refers to string object in the "String Constant Pool". 
+- Interning is the process of creating a string object in String Constant Pool which will be exact copy of string object in heap memory. 
+- The String "compareTo()" method compares values lexicographically and returns an integer value that describes if first string is less than, equal to 
+  or greater than second string.
+- After a string literal, all the + will be treated as string concatenation operator.
+- In substring startIndex is inclusive(included) while endIndex is exclusive(not include in created substring output)
+- Java StringBuffer class is thread-safe(syscronized) i.e. multiple threads cannot access it simultaneously. So it is safe and will result in an order.
+- Java StringBuilder is not thred-safe (non-syncronized). it is faster than StringBuffer.
+-* We can create immutable class by creating final class that have final data members.
+----- Generics -----
+- Generics are introduced in Java 5 to provide the "type checking" at "compile time". 
+- If you use generics, you need not to perform the type casting explicitly. Java compiler applies strong type checking if you use generics in your code and 
+  shows errors if the code violates the type safety. Thus removing the risk of "ClassCastException".
+-* Generics are used to check the "type compatibility" at the "compile time" and hence removing the chances of occuring "ClassCastException" at "run time". 
+- Generic Class  syntax : class Class_Name<T1, T2, T3 ... Tn>  Where T1, T2, T3 … Tn (T stands for Type) are called "type parameters".
+- When you pass a type while creating an object to the generic class, that object works only with that type only. 
+- You can make objects to work with any type using generics.
+-* While creating an instance of generic class, you must pass only derived types. You can’t pass primitive types. If you pass primitive type, it gives compile time error.
+-* generics works only with derived type. 
+- Objects of same "generic class" differ depending upon their "type parameters".
+- You can also pass your own user defined type while creating an instance to the generic class.  
+-* Only "generic classes" can implement "generic interfaces". Normal classes can’t implement generic interfaces.   
+- A normal class can implement a generic interface if type parameter of generic interface is a "wrapper class".
+-* Class implementing generic interface at least must have "same number and same type" of parameters and at most can have any number and any type of parameters.
+- You can change the type of parameter passed to generic interface while implementing it. When changed, the class which is implementing should have new type as 
+  parameter and also, you have to change old type with new type while implementing the methods.
+- Generic interface can have any number of type parameters. Class implementing generic interface at least must have  same type of parameters and at most can have 
+  any number of parameters
+-* Class can implement more than one generic interfaces. If implemented, class should have type parameters of both the interfaces.
+-  If you don’t want whole class or interface to be generic, you want only some part of class as generic, we can achieve it by Generic Methods.
+- syntax : <type-Parameters> return_type method_name(parameter list) {}
+-* Generic methods can be static or non-static. There is no restriction for that. Generic class as well as non-generic class can have generic methods.
+-* Like methods, constructors also can be generic. Even non-generic class can have generic constructors. 
+- syntax : <type-Parameters> Class_Name(parameter list) {}
+- Using bounded types, you can make the objects of generic class to have data of "specific derived types".
+- syntax for declaring Bounded type parameters : <T extends SuperClass>  e.g class GenericClass<T extends Number> 
+  This specifies that ‘T’ can only be replaced by ‘SuperClass’ or it’s sub classes. 
+- You can also use "interface type" along with "class type" as an "upper bound" to type parameters. As in java, any class can extend only one class and can 
+  implement multiple interfaces, this also applies while declaring the bound to type parameters. That means a bounded parameter can extend only one class and 
+  one or more interfaces. e.g <T extends AnyClass & FirstInterface & SecondInterface>
+- Wildcard arguments means unknown type arguments. They just act as placeholder for real arguments to be passed while calling method.
+  They are denoted by question mark (?).
+-* The types which are used to declare wildcard arguments must be generic types. 
+- Wildcard arguments are declared in three ways : 
+  1) Wildcard Arguments With An Unknown Type e.g GenericType<?>  It can hold any type of objects.
+  2) Wildcard Arguments with An Upper Bound  e.g GenericType<? extends SuperClass>
+  3) Wildcard Arguments with Lower Bound   e.g GenericType<? super SubClass> ( wildcard argument can contain ‘SubClass’ type or it’s super classes)
+- ‘super’ clause is used to specify the lower bound for only wildcard arguments. It does not work with bounded types.
+-* A generic class can extend a non-generic class.
+- Generic class can also extend another generic class.Here, Sub class should have at least same type and same number of type parameters and at most can have any number and any type of parameters.
+-* Non-generic class can’t extend generic class except of those generic classes which have already pre defined types as their type parameters.
+- Non-generic class can extend generic class by removing the type parameters. i.e as a raw type. But, it gives a warning.
+- While extending a generic class having bounded type parameter, type parameter must be replaced by either upper bound or it’s sub classes.
+- Generic methods of super class can be overrided in the sub class like normal methods.
+- When you compile your java code, compiler removes all generic information mentioned in your code. Compiler replaces all type parameters with their bounded type.
+  The type parameters which don’t have bounds will be replaced with java.lang.Object class. That means all type parameters exist till compilation only. They are 
+  erased during compilation. They don’t exist at run time.
+- You can’t create an instance to the type parameters. This is because, the type parameters does not exist at run time. They are erased during compilation.
+- In generic class with type parameter ‘T’, you can’t declare static fields of type ‘T’ and you can’t use ‘T’ in a static method. However, you can declare 
+  static generic methods with their own type parameters.
+- You can’t instantiate an array whose type is a type parameter. e.g  T[] t = new T[5] )
+- You can’t create an array of generic type containing specific type of data. But, you can create an array of generic type containing unknown type of data.
+-* You can not create generic exceptions i.e A generic class can not extend Throwable or any of it’s sub classes.
+------- Java Concept of the day : collection ------------
+- Collections are nothing but group of objects stored in well defined manner.
+- Collection Framework in java is a centralized and unified theme to store and manipulate the group of objects.It is introduced in java from JDK 1.2.
+- Collection(I) extends Iterable(I)
+- 1) List(I) , Queue(I) , Set (I) extends Collection (I) 
+  2) ArrayList(C) , Vector(C) , LinkedList(C) implements List(I)
+  3) LinkedList(C) , PriorityQueue(C) implements Queue(I) 
+  4) HashSet(C) , LinkedHashSet(C) implements Set(I)
+  5) SortedSet(I) extends Set(I) and  NavigableSet(I) extends SortedSet (I)
+  6) TreeSet(C) implements SortedSet(I)
+  7) Deque(I) extends Queue(I) 
+- HshMap(C) , HashTable(C) implements Map(I) (Map is not inherited from Collection interface)
+- SortedMap(I) extends Map(I), NavigableMap(I) extends SortedMap(I), TreeMap(C) implements NavigableMap(I)
+- Collection interface is the root level interface in the collection framework. List, Queue and Set are all sub interfaces of Collection interface. 
+  JDK does not provide any direct implementations of this interface. But, JDK provides direct implementations of it’s sub interfaces.
+- some import abstract method of Collection interface : 
+  1) int size() 2) boolean isEmpty() 3) boolean contains(Object o) 4) Iterator<E> iterator()(Inherited method of Iterable inerface) 5) Object[] toArray() 
+  6) boolean add(E e) 7) boolean remove(Object o) 8) boolean containsAll(Collection<?> c) 9) boolean addAll(Collection<? extends E> c) 10) boolean removeAll(Collection<?> c),
+  11) boolean retainAll(Collection<?> c) 12) void clear() 13) boolean equals(Object o) 14) int hashCode()
+-* equals() and hashcode() methods in the Collection interface are not the methods of java.lang.Object class. Because, interfaces does not inherit from Object class. 
+  Only classes in java are sub classes of Object class. Any classes implementing Collection interface must provide their own version of equals() and hashcode() 
+  methods or they can retain default version inherited from Object class.
+-* In equals() metohod of collection interface, two collection interface implementer class objects(e.g two ArrayList objects or two HashSet objects) can said to 
+ be equal, only if both the objects contain the same elements in the same order. (list1 == list2 if list1.equals(list2) and list1.hashCode()==list2.hashCode() )
+- In toArray() method, The returned array will be "safe" in nature.that means no references to it are maintained by this collection.In other words, this method 
+  must allocate a new array even if this collection is "backed" by an array.The caller is thus free to modify the returned array.
+- List Interface represents an ordered or sequential collection of objects. This interface has some methods which can be used to store and manipulate the ordered collection of objects.
+-* You have the control over where to insert an element and from where to remove an element in the list.
+- ArrayList, Vector and LinkedList are some examples of lists.
+- Elements of the lists are ordered using Zero based index.
+- Elements can be inserted at a specific position.Any pre-existing elements at or beyond that position are shifted right.
+- Elements can be removed from a specific position. The elements beyond that position are shifted left.
+-* A list may contain duplicate elements.It may also contain multiple null elements.
+- All 15 methods of Collection interface are inherited to List interface.It also contains another 9 methods to support the properties of lists.
+- This addition methods are (Positional Access Operations) : 
+  1) E get(int index) 2)* E set(int index, E element) (and will return the element previously present at the specified position) 3)void add(int index, E element)
+  4) E remove(int index) (and will return the element which is currently present at the specified position) 5)int indexOf(Object o) 6) int lastIndexOf(Object o)
+  7) ListIterator<E> listIterator() 8) ListIterator<E> listIterator(int index) 9)  List<E> subList(int fromIndex, int toIndex) (toIndex exclusive)
+- subList method will returns a view of the portion of the list between the specified fromIndex(inclusive) and toIndex exclusive.
+- It is permissible for lists to contain themselves as elements,but for that extreme caution is advised as the  equals and  hashCode methods are no longer well
+  defined on such a list.
+- The hash code of a list is defined to be the result of the following calculation: 
+	int hashCode = 1;
+	for (E e : list){
+		hashCode = 31*hashCode + (e==null ? 0 : e.hashCode());
+	}
+- Queue is a "data structure" where elements are added from one end called tail and elements are removed from another end called head. 
+- Queue is also first-in-first-out type of data structure (except priority queue). That means an element which is inserted first will be the first element to be removed from the queue. 
+- We can’t  get,set or add elements at an arbitrary position in the queues. 
+- Properties Of Queue : 
+  -* Null elements are not allowed in the queue.
+  - Queue can have duplicate elements.
+  - Queue doesn't have random access.
+- Add : offer() return false if the queue is empty and add() throws an exception if the queue is empty.
+- Retrive : peek() returns null if the queue is empty and element() throws an exception if the queue is empty.
+- Obtain and Remove : poll() returns null if the queue is empty and remove() throws an exception if the queue is empty.	
+- Deque (Double Ended Queue) is a linear collection of objects which supports insertion and removal of elements from both the ends. The Deque interface defines the methods needed to insert, retrieve and remove the elements from both the ends.(Introduced in Java SE 6)
+- The main advantage of Deque is that you can use it as both Queue (FIFO) as well as Stack (LIFO).
+- Methods of Deque interface : 
+      Operation	               Throws an exception   Returns null or false
+  1) Insertion Front End	   addFirst()	         offerFirst()
+               Rear End	       addLast()	         offerLast()
+  2) Retrieval FE	           getFirst()	         peekFirst()
+               RE	           getLast()	         peekLast()
+  3) Retrieval And Removal FE  removeFirst()	     pollFirst()
+                           RE  removeLast()	         pollLast()
+-* Deque can have null elements.It can have duplicate elements.It doesn't have random access.
+- You can use removeFirstOccurrenec(E e), removeLastOccurrence(E e) and remove(E e) methods to delete the elements from the Deque.
+- Deque as Queue : 1) add() -> addLast(), offer() -> offerLast() 2) remove() -> removeFirst(), poll() -> pollFirst() 3) element() ->  getFirst(),peek() -> peekFirst()  
+- Deque as stack : 1) push() -> addFirst() 2) pop() -> removeFirst() 3) peek() -> peekFirst()
+- The set is a linear collection of objects with no duplicates. (Doesn't allow duplicate element)
+- Set interface does not have it’s own methods. All it’s methods are inherited from Collection interface. 
+-* Here, add() method will return false if you try to insert an element which is already present in the set.
+-* Set can contain only one null element.
+-* Random access of elements is not possible.
+-* Order of elements in a set is implementation dependent. HashSet elements are ordered on "hash code" of elements. TreeSet elements are ordered according to 
+  supplied Comparator (If no Comparator is supplied, elements will be placed in ascending order) and LinkedHashSet maintains insertion order. 
+- you can compare two set instances of different implementation types (HashSet, TreeSet and LinkedHashSet).
+-* Two set instances, irrespective of their implementation types, are said to be equal if they contain "same elements".
+-* SortedSet interface is a set in which elements are placed according to supplied comparator. This Comparator is supplied while creating a SortedSet. If you don’t 
+  supply comparator, elements will be placed in ascending order.
+-  The ordering imposed by a comparator on a set of elements is said to be consistent with equals if and only if comparatorObj.compare(elementObj1, elementObj2) == 0
+   has the same boolean value as elementObj1.equals(elementObj2) for every elementObj1 and elementObj2 in Set.
+- SortedSet interface defines 6 more methods along with the inherited methods from Set interface. This methods are : 
+  1) Comparator<? super E> comparator() 2) SortedSet<E> subSet(E fromElement, E toElement) (toElement is exclusive) 3) SortedSet<E> headSet(E toElement) 
+  4) SortedSet<E> tailSet(E fromElement) 5) E first() 6) E ast()
+-* SortedSet can not have null elements. duplicate elements are not allowed.
+-* Inserted elements must be of Comparable type and they must be mutually Comparable.
+- You can retrieve first element and last elements of the SortedSet. You can’t access SortedSet elements randomly. i.e Random access is denied.
+-* SortedSets returned by headSet(), tailSet() and subSet() methods are just views of the original set. So, changes in the returned set are reflected in the original set and vice versa.
+- The NavigableSet is a SortedSet with navigation facilities. The NavigableSet interface provides many methods through them you can easily find closest matches of 
+  any given element. It has the methods to find out less than, less than or equal to, greater than and greater than or equal of any element in a SortedSet.
+-* NavaigableSet can not have null elements. duplicate elements are not allowed.
+-* NavigableSet can be traversed and accessed in either ascending or descending order.
+-* ArrayList can be defined as "re-sizable" array. ArrayList is same like normal array but it can grow and shrink dynamically to hold any number of elements. 
+- It is a sequential collection of objects which increases or decreases in size as we add or delete the elements.
+- ArrayList is an index based "data structure" where each element is associated with an index.elements are positioned according to Zero-based index.
+- ArrayList class implements List interface and extends "AbstractList". It also implements 3 marker interfaces – RandomAccess, Cloneable and Serializable. 
+- Size of the ArrayList is not fixed. It can increase and decrease dynamically as we add or delete the elements.
+- ArrayList can have any number of null elements. It can have duplicate elements.It maintains insertion order.
+- As ArrayList implements RandomAccess, you can get, set, insert and remove elements of the ArrayList from  any arbitrary position.
+-* ArrayList internally uses an array to store its elements(Object[] elementData). It provides methods to manipulate the size of this array.
+-* Each ArrayList instance has a "capacity". The capacity is the size of the "internal array" used to store the elements in the list.It is always at least as 
+   large as the "list size".As elements are added to an ArrayList,its capacity grows automatically. 
+-* Default initial capacity of an ArrayList is 10. You can also specify initial capacity of an ArrayList while creating it.
+-* Whenever the "size" of the ArrayList exceeds it’s "capacity", the capacity is increased by "half" of the "current capacity". 
+- An application can increase the capacity of an ArrayList instance before adding a large number of elements using the "ensureCapacity" method.This may reduce 
+  the amount of "incremental reallocation".
+-* In ArrayList time complexity for inserton and removal is O(n) (Due to elements shifting) while for retrival is O(1) (Due to index base data structure).
+- ArrayList is not synchronized. That means, multiple threads can use same ArrayList simultaneously.You can make it synchronized using
+  Collections.synchronizedList(arrListObj) method.
+-* ArrayList can hold only objects. If you try to insert primitive data into ArrayList, data is automatically boxed into corresponding wrapper class.
+-* ArrayList supports generics, it ensures the type safety during compilation itself. while Arrays doesn't support generics.
+- Array To ArrayList Conversion : Arrays.asList(arr);
+- ArrayList To Array Conversion : arrLstObj.toArray(arrRef);
+- ArrayList requires less memory compared to LinkedList. Because ArrayList holds only actual data and it’s index.
+- Drawbacks of Arrays :  
+  1) Fixed length.size can't increase dynamically.
+  2) Memory allocated at creation only,much before actual element is added to it.
+  3) We can not accommodate an extra element in an array after they are created.
+- Advantages of ArrayList over Arrays :
+	- ArrayList is a re-sizable array.
+	- Elements can be inserted at or deleted from a particular position.
+	- ArrayList class has many methods to manipulate the stored objects.
+	-* If generics (type argument) are not used, ArrayList can hold any type of objects.
+	- You can traverse an ArrayList in both the directions – forward and backward using ListIterator.
+- Using Iterator, you can traverse List, Set and Queue type of objects. But using ListIterator, you can traverse only List objects. 
+-* Using Iterator, we can traverse the elements only in forward direction. But, using ListIterator you can traverse the elements in both the directions – forward and backward.
+- Using ListIterator, you can obtain index of next and previous elements. But, it is not possible with Iterator interface.
+-* Using ListIterator, you can perform modifications(insert, replace, remove) on the list. But, using Iterator you can only remove the elements from the collection.
+-* Using ListIterator, you can iterate a list from the specified index. It is not possible with Iterator.
+- Vector Class is also dynamically grow-able and shrink-able collection of objects like an ArrayList class.
+-* Vector class is synchronized.All methods of Vector class are synchronized so that only one thread can execute them at any given time.
+- Vector class also extends "AbstractList" class and implements List interface. It also implements 3 marker interfaces – RandomAccess, Cloneable and Serializable.
+-* The capacity is increased by Capacity Increment passed while creating the Vector object. If Capacity increment is not passed, capacity will be "doubled automatically" when the size exceeds it’s capacity.
+-* You can manually change the current size of the vector. Vector class has a method called setSize(). Using this method, you can change the current size of the 
+  vector. If the new size is greater than the current size, new slots will be filled with null elements and if the new size is smaller than the current size, extra elements will be discarded.
+-* You can traverse the vector using "Enumeration" object. Vector class has a method called "elements()" which returns an Enumeration object consisting of all elements of Vector.(hasMoreElements , nextElement)
+-  firstElement() retrieves first element and lastElement() method retrieves last element of the vector.
+- Diffrence Between ArrayList and Vector : 
+ 1) Vector class is a synchronized class(thread safe) while ArrayList class is not synchronized class.
+ 2) ArrayList Performance is better compared to Vector.
+ 3) Vector, the capacity is increased by Capacity Increment passed while creating the Vector object. If Capacity increment is not passed, capacity will be doubled
+    automatically when the size exceeds it’s capacity. In ArrayList, there is no provision to pass Capacity increment while creating it. It’s capacity is automatically 
+	increased by "half" of the current capacity whenever size exceeds capacity.
+ 4) Vector class has a method called setSize(). 
+ 5) vector elements can be traversed using Enumeration also.
+ 6)* search operation in Vector faster than in ArrayList.
+ 7) Vector class is considered as Legacy code.  
+-* synchronizedList() method of Collections class is used to achieve thread safe list classes.  
+- LinkedList is a "data structure" where each element consist of three things. 1)reference to previous element 2) actual value of the element 3) reference to next element.
+-* "LinkedList class" in Java is an implementation of "doubly linked list" which can be used both as a "List" as well as "Queue". Elements can be inserted and 
+   can be removed from both the ends and can be retrieved from any arbitrary position.
+- The LinkedList class extends "AbstractSequentialList" and implements "List" and "Deque" interfaces. It also implements 2 marker interfaces – Cloneable and Serializable.
+-* Elements in the LinkedList are called as Nodes. Where each node consist of three parts 1)reference to previous element 2) actual value of the element 3) reference to next element.
+- Reference To Previous Element of first node and Reference To Next Element of last node are null as there will be no elements before the first node and after the last node.
+- You can insert or remove or retrieve the elements at both the ends and also in the middle of the LinkedList.
+-* Insertion and removal operations in LinkedList are faster than the ArrayList. Because in LinkedList, there is no need to shift the elements after each 
+   insertion and removal. only references of next and previous elements need to be changed. 
+-* Retrieval of the elements is very slow in LinkedList as compared to ArrayList. Becaues in LinkedList, you have to traverse from beginning or end 
+  (whichever is closer to the element) to reach the element.
+-* The LinkedList can be used as stack. It has the methods pop() and push() which make it to function as Stack.
+- The LinkedList can also be used as ArrayList, Queue, Single linked list and doubly linked list.
+- LinkedList can have multiple null elements. It can have duplicate elements.It maintains insertion order.It is not synchronized.
+-* LinkedList class in Java is not of type "Random Access". i.e the elements can not be accessed randomly. To access the given element, you have to traverse 
+   the LinkedList from beginning or end (whichever is closer to the element) to reach the given element.
+-* In LinkedList time complexity for inserton and removal is O(1) (Due to no elements shifting) while for retrival is O(n) (Due to searching from head/tail to element).
+-* LinkedList requires more memory compared to ArrayList. Because, each node in LinkedList holds data and reference to next and previous elements.
+-* PriorityQueue is a queue in which elements are ordered according to specified Comparator.If no Comparator is specified, elements will be placed in their natural 
+  order. The PriorityQueue is a special type of queue because it is not a First-In-First-Out (FIFO) as in the normal queues. But, elements are placed according to supplied Comaparator.
+- PriorityQueue class extends "AbstractQueue" class which in turn implements Queue interface. PriorityQueue also implements one marker interface – java.io.Serializable interface.
+- Elements in the PriorityQueue are ordered according to supplied Comparator. If Comparator is not supplied, elements will be placed in their natural order(ascending order).
+- The PriorityQueue is unbounded. That means the capacity of the PriorityQueue increases automatically if the size exceeds capacity. But, how it grows is not specified.
+-* The PriorityQueue can have duplicate elements but can not have null elements.
+- All elements of the PriorityQueue must be of Comparable type. Otherwise ClassCastException will be thrown at run time.
+- The head element of the PriorityQueue is always the least element and tail element is always the largest element according to specified Comparator.
+-* The default initial capacity of PriorityQueue is 11.
+- You can retrieve the Comparator used to order the elements of the PriorityQueue using comparator() method.
+- PriorityQueue is not a thread safe 
+- ArrayDeque is a resizable-array implementation of Deque interface which allows insertion of elements at both the ends.
+- The ArrayDeque class extends "AbstractCollection" class and implements "Deque" interface. It also implements Cloneable and Serializable marker interfaces.
+- ArrayDeque does not have any capacity limit. It will grow automatically as we add elements.
+-* Default initial capacity of ArrayDeque is 16. It will increase at a power of 2 when size exceeds capacity.
+-* ArrayDeque can be used as a stack (LIFO) as well as a queue (FIFO). ArrayDeque is faster than the Stack class when used as a stack and faster than the LinkedList class when used as a queue.
+-* Performance of ArrayDeque is sometimes considered as the best among the collection framework. It gives performance of O(1) for insertion, removal and retrieval 
+  operations. ArrayDeque class is recommended instead of Stack class (when you want stack data structure) and instead of LinkedList class (when you want queue data structure).
+- You can’t perform indexed operations on ArrayDeque. ArrayDeque doesn’t have the methods to support those operations.
+- ArrayDeque is not a thread safe (non-synchronized).
+- HashSet is a collection of objects which contains only unique elements. Duplicates are not allowed in HashSet( If you try to insert a duplicate element, 
+  older element will be overwritten).
+-* HashSet gives constant time performance for insertion, removal and retrieval operations(of order O(1)). It allows only one null element.
+- The HashSet internally uses HashMap to store the objects. The elements you insert in HashSet will be stored as keys of that HashMap object and their values will 
+  be a constant called PRESENT. This constant is defined as private static final Object PRESENT = new Object() in the source code of HashSet class.
+- HashSet class extends "AbstractSet" class and implements Set interface. It also implements Cloneable and Serializable marker interfaces. 
+-* HashSet doesn’t maintain any order. The order of the elements will be largely unpredictable. And it also doesn’t guarantee that order will remain constant over time.
+  If you want your elements to be ordered in some way, you can use LinkedHashSet or TreeSet.
+-* HashSet class is not synchronized. If you want synchronized HashSet, use Collections.synchronizedSet() method.
+- Whenever you insert an element into HashSet using add() method, it actually creates an Entry in the internally backing HashMap object with element you have 
+  specified as it’s key and constant called “PRESENT” as it’s value. This “PRESENT” is defined in the HashSet class as Object.
+- HashSet uses equals() and hashCode() methods to compare the elements.
+- LinkedHashSet in java is an ordered version of HashSet which internally maintains one "doubly linked list" running through it’s elements. This doubly linked 
+  list is responsible for maintaining the insertion order of the elements.
+- LinkedHashSet maintains insertion order of elements. i.e elements are placed in the order they are inserted. 
+-* LinkedHashSet is recommended over HashSet if you want a unique collection of objects in an insertion order.
+- The LinkedHashSet class extends "HashSet" class and implements Set interface. It also implements Cloneable and Serializable marker interfaces.
+- LinkedHashSet internally uses "LinkedHashMap" to store it’s elements just like HashSet which internally uses HashMap to store it’s elements.
+- LinkedHashSet maintains insertion order. This is the main difference between LinkedHashSet and HashSet
+-* LinkedhashSet also gives constant time performance for insertion, removal and retrieval operations(of order O(1)). The performance of LinkedHashSet is slightly 
+ less than the Hashset as it has to maintain doubly linked list internally to order it’s elements.
+-* Iterator returned by LinkedHashSet is fail-fast. i.e if the LinkedHashSet is modified at any time after the Iterator is created, it throws ConcurrentModificationException.
+-* LinkedHashSet doesn’t allow duplicate elements and allows only one null element.
+- LinkedHashSet is not synchronized. To get the synchronized LinkedHashSet, use Collections.synchronizedSet() method.
+-* LinkedHashSet uses LinkedHashMap object to store it’s elements. The elements you insert in the LinkedHashSet are stored as keys of this LinkedHashMap object. 
+  Each key, value pair in the LinkedHashMap are instances of it’s static inner class called "Entry<K, V>". This Entry<K, V> class extends HashMap.Entry class. 
+  The insertion order of elements into LinkedHashMap are maintained by adding two new fields to Entry<K, V> class. They are before and after. These two fields 
+  hold the references to previous and next elements. These two fields make LinkedHashMap to function as a doubly linked list.
+- As LinkedHashSet maintains doubly linked list (along with HashMap), the performance of LinkedHashSet is slightly slower than the HashSet.
+- LinkedHashSet uses equals() and hashCode() methods to compare the elements.
+-* LinkedHashSet requires more memory than HashSet as it also maintains LinkedList along with HashMap to store its elements.
+- In Treeset, Elements are sorted according to supplied Comparator. You need to supply this Comparator while creating a TreeSet itself. If you don’t pass any 
+  Comparator while creating a TreeSet, elements will be placed in their natural ascending order.
+- TreeSet class in java is a direct implementation of "NavigableSet" interface which in turn extends SortedSet interface (which in turn extends Set interface).
+- TreeSet class extends "AbstractSet" class and implements NavigableSet interface.It also implements Cloneable and Serializable marker interface.
+- Elements inserted in the TreeSet must be of Comparable type and elements must be mutually comparable. If the elements are not mutually comparable, you will get ClassCastException at run time.
+-* TreeSet does not allow even a single null element.
+- TreeSet is not synchronized. To get a synchronized TreeSet, use Collections.synchronizedSortedSet() method.
+-* TreeSet gives performance of order O(log(n)) for insertion, removal and retrieval operations.
+-* Iterator returned by TreeSet is of fail-fast nature. That means, If TreeSet is modified after the creation of Iterator object, you will get ConcurrentModificationException.
+- TreeSet internally uses TreeMap to store it’s elements.
+-* TreeSet doesn’t use hashCode() and equals() methods to compare it’s elements. It uses compare() (or compareTo()) method to determine the equality of two elements. 
+-* Map is a collection of key-value pairs where each key is associated with a value. This interface is the replacement for ‘Dictionary‘ class which is an abstract class introduced in JDK 1.0.
+- Map interface is a part of Java Collection Framework, but it doesn’t inherit Collection Interface.
+-* A map can not have duplicate keys but can have duplicate values.
+-* Each key-value pairs of the map are stored as Map.Entry objects. Entry is an inner interface of Map interface.
+-* Order of elements in map is implementation dependent. HashMap doesn’t maintain any order of elements. LinkedHashMap maintains insertion order of elements. 
+   Where as TreeMap places the elements according to supplied Comparator.
+- The Map interface provides three methods, which allows map’s contents to be viewed as a set of keys (keySet() method), collection of values (values() method), 
+  or set of key-value mappings (entrySet() method).
+- Methods Of Map Interface : 
+  1) int size() : returns the number of key-value mappings of the map.If the map contains more than Integer.MAX_VALUE elements, returns Integer.MAX_VALUE.
+  2) boolean isEmpty() : it is used to check whether map contains key-value pairs or not 
+  3) boolean containsKey(Object key) : It is used to check whether provided input key is present or not. (if and only if key.equals(k))
+  4) boolean containsValue(Object value) : To check whether map contains specified value with any of the key or not.(if and only if value.equals(v)) 
+  5) V get(Object key) : returns the value to which the specified key is mapped,or null if map do not have mapping for the key.(if and only if key.equals(k))
+  6)* V put(K key, V value) : Associates the specified value with the specified key in this map.If the map previously contained a mapping for the key, 
+    the old value is replaced by the specified new value.It will return the previous value associated with key, or null if there was no mapping for key.(1st time)
+  7) V remove(Object key) : Removes the mapping for a key from this map if it is present and will return the current value associated with key or null if there
+     was no mapping for key.
+  8) void putAll(Map<? extends K, ? extends V>  m) : Copies all of the mappings from the specified map to the current map
+  9) void clear() : Removes all of the key-value mappings from the map. The map will be empty after this call returns.
+  10) Set<K> keySet() : Returns a "view" of the keys contained in this map.
+  11) Collection<V> values() : Returns a view of the values contained in this map. 
+  12) Set<Map.Entry<K, V>> entrySet() : Returns a view of the mappings contained in this map.
+  13) boolean equals(Object o) : Compares the specified object with this entry for equality and returns true if the given object is also a map entry and the two 
+      entries represent the same mapping. (if and only if e1.getKey().equals(e2.getKey()) and e1.getValue().equals(e2.getValue()) )
+  14) int hashCode() : returns the hash code value for this map entry.
+  15) boolean equals(Object o) of Object class : Compares the specified object with this map for equality. Returns true if the given object is also a map and 
+       the two maps represent the same mappings. (if any only if m1.entrySet().equals(m2.entrySet()) )
+  16) int hashCode() of Object class : Returns the hash code value for this map.The hash code of a map is defined to be the sum of the hash codes of each entry 
+      in the map's entrySet() view.  This ensures that m1.equals(m2) implies that m1.hashCode() == m2.hashCode()
+- HashMap extends "AbstractMap" class and implements Cloneable and Serializable interfaces. 
+-* HashMap can have multiple null values and only one null key.
+-* HashMap is not synchronized. To get the synchronized HashMap, use Collections.synchronizedMap() method.
+- HashMap maintains no order.
+-* HashMap gives constant time performance for the operations like get() and put() methods.
+- Aditional method of HasMap : putIfAbsent(K key, V value), remove(Object key, Object value),replace(K key, V oldValue, V newValue),replace(K key, V value)
+- An instance of HashMap has two parameters that affect its performance: 1) initial capacity 2) load factor.
+-* The initial capacity of an HashMap is the number of slots(buckets) in the hash table. It is simply the capacity at the time the hash table is created. 
+-* Default initial capacity of HashMap is 16.It is doubled each time when it reaches the threshold.
+- Load factor is the measure which decides when to increase the capacity of the HashMap. The default load factor is 0.75f. 
+- It is represented as n/m where n is no of keys and m is no of slots(capacity) in hash table.
+- Threshold = (Current Capacity) * (Load Factor) hence default threshold = 16 *0.75 = 12
+  That means, the capacity of the HashMap is increased from 16 to 32 after the 12th element (key-value pair) is added into the HashMap.
+- Whenever HashMap reaches its threshold, rehashing takes place. 
+-* Rehashing is a process where new HashMap object with new capacity is created and all old elements(key-value pairs) are placed into new object after recalculating their hashcode. 
+-* This process of rehashing is both space and time consuming. So, you must choose the initial capacity, by keeping the number of expected elements 
+  (key-value pairs) in mind, so that rehashing process doesn’t occur too frequently.You also have to be very careful while choosing the load factor. 
+-* the default load factor of 0.75f always gives best performance in terms of both space and time. 
+- If you choose load factor as 1.0f, then rehashing takes place after filling 100% of the current capacity. This may save the space but it will increase the 
+  retrieval time of existing elements. Suppose if you choose load factor as 0.5f, then rehashing takes place after filling 50% of the current capacity. This will 
+  increase the number of rehashing operations. This will further degrade the HashMap in terms of both space and time.
+- So, you have to be very careful while choosing the initial capacity and load factor of an HashMap object. Choose the initial capacity and load factor such that they minimize the number of rehashing operations.
+-* HashMap is the most used "data structure" in java because it gives almost constant time performance of O(1) for put(insertion) and get(retrival) operations irrespective of how big is the data.
+- HashMap stores the data in the form of key-value pairs. Each key-value pair is stored in an object of Entry<K, V> class. Entry<K, V> class is the static inner class of HashMap.
+- This Entry<K,V> class contains below fields : 
+  1) key : It stores the key of an element and its final.
+  2) value : It holds the value of an element.
+  3)* next : It holds the pointer to next key-value pair. This attribute makes the key-value pairs stored as a linked list.
+  4) hash : It holds the hashcode of the key.
+-* These Entry objects are stored in an array called table[].( Entry<K,V>[] table ). This array is initially of size 16.
+- To summarize the whole HashMap structure, each key-value pair is stored in an object of Entry<K, V> class. This class has an attribute called next which holds 
+  the pointer to next key-value pair. This makes the key-value pairs stored as a linked list. All these Entry<K, V> objects are stored in an array called table[]. 
+-*  it uses the hashcode of the key to decide the index for a particular key-value pair in table[]. It is called Hashing.
+- Hashing is nothing but the function or algorithm or method which when applied on any object/variable returns an unique integer value representing that object/variable.
+  This unique integer value is called hash code. Hash function or simply hash said to be the best if it returns the same hash code each time it is called on the same object. Two objects can have same hash code.
+- Whenever you insert new key-value pair using put() method, HashMap blindly doesn’t allocate slot in the table[] array. Instead it calls hash function on the key. 
+- How put() method works? 
+  1)* First checks whether the key is null or not. If the key is null, it calls "putForNullKey()" method. table[0] is always reserved for null key. Because, hash code of null is 0.
+  2) If the key is not null, then it calculates the hash code of the key by calling "hash()" method.
+  3) Calls indexFor() method by passing the hash code calculated in step 2 and length of the table[] array. This method returns index in table[] array for the specified key-value pair.
+  4) After getting the index, it checks all keys present in the linked list at that index ( or bucket). If the key is already present in the linked list, it replaces the old value with new value.
+  5)* If the key is not present in the linked list, it appends the specified key-value pair at the end of the linked list.
+- How get() method Works?
+  1) First checks whether specified key is null or not. If the key is null, it calls getForNullKey() method.
+  2) If the key is not null, hash code of the specified key is calculated.
+  3) "indexFor()" method is used to find out the index of the specified key in the table[] array.
+  4) After getting index, it will iterate though linked list at that position and checks for the key using equals() method. If the key is found, 
+     it returns the value associated with it. otherwise returns null.
+-* Iterator returned by HashMap are fail-fast in nature i.e they throw ConcurrentModificationException if the HashMap is modified after the creation of Iterator other than iterator’s own remove() method.
+-* HashTable is internally synchronized. this makes HashTable slightly slower than the HashMap.
+- HashTable extends Dictionary class which is the legacy class in java.
+-* HashTable doesn’t allow even a single null key and null value.
+- HashTable returns Iterator as well as Enumeration which can be used to traverse over the elements of HashTable.
+-* Enumeration returned by the HashTable are fail-safe in nature.
+- Iterators returned by the Collection are either fail-fast in nature or fail-safe in nature. Fail-Fast iterators immediately throw ConcurrentModificationException 
+  if a collection is modified while iterating over it. Where as Fail-Safe iterators don’t throw any exceptions if a collection is modified while iterating over it. 
+  Because, they operate on the clone of the collection, not on the actual collection.
+- Fail-Fast iterator doesn’t’t throw any exceptions if the collection is modified by the iterator’s own methods like remove().
+- All Collection types maintain an internal array of objects ( Object[] ) to store the elements. Fail-Fast iterators directly fetch the elements from this array. 
+  They always consider that this internal array is not modified while iterating over its elements.
+-* The iterators returned by the ArrayList, Vector, HashMap etc are all Fail-Fast in nature.
+- Drawbacks of Fail-Safe Iterators : 
+  1) It is not always guaranteed that you will get up-to-date data while iterating. Because any modifications to collection after the iterator has been created is not updated in the iterator.
+  2) There will be additional overhead of creating the copy of the collection in terms of both time and memory.
+- Iterator returned by ConcurrentHashMap is a fail-safe iterator.
+- Enumeration and Iterator are two interfaces in java.util package which are used to traverse over the elements of a Collection object.
+-* Using Enumeration, you can only traverse the Collection object. But using Iterator, you can also remove an element while traversing the Collection. You can say Iterator is some what advanced version of Enumeration
+- Enumeration is a legacy interface used to traverse only the legacy classes like Vector, HashTable and Stack. 
+- Iterator is a fail-fast in nature. Where as Enumeration is fail-safe in nature. 
+- Difference between Collection and Collections : 
+ * Collection is a top level interface of java collection framework where as Collections is an utility class. 
+ * Collections is an utility class in java.util package. It consists of only static methods which are used to operate on objects of type Collection.
+- Difference between Comparable and Comparator interfaces :
+  1) Comparable provides single sorting sequence. In other words, we can sort the collection on the basis of single element such as id or name or price.while 
+     Comparator provides multiple sorting sequence.we can sort the collection on the basis of multiple elements such as id, name and price etc.  
+  2)* Comparable affects the original class i.e. actual class is modified.Comparator doesn't affect the original class i.e. actual class is not modified.
+  3) Comparable provides : int compareTo(Object o) method. while Comparator provides : int compare(Object o1,Object o2) method
+  4) Comparable is part of java.lang package. while Comparator is a part of java.util package.
+  5) We can sort the list elements of Comparable type by Collections.sort(listObj) method. While we can sort the list elements of Comparator type by 
+     Collections.sort(listObj,comparatorObj) method.
+  6) Comparable is used to impose an natural ordering (if numbers then 1,2,3 or in alphabetical order 'a','b','c' ) of the class that implements it.Which means 
+     in JVM, when we compare two objects using the comparable interfaces they are actually compared through their ASCII values which is the natural ordering. 
+	 This means that the comparable by default uses the sorting technique of JVM.While Comparator allow precisely control over the sort order.
+----- Java JDBC -----
+- Java JDBC is a java API to connect and execute query with the database. JDBC API uses jdbc drivers to connect with the database.
+- JDBC Driver is a software component that enables java application to interact with the database.
+- JDBC drivers are nothing but the "implementations" of interfaces provided in the JDBC API with respect to a particular database. These implementations are 
+  bundled in a JAR file and supplied along with the database. These implementations are used by the JDBC API to interact with that database.
+ 1) JDBC-ODBC bridge driver : It uses ODBC driver to connect to the database.It converts JDBC method calls into the ODBC function calls.
+ 2) Native-API driver : It uses the client-side libraries of the database. The driver converts JDBC method calls into native calls of the database API. It is not written entirely in java.
+ 3) Network Protocol driver : It uses middleware (application server) that converts JDBC calls directly or indirectly into the vendor-specific database protocol. It is fully written in java.
+ 4) Thin driver : It converts JDBC calls directly into the vendor-specific database protocol.It is fully written in Java language.
+- There are 5 steps to connect any java application with the database in java using JDBC. They are as follows:
+  (1) Register the driver class. (Class.forName("oracle.jdbc.driver.OracleDriver");) (or using DriverManager.registerDriver() method)
+  (2) Creating connection. (Connection con=DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe","system","password");)
+  (3) Creating statement. (Statement stmt=con.createStatement();)
+  (4) Executing queries. (ResultSet rs=stmt.executeQuery("select * from emp");)
+  (5) Closing connection. (con.close();)
+- DriverManager is a class.It acts as an interface between  your java application and drivers.It handles establishing a connection between a database and the appropriate driver.
+- A Connection is the session between java application and database. The Connection interface is a factory of Statement, PreparedStatement, and DatabaseMetaData.
+- Connection interface is mainly used to create Statement, PreparedStatement and CallableStatement objects. You can also use it to retrieve the metadata of a database 
+- By default, connection commits the changes after executing queries.
+- The Statement interface provides methods to execute queries with the database.
+- executeQuery(), executeUpdate() and execute() are the methods of java.sql.Statement interface of JDBC API which are used to execute the SQL statements.
+- executeQuery() : It is used to retrive some data from the database (SELECT statements). This method returns one java.sql.ResultSet object which contains the data returned by the query.
+- executeUpdate() : It is used for  DML(INSERT,UPDATE,DELETE) and DDL (CREATE OR ALTER) Statements.  This method returns an int value which represents the number 
+  of rows affected by the query. This value will be 0 for the statements which return nothing. 
+- execute() : It can be used for all types of SQL statements. It returns a boolean value.TRUE indicates that statement has returned a ResultSet object and 
+  FALSE indicates that statement has returned an int value or returned nothing.
+- JDBC API provides three types of Statement objects to execute the SQL queries. They are – Statement, PreparedStatement and CallableStatement. 
+1) Statement object is used to execute normal SQL queries. "createStatement()" method  of Connection interface is used to return the object of Statement.
+2) PreparedStatement is used to execute parameterized or dynamic SQL queries. It extends Statement interface. 
+-* The performance of the application will be faster if you use PreparedStatement interface because query is compiled only once.
+- PreparedStatement are precompiled and the query plan is created only once irrespective of how many times you are executing that query. This will save lots of time.
+- The "prepareStatement()" method of Connection interface is used to return the object of PreparedStatement.
+-* PreparedStatement prevents SQL injection attacks.
+- Eg:- PreparedStatement stmt=con.prepareStatement("delete from emp where id=?");  
+	   stmt.setInt(1,101);  
+	   int i=stmt.executeUpdate();
+3) CallableStatement interface is used to execute stored procedures and functions.It  extends "PreparedStatement" interface.
+- The performance of this interface is higher than the other two interfaces. Because, it calls the stored procedures which are already compiled and stored in the database server.
+- "prepareCall()" method  of Connection interface is used to return the object of CallableStatement.
+- Eg:- (1) CallableStatement stmt=con.prepareCall("{ call procName }"); // With out parameter
+	   (2) CallableStatement stmt=con.prepareCall("{ call sum4(?,?,?) }");  
+		   stmt.setInt(1,10);  // First IN Parameter
+		   stmt.setInt(2,43);  // Second IN Parameter
+		   stmt.registerOutParameter(3,Types.INTEGER);  
+		   stmt.execute();
+	   (3) CallableStatement stmt = con.prepareCall("{ call procName(?) }");  // WITH One parameter as a IN-OUT both
+	       stmt.setInt(1,10);
+		   stmt.registerOutParameter(1,Types.INTEGER);  
+-----------		   
+- Stored procedure is a set of SQL statements to be executed to perform a specific task on a database. All statements of a stored procedure falls under one 
+  execution plan. Stored procedure may act on one or more tables. Stored procedures are "precompiled" and stored in the database. 
+- Stored procedures are used to perform some complex repetitive tasks involving more than one tables.you can also implement the business logic in the database itself. 
+-* Stored Procedures must "not have the return type".
+-* We can call functions from the procedure.Exception handling using try/catch block can be used in stored procedures.
+- Stored procedures take 3 types of parameters : 
+  1) IN Parameter (Default) : These parameters are used to pass the values to stored procedures. These are the default parameters. If you don’t mention the type 
+     of the parameter, then it will be IN parameter by default. 
+  2) OUT Parameter : These parameters are used to hold the result returned by the stored procedure.
+  3) 3) IN OUT Parameter : These parameters act as both IN as well as OUT. You can use them to pass the values to stored procedures and as well as to hold the 
+  result obtained from the stored procedure.  
+-* Function is used to perform calculation. It must have the "return type".
+-* Procedure cannot be called from function.Exception handling using try/catch can't be used in user defined functions.
+- Function supports only IN parameter.
+-----------
+- The object of ResultSet maintains a cursor pointing to a row of a table. Initially, cursor points to before the first row.
+-* By default, ResultSet object can be moved forward only and it is not updatable.
+- ResultSetMetaData interface is used to get the metadata about a ResultSet object.
+- Every ResultSet object is associated with one ResultSetMetaData object. This object will have all the meta data about a ResultSet object like schema name, 
+  table name, number of columns, column name, datatype of a column etc. 
+- You can get this ResultSetMetaData object using "getMetaData()" method of ResultSet. 
+- Eg:- ResultSetMetaData rsmd = resultSetObj.getMetaData();  
+	   System.out.println("Total columns: "+ rsmd.getColumnCount());  
+	   System.out.println("Column Name of 1st column: "+ rsmd.getColumnName(1));  
+	   System.out.println("Column Type Name of 1st column: "+ rsmd.getColumnTypeName(1));  
+- DatabaseMetaData interface provides methods to get meta data of a database such as database product name, database product version, driver name, 
+  name of total number of tables, name of total number of views etc.
+- You can get this DatabaseMetaData object using "getMetaData()" method of Connection. 
+- Eg :- DatabaseMetaData dbmd = con.getMetaData();
+		System.out.println("Driver Name: "+dbmd.getDriverName() + "Driver Version: "+dbmd.getDriverVersion());  
+		System.out.println("UserName: "+dbmd.getUserName());  
+		System.out.println("Database Product Name: "+dbmd.getDatabaseProductName() + "Database Product Version: "+dbmd.getDatabaseProductVersion());  
+- For storing image into the database, BLOB (Binary Large Object) datatype is used in the table.
+-* "setBinaryStream()" method of "PreparedStatement" is used to set Binary information into the parameterIndex.
+- "getBlob()" method of PreparedStatement is used to get Binary information.
+-* For storing file into the database, CLOB (Character Large Object) datatype is used in the table. 
+- "setCharacterStream()" method of PreparedStatement is used to set character information into the parameterIndex.
+- The "getClob()" method of PreparedStatement is used to get file information from the database.
+- Transaction Management:-
+(A) Atomicity means either all successful or none.
+(B) Consistency ensures bringing the database from one consistent state to another consistent state.
+(C) Isolation ensures that transaction is isolated from other transaction.
+(D) Durability means once a transaction has been committed, it will remain so, even in the event of errors, power loss etc.
+- Instead of executing a single query, we can execute a batch (group) of queries. It makes the performance fast.
+- Statement and PreparedStatement interfaces provide methods for batch processing.
+  1) addBatch(String query) : It adds query into batch.
+  2) int[] executeBatch() : It executes the batch of queries.
+----------------
+-* “==” operator returns true if and only if two references variables(physically) are pointing to same object. That means it checks only physical address of 
+ the objects not their contents. Default version of equals() method also compares physical address of two objects, but you can override and modify it to compare 
+ the contents of two objects.
+- You can use “==” operator to compare derived types as well as primitive types. But, equals() method is used only to compare the derived types. 
+-* In all wrapper classes and String class, equals() method is overrided to compare the two objects on "contents". 
+- finalize() method is a protected method of java.lang.Object class. This method is called by garbage collector thread before an object is removed from the memory.
+- finalize() method is used to perform some clean up operations on an object before it is removed from the memory.
+- We can overload main() method.
+- main() method must be public. If you define main() method other than public, compilation will be successful but you will get run time error as no main method found.
+- main() method must be declared as static. If you remove ‘static’ from main() method signature, compilation will be successful but program fails at run time
+- The return type of main() method must be void only.
+- Argument of main() method must be string array. But, from the introduction of var args you can pass var args of string type as an argument to main() method. 
+-* You can’t run java class without main method. But, there are some scenarios like if super class has main() method, then sub class can be run without defining main() method in it.
+-------------------------------------------------- Java Concept Of The Day  -> Over --------------------------------------------------
+- Java Application : Desktop(Stand alone) , Web , Enterprise (E.g banking) , Mobile 
+- JVM : abstract machine. "specification" that provides run time envirornment. Task : Loads,Verifies and Executes code.Provide runtime Env.
+- JRE : "implementation" of JVM. physically exist. contains libraries and other file that JVM needed.
+- JDK : JRE + developemnt tool(Comipler,Debugger etc).
+- JVM, JRE and JDK are platform dependent because configuration of each OS differs. But, Java is platform independent.
+- In an internal architecture of JVM, It contains classloader, memory area, execution engine etc.
+              Classloder
+			      |
+            Memory Area (Class Area, Heap, Stack, PC Register, Native Method Stack)
+			      |
+			Execution Engine <-> Native Method Interface <-> Java Native Libraries	  
+
+- At comile time : A.java -> compiler -> A.class (byte code)
+- At run time : bycode -> classloder -> bycode verfier -> interpreter -> Runtime -> harware
+
+- Java has 8 primitive data types; char, boolean, byte(8 bit), short(16 bit), int(32 bit), long(64 bit), float(32 bit), and double(64 bit).
+1) Byte: -128 to 127 (inclusive).
+2) Short: -32,768 to 32,767 (inclusive).
+3) int: -2^31 to 2^31-1.
+4) long: -2^63 to 2^63-1.
+5) char:-  It has a minimum value of '\u0000' (or 0) and a maximum value of '\uffff' (or 65,535 inclusive).
+---------------------OOPS-----------------------
+- Any entity that has state(data) and behavior(method) is known as an object.It is an instance of a class.Object means a real word entity such as pen, chair, table etc.
+- Collection of objects is called class. It is a logical entity. It is a template or blueprint from which objects are created.
+- When one object acquires all the properties and behaviours of parent object i.e. known as inheritance. It provides code reusability. It is used to achieve runtime polymorphism.
+- When one task is performed by different ways i.e. known as polymorphism. In java, we use method overloading and method overriding to achieve polymorphism.
+- Hiding internal details and showing functionality is known as abstraction.In java, we use abstract class and interface to achieve abstraction.
+- Binding (or wrapping) code and data together into a single unit is known as encapsulation.A java class is the example of encapsulation. Java bean is the fully encapsulated class because all the data members are private here.
+- OOPs makes development and maintenance easier where as in Procedure-oriented programming language it is not easy to manage if code grows as project size grows.
+-* Object based programming language follows all the features of OOPs except Inheritance. JavaScript and VBScript are examples of object based programming languages.
+- class name -> should start with uppercase letter and be a noun e.g. String, Color, Button, System, Thread etc.
+- interface name -> should start with uppercase letter and be an adjective e.g. Runnable, Remote, ActionListener etc.
+- method name -> should start with lowercase letter and be a verb e.g. actionPerformed(), main(), print(), println() etc.
+- variable name	should start with lowercase letter e.g. firstName, orderNumber etc.
+- package name should be in lowercase letter e.g. java, lang, sql, util etc.
+- constants name should be in uppercase letter. e.g. RED, YELLOW, MAX_PRIORITY etc.
+- A variable that is created inside the class but outside the method, is known as instance variable.Instance variable doesn't get memory at compile time.It gets memory at runtime when object(instance) is created.That is why, it is known as instance variable.
+- The new keyword is used to allocate memory at runtime.
+- There are many ways to create an object in java. They are: By new keyword, By newInstance() method, By clone() method, By factory method etc.
+- Eg:- (1) Class c=Class.forName("Simple");  
+		   Simple s=(Simple)c.newInstance();
+	   (2) Student18 s1=new Student18(101,"amit");
+		   Student18 s2=(Student18)s1.clone();  
+- An object that have no reference is known as annonymous object. If you have to use an object only once, annonymous object is a good approach.
+- If a class have multiple methods by same name but different parameters, it is known as Method Overloading. Method overloading increases the readability of the program.
+- There are two ways to overload the method in java:- By changing number of arguments, By changing the data type.In java, Methood Overloading is not possible by changing the return type of the method.
+- Method Overloading with TypePromotion:-
+  If there are matching type arguments in the method, type promotion is not performed.
+- If there are no matching type arguments in the method, and each method promotes similar number of arguments, there will be ambiguity.
+- One type is not de-promoted implicitly for example double cannot be depromoted to any type implicitely.
+- Constructor name must be same as its class name. Constructor must have no explicit return type.If there is no constructor in a class, compiler automatically creates a default constructor.
+- Constructor Returns :- current class instance.
+- The static keyword in java is used for memory management mainly. The static variable gets memory only once in class area at the time of class loading.
+- Why java main method is static:- because object is not required to call static method if it were non-static method, jvm create object first then call main() method that will lead the problem of extra memory allocation.
+- The this keyword can be used to refer current class instance variable. this() can be used to invoked current class constructor.Call to this() must be the first statement in constructor.
+- The this keyword can be used to invoke current class method (implicitly).
+- this keyword can be passed as an argument in the method.
+- Inheritance in java is a mechanism in which one object acquires all the properties and behaviors of parent object.
+- In java programming, multiple and hybrid inheritance is supported through interface only.
+- Inheritance should be used only if the relationship is-a is maintained throughout the lifetime of the objects involved; otherwise, aggregation is the best choice.
+--------------
+- Singleton class : you can create only one object for the given class. You can create a singleton class by making its constructor as private, so that you can restrict the creation of the object. 
+  Provide a static method to get instance of the object, wherein you can handle the object creation inside the class only. 
+- Instance variable gets memory at runtime(when object is created).
+- Method overloading increases the readability of the program.
+- In java, Methood Overloading is not possible by changing the return type of the method.
+- One type is not de-promoted(reverse) implicitly for example double cannot be depromoted to any type implicitely.
+- Constructor is a special type of method that is used to initialize the object.It is invoked at the time of object creation. It constructs the values i.e. provides data for the object.
+- If there is no constructor in a class, compiler automatically creates a default constructor.
+- Constructor returns current class instance (You cannot use return type yet it returns a value).
+- The static keyword in java is used for memory management mainly.
+- The static variable can be used to refer the common property of all objects (that is not unique for each object).
+- The static variable gets memory only once in class area at the time of class loading.
+- Java static property is shared to all objects.
+- The static method can not use non static data member or call non-static method directly.
+- this and super cannot be used in static context.
+- Java Static block is used to initialize the static data member.It is executed before main method at the time of classloading.
+- this is a reference variable that refers to the current object.
+- Call to this() must be the first statement in constructor.
+- Inheritance represents the IS-A relationship, also known as parent-child relationship.
+- Multiple inheritance is not supported in java through class.Multiple and hybrid inheritance is supported through interface only
+- If a class have an entity reference (other class reference as a instance member), it is known as Aggregation. Aggregation represents HAS-A relationship.
+- If subclass (child class) has the same method as declared in the parent class, it is known as method overriding in java.
+- Static method cannot be overridden.because static method is bound with class whereas instance method is bound with object. 
+  Static belongs to class area and instance belongs to heap area.
+- The default modifier is accessible only within package.
+- The protected access modifier is accessible within package and outside the package but through inheritance only.It can be applied on the data member, method and constructor. It can't be applied on the class
+- public -> protected -> default -> private 
+- class can be default,public and final.
+- Local variable can't be private, public or protected. (Only Final & Default)
+- Types of Nested classes:- Non-static nested class(inner class) ((a)Member inner class (b)Annomynous inner class (c)Local inner class)) & Static nested class.
+- Local inner class cannot be invoked from outside the method.
+- Local inner class cannot access non-final local variable till JDK 1.7. Since JDK 1.8, it is possible to access the non-final local variable in local inner class.
+- Method is overridden not the datamembers, so runtime polymorphism can't be achieved by data members.
+- The super keyword in java is a reference variable that is used to refer immediate parent class object.
+- super() is added in each class constructor automatically by compiler.
+- Instance Initializer block is used to initialize the instance data member. It run each time when object of the class is created
+  (The java compiler copies the instance initializer block in the constructor after the first statement super(). So firstly, constructor is invoked)
+- final key word is used stop value change of variable , stop overiding of method and stop inhertance of class. But also note that final method is 
+  inherited but you cannot override it.
+- reference variable of Parent class refers to the object of Child class, it is known as upcasting (ServiceImpl Class object creation with reference of Service Inteface class )
+- When Subclass type refers to the object of Parent class, it is known as downcasting
+- Runtime polymorphism can't be achieved by data members.
+- Abstract class can not be instantiated.
+- If there is any abstract method in a class, that class must be abstract. But We can also create abstract classes without any abstract methods.
+- If you are extending any abstract class that have abstract method, you must either provide the implementation of the method or make this class abstract.
+- Interface have static constants and abstract methods only and like abstract class inrtface also can not be instantiated.
+  but in java 8 , 'Default Method ' is the new way of declaring the method body in an interface. We dont need to implement default methods if we impl such tyep of interface.
+  Usage : 1) to provide common impl for all implemeting classes.
+          2) to add new requirment modification in existing application.  
+- The java compiler adds public and abstract keywords before the interface method and public, static and final keywords before data members.
+- If you import a package, subpackages will not be imported.
+- The standard of defining package is domain.company.package e.g. com.javatpoint.bean or org.sssit.dao.
+- There can be only one public class in a java source file and it must be saved by the public class name.
+- The private access modifier is accessible only within class.
+- If you don't use any modifier, it is treated as default bydefault. The default modifier is accessible only within package.
+- The protected access modifier is accessible within package and outside the package but through inheritance only.
+  The protected access modifier can be applied on the data member, method and constructor. It can't be applied on the class.
+- A class cannot be private or protected except nested class.
+- If you are overriding any method, overridden method (i.e. declared in subclass) must not be more restrictive.
+- We can create a fully encapsulated class in java by making all the data members of the class private. Now we can use setter and getter methods to set and get the data in it.
+  The Java Bean class is the example of fully encapsulated class.
+- Automatic conversion of primitive into object is known and autoboxing and vice-versa unboxing.
+- Wrapper class in java provides the mechanism to convert primitive into object and object into primitive.
+- Everything in java is an object, except primitives. Since they are not objects, they cannot return as objects, and collection of objects. 
+  To support this, java provides wrapper classes to move primitives to objects. Some of the wrapper classes are Integer, Long, Boolean, etc.
+---------------- Exception ----------------
+- The classes that extend Throwable class except RuntimeException and Error are known as checked exceptions.e.g.IOException, SQLException etc. Checked exceptions are checked at compile-time.
+- The classes that extend RuntimeException are known as unchecked exceptions. e.g. ArithmeticException, NullPointerException, ArrayIndexOutOfBoundsException etc.Unchecked exceptions are checked at runtime.
+- Java try block is used to enclose the code that might throw an exception.It must be followed by either catch or finally block.
+- Java catch block is used to handle the Exception. It must be used after the try block only.You can use multiple catch block with a single try.
+- At a time only one Exception is occured and at a time only one catch block is executed.
+- All catch blocks must be ordered from most specific to most general i.e. catch for ArithmeticException must come before catch for Exception.
+- Java finally block is always executed whether exception is handled or not.
+- If your method has return statment , the finally block will be executed at the end fo try block. It returns after executing finally block.
+- If you don't handle exception, before terminating the program, JVM executes finally block(if any).
+- For each try block there can be zero or more catch blocks, but only one finally block.
+- The finally block will not be executed if program exits(either by calling System.exit() or by causing a fatal error that causes the process to abort).
+- By default Unchecked Exceptions are forwarded in calling chain (propagated).
+- By default, Checked Exceptions are not forwarded in calling chain (propagated).
+- Java throw keyword is used to explicitly throw an exception while  throws keyword is used to declare an exception.
+- throws is used to propagate Checked Exception(forwarded in call stack).
+- If you are calling a method that declares an exception, you must either caught or declare the exception.
+- If the superclass method does not declare an exception, subclass overridden method cannot declare the checked exception but can declare unchecked exception.
+- If the superclass method declares an exception, subclass overridden method can declare same, subclass exception or no exception but cannot declare parent exception.
+---------------- Inner Class ----------------
+- Nested class type : 1) non-static (inner class) nested class 2) static nested class.
+- Inner class can access all the members of outer class including private data members and methods.
+- A non-static class that is created inside a class but outside a method is called member inner class.
+- A class created inside a method is called local inner class.
+- Local variable can't be private, public or protected.
+- Local inner class cannot be invoked from outside the method.
+- Local inner class cannot access non-final local variable till JDK 1.7. Since JDK 1.8, it is possible to access the non-final local variable in local inner class.
+- A static class created inside a class is called static nested class.It cannot access non-static data members and methods.It can be accessed by outer class name.
+- If you have the static member inside static nested class, you don't need to create instance of static nested class.
+- Nested interface must be public if it is declared inside the interface but it can have any access modifier if declared within the class.
+- Nested interfaces are declared static implicitely.
+---------------- Java Multithreading ----------------
+- We use multithreading than multiprocessing because threads share a common memory area. They don't allocate separate memory area so saves memory, and context-switching between the threads takes less time than process. Java Multithreading is mostly used in games, animation etc.
+- Every thread maintains its own separate stack. It is called Runtime Stack but they share the same memory.
+- At least one process is required for each thread.
+- At a time one thread is executed only.
+- new -> runnable -> running -> non-runnable -> terminated
+- There are two ways to create a thread: By extending Thread class & By implementing Runnable interface.
+- After starting a thread, it can never be started again. If you does so, an IllegalThreadStateException is thrown. In such case, thread will run once but for second time, it will throw exception.
+- If we call run() directly before start():- There is no context-switching because, t1 and t2 will be treated as normal object not thread object.
+- The join() method waits for a thread to die.It causes the currently running threads to stop executing until the thread it joins with completes its task.
+- Daemon Thread provides services to user threads for background supporting tasks.Its life depends on user threads.It is a low priority thread.
+- If you want to make a user thread as Daemon, it must not be started otherwise it will throw IllegalThreadStateException.
+- Java Thread pool represents a group of worker threads that are waiting for the job and reuse many times.It is used in Servlet and JSP where container creates a thread pool to process the request.
+- ThreadGroup  is used to group multiple threads in a single object.
+- The shutdown hook can be used to perform cleanup resource or save the state when JVM shuts down normally or abruptly. 
+- The shutdown sequence can be stopped by invoking the halt(int) method of Runtime class.
+- Garbage Collection is process  to destroy the unused objects(unreferenced).
+- The Garbage collector of JVM collects only those objects that are created by new keyword. So if you have created any object without new, you can use finalize method to perform cleanup processing (destroying remaining objects).
+- Garbage collection is performed by a daemon thread called Garbage Collector(GC). This thread calls the finalize() method before object is garbage collected.
+- Neither finalization nor garbage collection is guaranteed.
+- Java Runtime class is used to interact with java runtime environment.It provides methods to execute a process, invoke GC, get total and free memory etc. 
+  There is only one instance of java.lang.Runtime class is available for one java application. 
+---------------- Synchronization ----------------
+- Synchronization in java is the capability to control the access of multiple threads to any shared resource.
+- Synchronized method is used to lock an object for any shared resource.When a thread invokes a synchronized method, it automatically acquires the lock for that object and releases it when the thread completes its task.
+- Synchronized block can be used to perform synchronization on any specific resource(no of lines) of the method.
+- If you make any static method as synchronized, the lock will be on the class not on object.
+- when a thread is waiting for an object lock, that is acquired by another thread and second thread is waiting for an object lock that is acquired by first thread.
+  Since, both threads are waiting for each other to release the lock, the condition is called deadlock.
+- Cooperation (Inter-thread communication) is a mechanism in which a thread is paused running in its critical section and another thread is allowed to enter (or lock) in the same critical section to be executed.
+- Java monitors are reentrant means java thread can reuse the same monitor for different synchronized methods if method is called from the method.
+- Race condition : It is a situation in which two or more threads or processes are reading or writing some shared data, and the final result depends on the timing of how the threads are scheduled.
+  It can lead to unpredictable results and subtle program bugs. A thread can prevent this from happening by locking an object. When an object is locked by one thread and another thread tries to call 
+  a synchronized method on the same object,the second thread will block until the object is unlocked.
+---------------- Java I/O ----------------
+- FileInputStream and FileOutputStream classes are used to read and write data in file. (byte Oriented)
+- BufferedOutputStream class uses an internal buffer to store data. It adds more efficiency than to write data directly into a stream.
+- BufferedInputStream class is used to read information from stream. It internally uses buffer mechanism to make the performance fast.
+- SequenceInputStream class is used to read data from multiple streams. It reads data of streams one by one.
+- ByteArrayOutputStream class is used to write data into multiple files. In this stream, the data is written into a byte array that can be written to multiple stream.
+- Closing the ByteArrayOutputStream has no effect.
+- ByteArrayInputStream class contains an internal buffer which is used to read byte array as stream. In this stream, the data is read from a byte array.
+- DataOutputStream class allows an application to write primitive Java data types to the output stream in a machine-independent way.
+- DataInputStream class allows an application to read primitive data from the input stream in a machine-independent way.
+- FilterOutputStream class implements the OutputStream class. It provides different sub classes such as BufferedOutputStream and DataOutputStream to provide additional functionality. 
+- FilterInputStream class implements the InputStream. It contains different sub classes as BufferedInputStream, DataInputStream for providing additional functionality. 
+- Console class is to used to get input from console. It provides methods to read text and password.
+- FilePermission class contains the permission related to a directory or file. 
+  (D:\\IO\\- scan current directory as well as sub directory) (D:\\IO\\* scan only current directory (upto IO) Doesn't scan sub directory of IO)
+- FileWriter and FileReader classes are used to write and read data from text files. These are character-oriented classes.
+- Unlike FileInputStream class, you don't need to convert string into byte array because FileWriter provides method to write string directly.
+- FileReader returns data in byte format like FileInputStream class.
+- BufferedWriter class is used to provide buffering for Writer instances. It inherits Writer class. It makes the performance fast. The buffering characters are used for providing the efficient writing of single arrays, characters, and strings.
+- BufferedReader class is used to read the text from a character-based input stream.It can be used to read data line by line by readLine() method.It makes the performance fast. It inherits Reader class.
+- CharArrayWriter class is used to write data to multiple files.Its buffer automatically grows when data is written in this stream.Calling the close() method on this object has no effect.
+- The CharArrayReader class is used to read character array as a reader (stream). It inherits Reader class.
+- PrintStream class provides methods to write data to another stream. The PrintStream class automatically flushes the data.Its methods don't throw IOException.
+- PrintWriter class is the implementation of Writer class. It is used to print the formatted representation of objects to the text-output stream.
+- PushbackInputStream class overrides InputStream and provides extra functionality to another input stream. It can unread a byte which is already read and push back one byte.
+- PushbackReader class is a character stream reader. It is used to pushes back a character into stream and overrides the FilterReader class.
+- StringWriter class is a character stream that collects output from string buffer, which can be used to construct a string. The StringWriter class inherits the Writer class.
+- StringReader class is a character stream with string as a source. It takes an input string and changes it into character stream. It inherits Reader class.
+- There are 4 ways to read data from the keyboard.InputStreamReader, Console, Scanner, DataInputStream etc.
+- InputStreamReader class can be used to read data from keyboard. it connects to input stream of keyboard and converts the byte-oriented stream into character-oriented stream.
+- Scanner class breaks the input into tokens using a delimiter that is whitespace bydefault. 
+- The DeflaterOutputStream and InflaterInputStream classes provide mechanism to compress and uncompress the data in the deflate compression format.
+- The PipedInputStream and PipedOutputStream classes can be used to read and write data simultaneously. Both streams are connected with each other using the connect() method of the PipedOutputStream class.
+----------- Java Date ---------------------
+- The java.util, java.sql and java.text packages contains classes for representing date and time.
+- Eg:- (1) java.util.Date date=new java.util.Date();
+	   (2) long millis=System.currentTimeMillis();  
+		   java.util.Date date=new java.util.Date(millis);
+	   (3) long millis=System.currentTimeMillis();  
+		   java.sql.Date date=new java.sql.Date(millis);  (2015-03-27)
+	   (4) Date date=java.util.Calendar.getInstance().getTime();
+- Formatting means date to string and parsing means string to date.
+- "dd/MM/yyyy":- M (capital M) represents month and m (small m) represents minute in java.
+- It is recommended to use Calendar class for getting current date and time.
+----------- Java Collection ---------------
+- Collection represents a single unit of objects.
+- Iterator interface provides the facility of iterating the elements in forward direction only.
+- ArrayList extends AbstractList class and implements List interface.It can contain duplicate elements , maintains insertion order.It is non synchronized.
+  It allows random access.manipulation is slow because a lot of shifting needs to be occurred if any element is removed from the array list.
+- LinkedList extends AbstractList class and implements List and Deque interfaces.It can contain duplicate elements , maintains insertion order.It is non synchronized.Manipulation is fast because no shifting needs to be occurred.It can be used as list, stack or queue.
+- Accessing elements are faster with ArrayList, because it is index basedwhile it is difficult with LinkedList. 
+  But insertion and deletion is much faster with LinkedList while Insertion and deletion is slow with ArrayList.
+- ListIterator Interface is used to traverse the element in backward and forward direction.
+- HashSet class uses hashtable to store the elements.It extends AbstractSet class and implements Set interface.contains unique elements only.
+- LinkedHashSet class contains unique elements only like HashSet. It extends HashSet class and implements Set interface.maintains insertion order.
+- TreeSet Class contains unique elements only like HashSet.It implements NavigableSet interface that extends the SortedSet interface.maintains ascending order.
+- Queue interface basically orders the element in FIFO(First In First Out)manner.
+- PriorityQueue class provides the facility of using queue. But it does not orders the elements in FIFO manner. element() and peek() method are same, but     element() will throw "NoSuchElementException" if Queue is Empty. remove() and poll() method are same, but remove() will throw "NoSuchElementException" if Queue is Empty.
+- Map contains values based on the key i.e. key and value pair.Each pair is known as an Map.Entry contains only unique elements.
+- Entry is the subinterface of Map.So we will access it by Map.Entry name.It provides methods to get key and value.
+- HashMap contains values based on the key.It implements the Map interface and extends AbstractMap class.contains only unique elements.
+  It may have one null key and multiple null values.It maintains no order.
+- LinkedHashMap implements the Map interface and extends HashMap class.It is same as HashMap instead maintains insertion order.
+- TreeMap contains values based on the key. It implements the NavigableMap interface and extends AbstractMap class.It contains only unique elements.
+  It cannot have null key but can have multiple null values.It is same as HashMap instead maintains ascending order.
+- Hashtable is an array of list.Each list is known as a bucket.The position of bucket is identified by calling the hashcode() method.A Hashtable contains values based on the key. 
+  It implements the Map interface and extends Dictionary class.contains only unique elements.It may have not have any null key or value.It is synchronized.
+- String class and Wrapper classes implements the Comparable interface.So if you store the objects of string or wrapper classes, it will be Comparable.  
+- Comparable interface is used to order the objects of user-defined class.contains only one method named compareTo(Object).
+  It provide only single sorting sequence i.e. you can sort the elements on based on single datamember only.For instance it may be either rollno,name,age or anything else.
+- Comparator interface is used to order the objects of user-defined class.contains 2 methods compare(Object obj1,Object obj2) and equals(Object element).
+  It provides multiple sorting sequence i.e. you can sort the elements based on any data member. For instance it may be on rollno, name, age or anything else.
+- Properties Class :- The properties object contains key and value pair both as a string. It is the subclass of Hashtable (Eg:- Loading DB.properties file)
+- - Comparator in Java is defined in java.util package while Comparable interface in Java is defined in java.lang package.
+- Comparator interface in Java has method public int compare (Object o1, Object o2) & Comparable interface has method public int compareTo(Object o).
+- if you want to sort objects based on natural order then use Comparable in Java and if you want to sort on some other attribute of object then use Comparator in Java.
+- The functionality of Enumeration and the Iterator are same. You can get remove() from Iterator to remove an element, while while Enumeration does not have remove() method. 
+  Using Enumeration you can only traverse and fetch the objects, where as using Iterator we can also add and remove the objects. 
+  So Iterator can be useful if you want to manipulate the list and Enumeration is for read-only access.
+----------- Design Pattern ----------------------------
+- A design pattern is a general reusable solution to a commonly occurring problem within a given context in software design.
+- The types of design patterns are Creational, Structural, and Behavioral design patterns.
+- Creational design patterns are design patterns that deal with object creation mechanisms, trying to create objects in a manner suitable to the situation.
+1) Singleton pattern : This pattern involves a single class which is responsible to create an object while making sure that only single object gets created.
+2) Factory Pattern : It deals with the problem of creating objects without specifying the exact class of object that will be created.
+3) Abstract Factory Pattern : It provides a way to encapsulate a group of individual factories that have a common theme without specifying their concrete classes.
+---------------------------- Data Structure ----------------------------
+-* Data Structure is a way of collecting and organising data in such a way that we can perform operations on these data in an effective way. 
+- Data Structures is about rendering data elements in terms of some relationship, for better organization and storage.
+- Data Structures are structures programmed to store ordered data, so that various operations can be performed on it easily. 
+-* It should be designed and implemented in such a way that it reduces the "complexity" and increases the "effieciency".
+-* Anything that can store data can be called as a data strucure, hence Integer, Float, Boolean, Char are Primitive Data Structures.
+- Linked List,Stack, Queue,Tree,Graph etc are Abstract Data Structure. which are used to store large and connected data.
+- Data Structure -> 1) Built in Data Structure 2) User Defined Data Structure
+- Built in Data Structure ->  Integer, Float, Char, Pointer
+- User Defined Data Structure -> 1) Arrays 2) Lists 3) File
+- Lists -> 1) Linear Lists (Stack and Queue) 2) non-Linear Lists (Trees , Graphs)
+- data structures can also be classified on the basis of the following characteristics:
+  1) Linear : In Linear data structures,the data items are arranged in a linear sequence. e.g Array
+  2) Non-Linear : In Non-Linear data structures,the data items are not in sequence. e.g: Tree, Graph
+  3) Homogeneous : In homogeneous data structures,all the elements are of same type. e.g: Array
+  4) Non-Homogeneous : In Non-Homogeneous data structure, the elements may or may not be of the same type. e.g: Structures
+  5) Static : Static data structures are those whose sizes and structures associated memory locations are fixed, at compile time. e.g: Array
+  6) Dynamic : Dynamic structures are those which expands or shrinks depending upon the program need and its execution. Also, their associated memory locations changes. e.g: Linked List
+- An algorithm is a way of solving Well-Specified computational problems.
+-* It is a finit set of rules/instructions that gives a sequence of operations for solving a specific type of problem.
+-* It gives and idea of runnig time.It helps us decide on hardware requirements.It can be use to identify ;What is feasible Vs what is impossible'.
+- Algorithm is not the complete code or program, it is just the core logic(solution) of a problem, which can be expressed either as an informal high level description as pseudocode or using a flowchart.
+-* An algorithm is said to be efficient and fast, if it takes less time to execute and consumes less memory space. 
+-* The performance of an algorithm is measured on the basis of : 1) Time Complexity 2) Space Complexity
+-* Space Complexity is the amount of memory space required by the algorithm, during the course of its execution. It  must be taken seriously for multi-user systems and in situations where limited memory is available.
+- An algorithm generally requires space for theses components : 1)Instruction Space 2) Data Space  3) Environment Space 
+-* Time Complexity is a way to represent the amount of time needed by the program to run till completion.
+- There are three type of analysis for time coomplexity. 1) Worst Case 2) Best Case 3) Average Case
+- RAM model of Computation Assumptions : 
+  * We have infinite memory. 
+  * Each operations (+,,*,/,=) takes unit time. 
+  * For each memory access, unit time is consumed.
+  * Data may be accessed from RAM or disk,it is assumed that data is in the RAM.
+-* The most common metric for calculating time complexity is Big O notation. This removes all constant factors so that the running time can be 
+  estimated in relation to N, as N approaches infinity.
+- O(g(n)) = set of all f(n) ,there exist positive constants c and n0 such that , 0 <= f(n) <= cg(n) for all n > n0.
+  e.g O(n^2) = set of all f(n) ,there exist positive constants c and n0 such that , 0 <= f(n) <= cn^2 for all n > n0. that means for after some 
+  point n0, cn^2 >= f(n)
+- Example : 5n^2 + 6 belong to O(n^2) , as for all value of c and n0, cn^2 >= 5n^2 + 6 (e.g c = 6 , n0 = 3)
+1) Constant O(1) : The running time of the statement will not change in relation to N.Algorithm performance is not affected by the size of the 
+   input data. (e.g fetching array elements as array is index based)
+2) Linear O(N) : The running time of the loop is directly proportional to N. When N doubles, so does the running time.algorithm's performance is directly 
+   proportional to size of the input data(N). (e.g searching element in array)
+3) Quadratic O(N*N) : The running time of the two loops is proportional to the square of N. When N doubles, the running time increases by N * N (N^2).
+   (if length of two loops are N1 and N2 than Quadratic time complexcity is N1 * N2).Algorithm's performance is directly proportional to 
+   square(or multiplication) of the size of the input data. (e.g bubble sort)
+4)* Logarithmic O(log(N)): The running time of the algorithm is proportional to the number of times N can be divided by 2(base).
+   (In Quick Sort, we divide the list into halves every time(pivot logic), but we repeat the iteration N times(where N is the size of list). Hence time complexity will be 
+    N*log( N ). The running time consists of N loops (iterative or recursive) that are logarithmic, thus the algorithm is a combination of linear and logarithmic.)
+-* In general, doing something with every item in "one dimension" is "linear", doing something with every item in "two dimensions" is "quadratic", and 
+   dividing the working area in "half" is "logarithmic".
+-* Order of functin as per time complexcity : (better) 1 <= logn <= SQRT(n) <= n <= nlogn <= n^2 <= n^3 <= 2^n <= n! (worst)
+-* Note: In time complexity notation O(expression), expression represents the number of computations a particular algorithm has to perform to solve a given problem.
+- Time complexity notation : 
+ 1) Big Oh denotes "fewer than or the same as" <expression> iterations.
+ 2) Big Omega denotes "more than or the same as" <expression> iterations.
+ 3) Big Theta denotes "the same as" <expression> iterations.
+ 4) Little Oh denotes "fewer than" <expression> iterations.
+ 5) Little Omega denotes "more than" <expression> iterations
+- O(expression) is the set of functions that grow slower than or at the same rate as expression. It indicates the "maximum time" required by an algorithm for all 
+  input values. It represents the "worst case" of an algorithm's time complexity.
+- Omega(expression) is the set of functions that grow faster than or at the same rate as expression. It indicates the "minimum time" required by an algorithm 
+  for all input values. It represents "the best case" of an algorithm's time complexity.
+- Theta(expression) consist of all the functions that lie in both O(expression) and Omega(expression). It indicates the "average bound" of an algorithm. It 
+  represents the "average case" of an algorithm's time complexity.
+-* O(2^N) : Represents an algorithm whose execution time is doubled for every extra element in the input data. e.g if an algorithm takes 4 seconds to compute 2 
+  elements, then it will take 8 seconds to compute 3 elements.
+-* O(N!) : Represents an algorithm which has to perform N! computations to solve a problem. Where N is the number of elements in the input data. 
+  e.g if an algorithm takes 2 seconds to compute 2 elements, then it will take 6 seconds to compute 3 elements, 24 seconds to compute 4 elements and so on.
+-* Sorting is nothing but storage of data in sorted order, it can be in ascending or descending order.The term Sorting comes into picture with the term "Searching". 
+-* Sorting arranges data in a sequence which makes "searching" easier.
+- Sorting techniques mainly depends on two parameters. 1) Time Complexity(efficiency) 2) Space Complexity
+- 1) Bubble Sort (Coparision sort): 
+- Bubble Sort compares all the element one by one and sort them based on their values.
+-* It is called Bubble sort, because with each iteration(parent loop iteration) the largest element in the list bubbles up towards the last place, just like a water bubble rises up to the water surface.
+- Sorting takes place by stepping through all the data items one-by-one in pairs and comparing adjacent data items and swapping each pair that is out of order.
+- In Bubble Sort, n-1 comparisons will be done in 1st pass, n-2 in 2nd pass, n-3 in 3rd pass and so on. So the total number of comparisons will be
+  (n-1)+(n-2)+(n-3)+.....+3+2+1 = n(n-1)/2   i.e O(n^2)
+- Worst Case Time Complexity : O(n^2)
+- Best Case Time Complexity : O(n)  (when the list is already sorted)
+- Average Time Complexity : O(n^2)
+- Space Complexity : O(1) (As only single additional memory space is required for temp variable)
+- The main advantage of Bubble Sort is the simplicity of the algorithm.
+- 2) Insertion Sort : 
+- It is a simple Sorting algorithm which sorts the array by shifting elements one by one.
+- It is efficient for smaller data sets, but very inefficient for larger lists.
+-* Insertion Sort is adaptive, that means it reduces its total number of steps if given a partially sorted list, hence it increases its efficiency.
+-* It is better than Selection Sort and Bubble Sort algorithms.
+- Its space complexity is less, like Bubble Sorting, inerstion sort also requires a single additional memory space.
+-* It is Stable, as it does not change the relative order of elements with equal key.
+-* Always we start with the second element as the key. (key = arr[i] where i = 1)
+-* Here, we pick up a key, compare it with the elements ahead of it, and put it at the right place.
+- Worst Case Time Complexity : O(n^2)
+- Best Case Time Complexity : O(n)
+- Average Time Complexity : O(n^2)
+- Space Complexity : O(1) 
+- 3) Selection Sort : 
+- Selection sorting is conceptually the most simplest sorting algorithm. This algorithm first finds the smallest element in the array and exchanges it with the 
+  element in the first position, then find the second smallest element and exchange it with the element in the second position, and continues in this way until the entire array is sorted.
+-* Selection sort is an unstable sort i.e it might change the occurrence of two similar elements in the list while sorting. 
+-** Running time is independent of ordering of elements.because we need to perform same number of steps to find smallest element.
+- Worst Case Time Complexity : O(n^2)
+-* Best Case Time Complexity : O(n^2)
+- Average Time Complexity : O(n^2)
+- Space Complexity : O(1)
+- 4) Quick Sort : 
+- It is based on the rule of Divide and Conquer(also called "partition-exchange sort"). This algorithm divides the list into three main parts :
+  1) Elements less than the Pivot element 2) Pivot element 3) Elements greater than the pivot element 
+-* It is not stable search(duplicate elements may not maintain same order), but it is very fast and requires very less aditional space. 
+- Worst Case Time Complexity : O(n^2)
+-* Best Case Time Complexity : O(n log n)
+- Average Time Complexity : O(n log n)
+-* Best case Space Complexity : O(n log n)
+-* Worst case Space Complexity : O(n) (As In the worst case, quicksort will be called one time for every element of the list since a solution could recurse 
+   all the way down to single element lists. So, there must be a call stack entry for every one of these function calls. This means that with a list of n integers, at worst there will be n stack entries created, hence O(n) space complexity.
+-* Quick sort is "in place sorting"(with out using any extra memory space which is proportinal to the elements size).In other word As long as we use constant
+   amount of temporary memory space, the sort is said to be "in place sort".
+- 5) Merge Sort : 
+- It is based on the rule of Divide and Conquer. In merge sort the unsorted list is divided into N sublists, each having one element, because a list consisting 
+  of one element is always sorted. Then, it repeatedly merges these sublists, to produce new sorted sublists, and in the end, only one sorted list is produced.
+- It is a Recusive algoritham which works very well for large amout of elements.
+-* Merge Sort is quite fast. It is also a stable sort, which means the "equal" elements are ordered in the same order in the sorted list.
+-* Worst Case Time Complexity : O(n log n)  (2^ h-1 = n , where h is no of sub layer, hence h = 1+ log2n -> O(n log2n)
+- Best Case Time Complexity : O(n log n)
+- Average Time Complexity : O(n log n)
+ -* Space Complexity : O(n)
+-* Time complexity of Merge Sort is O(n Log n) in all 3 cases (worst, average and best) as merge sort always divides the array in two halves and take linear time to merge two halves.
+-* It requires equal amount of additional space as the unsorted list. Hence its not at all recommended for searching large unsorted lists.
+-* Merge sort is not "in place sorting"(that means we need to use extra memory space which is proportinal to the elements size for temporary array)
+- Java collection framework uses merge sort as its default sorting algoritham. It is the best Sorting technique used for sorting Linked Lists.
+- Searching Algorithms on Array : 
+1) Linear Search : 
+- It searches an element or value from an array till the desired element or value is not found and it searches in a "sequence order". It compares the element 
+  with all the other elements given in the array/list and if the element is matched it returns the value index else it return -1. 
+-* It is applied on the unsorted or unordered list when there are fewer elements in a list.
+-* Worst Case Time Complexity : O(n)
+2) Binary Search : 
+-* Binary Search is applied on the "sorted" array or list. In binary search, we first compare the value with the elements in the middle position of the array. 
+  If the value is matched, then we return the value. If the value is less than the middle element, then it must lie in the lower half of the array and if it's 
+  greater than the element then it must lie in the upper half of the array. We repeat this procedure on the lower (or upper) half of the array. 
+- Binary Search is useful when there are large numbers of elements in an array. 
+-* Worst case time Complexity : O(log2 n) (where 2 is base) (if k = log 2 n then n = 2^k)
+- Data Structures : 
+1) Stacks Data Structure : 
+- Stack is an "abstract data type structure" with a bounded(predefined) capacity.(It means it is a coneceptual data structure which are usually 
+  implemented using Array or Linked List as an under line data structure which can hold the real data added in stack). 
+- It is a simple data structure that allows adding and removing elements in a particular order. 
+  You can consider it as a container where you can add as well as remove element from the top only.
+- Every time an element is added, it goes on the top of the stack, the only element that can be removed is the element that was at the top of the stack, just like a pile of objects.
+- Stack is an ordered list of similar data type. Stack is a LIFO structure. (Last in First out).
+- push() function is used to insert new elements into the Stack and pop() function is used to delete an element from the stack.while peak() method
+  is used to retrive top element from the stack. 
+-* Both insertion and deletion are allowed at only one end of Stack called Top.
+- Stack is said to be in "Overflow" state when it is completely full and is said to be in "Underflow" state if it is completely empty.
+- Stack can be easily implemented using an Array or a Linked List. 
+- Algorithm for PUSH operation : 1) Check if the stack is full or not. 2) If the stack is full,then print error of overflow and exit the program. 
+  3) If the stack is not full,then increment the top and add the element .
+- Algorithm for POP operation : 1) Check if the stack is empty or not. 2) If the stack is empty, then print error of underflow and exit the program. 
+  3) If the stack is not empty, then print the element at the top and decrement the top.
+- Position of Top : 1) -1 : Stack is Empty 2) 1 : Only one element in Stack 3) N-1 : Stack is Full 4) N : Overflow state of Stack
+- Time complexities for different operation : 
+  1) Push/Pop/Peak Operation : O(1)  2)* Search Operation : O(n)
+- 2) Queue Data Structure :  
+- Queue is also an "abstract data type" or a linear data structure, in which the first element is inserted from one end called REAR(also called tail), and the 
+  deletion of existing element takes place from the other end called as FRONT(also called head). This makes queue as FIFO(First in First Out) data structure, 
+  which means that element inserted first will also be removed first.
+- It can be thought of as container whose front end  is called "Head" and the rear end is called "Tail".
+- The process to add an element into queue is called "Enqueue"(inserts an element in the queue from tail towards the head) and the process of 
+  removal of an element from queue is called "Dequeue" (Removes and element in the queue from the head of the queue).
+- Like Stack, Queue is also an ordered list of elements of similar data types.
+- Once a new element is inserted into the Queue, all the elements inserted before the new element in the queue must be removed, to remove the new element.
+- peek( ) function is oftenly used to return the value of first element (from the head) without dequeuing it.
+- Queue can be implemented using an Array, Stack or Linked List.
+-* Initially the head(FRONT) and the tail(REAR) of the queue points at the first index of the array (starting the index of array from 0). As we add elements to 
+  the queue, the tail keeps on moving ahead, always pointing to the position where the next element will be inserted, while the head remains at the first index.
+- When we remove an element from Queue, we can follow two possible approaches : 
+ 1) we remove the element at head position, and then one by one shift all the other elements in forward position. 
+ 2) we remove the element from head position and then move head to the next position(next index).
+- In approach (1) there is an overhead of shifting the elements one position forward every time we remove the first element. 
+- In approach (2) there is no such overhead, but whenever we move head one position ahead, after removal of first element, the size on Queue is reduced by one space each time.
+- Algorithm for ENQUEUE (Add) operation : 1) Check if the queue is full or not.
+  2) If the queue is full, then print overflow error and exit the program. 3) If the queue is not full, then increment the tail and add the element.
+- Algorithm for DEQUEUE (Remove) operation : 1) Check if the queue is empty or not.
+  2) If the queue is empty, then print underflow error and exit the program. 3) If the queue is not empty, then print the element at the head and increment the head.
+- Analysis of Queue : 1) Enqueue(add) : O(1) 2) Dequeue(Remove) : O(1) 3) Peak : O(1)
+- Queue Data Structure using Stack : 
+  * For performing enqueue we require only one stack as we can directly push data into stack, but to perform dequeue we will require two Stacks, because we need 
+    to follow queue's FIFO property and if we directly pop any data element out of Stack, it will follow LIFO approach.
+  * Adding Data to Queue : Add data into InStack using push() method.
+  * Removing Date from Queue : take the data from InStack using pop() method and add it into OutStack using push() method. Now remove data from OutStack using 
+    pop() method. (It will be as per FIFO )  
+- A queue in which we "Enqueue" elements by bringing the tail back to the 0th endex after it has reached to the maximum index position is called 
+  a "Circular Queue".
+- Double Ended Queue (DE Queue) : It allows us to add or remove the elements from both the ends head and tail. 
+- 3) Linked List Data Structure : 
+- Linked List is a linear data structure and it is very common data structure which consists of group of nodes in a sequence which is divided in two parts. 
+  Each node consists of its own data and the address of the next node and forms a chain. Here, last element in sequence will point to null.
+-* Linked List is a "real data type structure" (which can be physically represented in memory and can hold real data).
+- Linked List object itself contains a reference to the first element of the list only which is known as "Head" node.so whenever you will 
+  add first element to the list it will beocome a head Node.
+-* Adding or removing elemet from the head will give O(1) performance. while for searching element in linkedlist, worst case complexcity is O(n).
+- Worst case complexcity to add new node in sorted list is O(n).
+- Linked Lists are used to create trees and graphs.
+- Advantages : 
+- They are a dynamic in nature which allocates the memory when required.
+- Insertion and deletion operations can be easily implemented.
+- Stacks and queues can be easily executed.
+- Linked List reduces the access time. 
+- Disadvantages : 
+- The memory is wasted as pointers require extra memory for storage.
+-* No element can be accessed randomly; it has to access each node sequentially.
+- Reverse Traversing is difficult in linked list.
+- Singly Linked List : It contain nodes which have a data part as well as next node address part.The operations we can perform on singly 
+  linked lists are insertion, deletion and traversal.
+- Doubly Linked List : 
+- Each node contains two references the one rference points to the previous node and the next reference points to the next node in the sequence.
+- It contains two ends. head and tail.head refers to first elemet of the linked list while tail refers to the last element of the link list.
+- Doubly Linked List object has two Node references : head and tail.
+- We can add or delete elements from both the ends(head and tail)
+- Circular Linked List : In the circular linked list the last node of the list contains the address of the first node and forms a circular chain.
+- 4) Hash Tables Data Structure : 
+-* Hash Tables are data strucure which are very useful for very fast insertion and retrival of data with almost constant time.
+- It is collection of key and value pairs.key or value can be any type of object.
+- "Direct Access Tables" are very simple data structure which can store data in key-value pair,but, it does not work in all the cases.It works only when the keys
+  are integers (which are drawn from the set of integers).Each key should be distinct(unique)(no two records can have the same key).
+- Direct Access Tables can be easily implemented using regular array.Here, index of the array can be used as key.
+- In Direct Access Tables, if key set is very large ,than we need a very large set of integers.
+- In Direct Access Tables key must be integer, we can not use string or charcter or any other kind of object as a key. to solve this problems "Hashing" is required.
+- "Hashing" is a way to map keys of any type to a "random array index".(It can be string or character or any other kind of object).
+- A hash function 'h' maps keys randomly into slots (array indices) of table T (array).
+- If we have a key which when hashed and maps to a slot that is already been maped and contains some data, it is known as "collision".
+- One of the ways to resolve the collision can be  not to insert data direcly into the array slot rather we can use list.linked list kind of data structure for
+  each array slot.So,even if multiple keys maps to the same slot the records can be stored as a linked list. here,Each records contains the key as well as data
+  object in a Node of a linked list. So this method of resloving collison is known as method of "Chainig".
+-* In worst case when all the keys mapped to the single slot (h(k1) = h(k2)....h(kn) = i) , than all the records will be saved in sinlge linked list, so if we 
+  we have to find record associated with some key say kj, the Time complexity will be O(n). Find(kj) = O(n)
+- In Average case for Chaining : 
+  1) let say we have "n" keys which need to be maps to "m" slots in the array and we have assumed that hashing is uniform.that is each key is equally likely to 
+     be hashed to any slot in the table independedt of others keys are hashed.We can say that the hashing function is such that the hash values of all the keys 
+	 are sort of evenly distibuted across the slots of the table.
+  2) Than in each slot on and everage no of keys will be : load factor = n /m (n records evenly distrubuted in m slots). here time complexity to find kj is 
+     Find(kj) = O(1 + loadfactor).
+	 here 1 is for Hash function call assuming Hash function call takes constant time and load factor is the average length of the linked list in the chain,
+- here to assume it as Find(kj) = O(1 + loadfactor) = O(1) , there should be n = O(m) -> loadfactor = n /m  = Constant. so with changing "n" , 
+  "m"(capacity of array) needs to be keep up with it atleast by some constant factor.
+-* Therefor in HashMap/HashTable capacity(m) changes when we keep adding records(n will increase) into the HashMap/HashTable so that the loadfactor remains constant.
+- The defalut load factor for HashMap is 0.75.
+- The main idea of hashing is that for any object which is acting as a key, we find some numeric representation of it(hash code).and than hash it so that we can 
+  get to a slot in a array to be able to insert data associated with that key.
+- A good Hash function should be able to distrubute the keys uniformaly into slots of arrary.Keys themselves should represent as "natural numbers"(hash code).
+  possibly large natural numbers which when hashed can map to an index of the array.
+- "Open Addressing"  method is also used for resolving "collision" problem.This method is used specially in context of those application, where one would not
+  like to maintain a link to a list or we are not allowed to read the data of any other elements in the list.So in this way records are direcely inserted in the array.  
+- It requirs n <= m. no of keys(n) should be less than or equal to array size(m).otherwsie table may fill up.
+- Delete is difficut in case of open addressing. 
+- Open Addressing stratorgy : 
+  1) Linear probing : Here, We will start from the base hash index in prob step.that is 0.we will keep increasing the prob index until we find the empty slot. 
+     e.g h(256,0),h(256,1),h(256,2) so and so on -> h(k,i) = (h(k,0)+ i) % m. We can also choose any linear function in place of i.
+	 Problem : Thee could be clustering of records in region of hashtable.If that happen than any key that hashing into that region will have to keep looking 
+     for an empty slot to put the record.which will further increase the size of a local cluster.
+  2) Quadratic probing : In this case instead of adding linear function of the prob step to the base hash index,we can use a quadratic function. 
+     e.g h(256,0),h(256,1),h(256,4) so and so on -> h(k,i) = (h(k,0)+ i^2) % m. We can also choose any other quadratic function in place of i^2. 
+	 It avoid clustering to some extent.but still it is not the best solution.
+  3) Double Hashing : It is the most practical approach. h(k,i) = ( h(k1)+ i h(k2) ) % m. It works very well in distributing the keys evenly across the various
+     slots of the table.  
+-------------------------------------------------------
+- fail-fast system : It is nothing but immediately report any failure that is likely to lead to failure. When a problem occurs, a fail-fast system fails immediately. 
+  In Java, we can find this behavior with iterators. Incase, you have called iterator on a collection object, and another thread tries to modify the collection object, 
+  then concurrent modification exception will be thrown. This is called fail-fast
+- Lambda Expressions is a new language feature, has been introduced in Java 8. They enable you to treat functionality as a method argument, or code as data.
+  Syntax : (arguments) -> {body}
+-* An interface with only one abstract method is called functional interface. 
+- Interface, which doesn't have any abstract methods in it is known as marker interface. It is an empty interface, and used to notify compiler.

@@ -1,0 +1,40 @@
+- Node Js is a runtime enviroment for executing Javascript code outside the browser. Writte in C++.
+- It is built on Chrome's Javascript V8 engine and it is used for creating backend services (API) on server side.
+- It provides 
+- Great for real time services (like chats, live update).
+- It works on a single thread using non-blocking I/O calls. 
+- Drawbacks of mutlithread model : 1) for every request,server creates a seprate thread(which are limited in number based on resources) 2) if thread acquires 
+ an exclusive lock in the shared resource,it will block other threads
+- Node.js is event driven,handling all request asynchronously from single thread.Almost not function in Node directly perofrom opertations, so the process never  blocks.
+  User Request -> Event Emitters -> Event Queue -> Event loop (Single threaded) -> Thread Pool(FileSystem,Network,Process,Other) -> Databases
+- Features : 
+1) Even driven non-blocking (Asynchronous) : When req is made,instead of waiting for req to complete,server continues to process other requests.when req 
+   processing completes,the response is sent to caller using callback mechanisam.
+2) Very fast : Due to goolge's V8 engine
+3) Single threaded but highly scalable : 
+4) No Buffering : never buffer any data.simply output the data in chunk.
+- node global objects and function  : console, setTimeout() , clearTimeout() , setInterval() , clearInterval()
+- In Node, every file is a module.variables and functions defined inside file are scoped to that module. They are note available outside module.
+- Implicit module wrapper function : 
+  (function (exports, requires, module, __filename, __dirname) {
+		// module code
+  })
+  
+- Node buil in Modules : 
+1) os : 
+- Provides information about the operation system . 
+   var os = require('os');
+   var totalMemory = os.totalmem() , freeMemory = os.freemem(); 
+2) fs :
+- To handle the file system.
+   
+1) NPM : 
+2) Globals : 
+3) File System : 
+4) Callbacks
+
+----- commands -----
+node -v
+npm -v
+npm init		// to create package.json file for node app
+ 

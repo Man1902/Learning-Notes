@@ -1,0 +1,147 @@
+Current Version : 3.3.1
+----------
+- jQuery is a small and lightweight JavaScript library.
+- jQuery is a fast, small, cross-platform and feature-rich JavaScript library. It is designed to simplify the client-side scripting of HTML.
+- jQuery means "write less do more".
+- jQuery simplifies AJAX call and DOM manipulation.
+- It makes things like HTML document traversal and manipulation, animation, event handling, and AJAX very simple with an easy-to-use API that 
+  works on a lot of different type of browsers.
+- The main purpose of jQuery is to provide an easy way to use JavaScript on your website to make it more interactive and attractive. 
+- All the jQuery code must be executed only after the page loads completely.
+- The code inserted between $(document).ready() is executed only once when page is ready for JavaScript code to execute.
+- $(document).ready(function(){}); and $(function(){}); both are equal.
+-* jQuery Selectors are used to select and manipulate HTML elements.
+- selectors are used to select one or more HTML elements using jQuery and once the element is selected then you can perform various operation on that.
+- All jQuery selectors start with a dollor sign and parenthesis e.g. $(). It is known as the "factory function".
+  1) Tag Name : It represents a tag name available in the DOM. e.g $('p') selects all paragraphs'p'in the document.
+  2) Tag ID : It represents a tag available with a specific ID in the DOM. e.g $('#real-id')
+  3) Tag Class : It represents a tag available with a specific class in the DOM. e.g $('.real-class')
+- Selectors can be used alone or with the combination of other selectors.
+---------- Selectors ----------
+- Element selector , Id selector , Class selector.
+- $("*")	It is used to select all elements.
+- $("#firstname")	It will select the element with id="firstname"
+- $(".primary")	It will select all elements with class="primary"
+- $(".primary,.secondary")	It will select all elements with the class "primary" or "secondary"
+- $("p")	It will select all p elements.
+- $("h1,div,p")	It will select all h1, div, and p elements.
+- $("p:first")	This will select the first p element
+- $("p:last")	This will select he last p element
+- $("tr:even")	This will select all even tr elements
+- $("tr:odd")	This will select all odd tr elements
+- $("p:first-child")	It will select all p elements that are the first child of their parent
+- $("p:first-of-type")	It will select all p elements that are the first p element of their parent
+- $("p:last-child")	It will select all p elements that are the last child of their parent
+- $("p:last-of-type")	It will select all p elements that are the last p element of their parent
+- $("p:nth-child(2)")	This will select all p elements that are the 2nd child of their parent
+- $("p:nth-last-child(2)")	This will select all p elements that are the 2nd child of their parent, counting from the last child
+- $("p:nth-of-type(2)")	It will select all p elements that are the 2nd p element of their parent
+- $("p:nth-last-of-type(2)")	This will select all p elements that are the 2nd p element of their parent, counting from the last child
+- $("p:only-child")	It will select all p elements that are the only child of their parent
+- $("p:only-of-type")	It will select all p elements that are the only child, of its type, of their parent
+- $("div > p")	It will select all p elements that are a direct child of a div element
+- $("div p")	It will select all p elements that are descendants of a div element
+- $("div + p")	It selects the p element that are next to each div elements
+- $("div ~ p")	It selects all p elements that are siblings of a div element
+- $("ul li:eq(3)")	It will select the fourth element in a list (index starts at 0)
+- $("ul li:gt(3)")	Select the list elements with an index greater than 3
+- $("ul li:lt(3)")	Select the list elements with an index less than 3
+- $("input:not(:empty)")	Select all input elements that are not empty
+- $(":header")	Select all header elements h1, h2 ...
+- $(":animated")	Select all animated elements
+- $(":focus")	Select the element that currently has focus
+- $(":contains('Hello')")	Select all elements which contains the text "Hello"
+- $("div:has(p)")	Select all div elements that have a p element
+- $(":empty")	Select all elements that are empty
+- $(":parent")	Select all elements that are a parent of another element
+- $("p:hidden")	Select all hidden p elements
+- $("table:visible")	Select all visible tables
+- $(":root")	It will select the document's root element
+- $("p:lang(de)")	Select all p elements with a lang attribute value starting with "de"
+- $("[href]")	Select all elements with a href attribute
+- $("[href='default.htm']")	Select all elements with a href attribute value equal to "default.htm"
+- $("[href!='default.htm']")	It will select all elements with a href attribute value not equal to "default.htm"
+- $("[href$='.jpg']")	It will select all elements with a href attribute value ending with ".jpg"
+- $("[title|='Tomorrow']")	Select all elements with a title attribute value equal to 'Tomorrow', or starting with 'Tomorrow' followed by a hyphen
+- $("[title^='Tom']")	Select all elements with a title attribute value starting with "Tom"
+- $("[title~='hello']")	Select all elements with a title attribute value containing the specific word "hello"
+- $("[title*='hello']")	Select all elements with a title attribute value containing the word "hello"
+- $(":input")	It will select all input elements
+- $(":text")	It will select all input elements with type="text"
+- $(":password")	It will select all input elements with type="password"
+- $(":radio")	It will select all input elements with type="radio"
+- $(":checkbox")	Itwill select all input elements with type="checkbox"
+- $(":submit")	It will select all input elements with type="submit"
+- $(":reset")	It will select all input elements with type="reset"
+- $(":button")	It will select all input elements with type="button"
+- $(":image")	It will select all input elements with type="image"
+- $(":file")	It will select all input elements with type="file"
+- $(":enabled")	Select all enabled input elements
+- $(":disabled")	It will select all disabled input elements
+- $(":selected")	It will select all selected input elements
+- $(":checked")	It will select all checked input elements
+- $("p").eq(2) To select the third <p> tag (based on html index)
+- $("p").slice(2,5) To selects a range of elements using their index
+- $("p").filter(".new") It will select <p> tags with class new
+- $("p").not(".new") It will select <p> tags without class new
+---------- jQuery Effects ----------
+- jQuery effects can be categorized into fading, -, hiding/showing and animation effects.
+- Display Effects : show() , hide() , toggle()
+- Fading Effects : fadeIn() , fadeOut() , fadeToggle() , fadeTo()
+- Sliding Effects : slideUp() , slideDown() , slideToggle()
+- Other Effects  : animate() , delay()
+- hide/show Syntax : 1) $(selector).hide();  2) $(selector).hide(speed, callback);  3) $(selector).hide(speed, easing, callback);  
+- NOTE : speed possible vales are "slow", "fast" and milliseconds. 
+- toggle Syntax : 1) $(selector).toggle();  2) $(selector).toggle(speed, callback); 3) $(selector).toggle(speed, easing, callback); 4) $(selector).toggle(display);  
+- fadeIn/fadeOut/fadeToggle Syntax : 1) $(selector).fadeIn(); 2) $(selector).fadeIn(speed,callback); 3) $(selector).fadeIn(speed, easing, callback);   
+- fadeTo Syntax : 1) $(selector).fadeTo(speed, opacity); 2) $(selector).fadeTo(speed, opacity, callback); 3) $(selector).fadeTo(speed, opacity, easing, callback);  
+- slideDown/slideUp/slideToggle Suntax : 1) $(selector).slideDown(speed); 2) $(selector).slideDown(speed, callback); 3) $(selector).slideDown(speed, easing, callback);  
+- animate Syntax : $(selector).animate({params}, speed, callback); (Here params parameter defines the CSS properties to be animated.)
+- The default position of all HTML elements is static. If you want to manipulate their position, set the CSS position property to the element to relative, fixed or absolute.
+- delay Syntax : $(selector).delay (speed, queueName);
+---------- jQuery HTML/CSS ----------
+- html/text Syntax : 1) $(selector).html(); 2)$(selector).html(newContent); 3) $(selector).html(function (index, currentcontent));
+- The jQuery text() method is used to set or return html content without HTML markup while, html() method is used to set or return the innerHtml (text + HTML markup).
+- The jQuery text() method can be used in both XML and HTML document while jQuery html() method can't.
+- val() - Used to get current value of the first element in the set of matched elements and also Used to set the value of every matched element.
+- val Syntax : 1) $(selector).val(); 2) $(selector).val(value); 3) $(selector).val(function(index,currentvalue));
+- css Syntax  : 1) $(selector).css("propertyname"); 2) $(selector).css("propertyname","value"); 3) $(selector).css({"propertyname":"value","propertyname":"value",...});
+- before/prepend/after Syntax : 1) $(selector).before(content); 2) $(selector).before(content, function(index)); 
+- insertAfter Syntax : $(content).insertAfter(selector); Same as after() only Syntax is different.
+- append is used to insert specified content as the last child (at the end of) the selected elements in the jQuery collection.
+- append Syntax : 1) (selector).append(content); 2) $(selector).append(content, function(index, html));
+- appendTo Syntax : $(content).appendTo(selector); Same as append() only Syntax is different.
+- clone() method is used to make copies of the set of matched elements. It also makes copies of their child nodes, texts and attributes. The clone() method is a convenient way to duplicate elements on a page.
+- clone Syntax : $(selector).clone(true|false); default is false. 
+- remove() method is used to remove the selected elements out of the DOM. It removes the selected element itself, as well as everything inside it (including all texts and child nodes).It also removes the data and the events of the selected elements.
+- remove Syntax : $(selector).remove(selector); selector arg is optional.
+- empty() method is used to remove all child nodes and content from the selected elements. This method doesn't remove the element itself.
+- detach() method is used to remove the selected elements, including all texts and child nodes and keeps only data and events.
+  This method saves a copy of the removed elements to reinsert them whenever they needed later.
+- empty/detach Syntax : $(selector).empty();
+- scrollTop() method is used to set or return the vertical scrollbar position for the selected element. When the scrollbar is on the top, it specifies the position 0.
+- scrollTop Syntax : 1) $(selector).scrollTop(); 2) $(selector).scrollTop(value);
+- The jQuery attr() method is used to set or return attributes and values of the selected elements.
+- prop() method is generally used to retrieve property values i.e. DOM properties (like tagName, nodeName, defaultChecked) or own custom made properties. This is a very convenient way to set the values of properties, especially the multiple properties.  
+  If you want to retrieve HTML attributes, you should use the attr() method instead.  
+- attr/prop Syntax : 1) $(selector).attr(attribute); 2)$(selector).attr(attribute,value) 3) $(selector).attr(attribute,unction(index,currentvalue)); 4) $(selector).attr({attribute:value, attribute:value,...});
+- The removeProp() method is used to remove a property. $(selector).removeProp(propertyname);  
+- NOTE : Properties are generally simpler to deal with than attributes so the prop() method is mostly used rather than attr() method.
+---------- Events ----------
+- $("#userName").click( function { //some logic } )
+- Multiple event handler :  
+  $("p").on({	click: function(){ //logic },
+				mouseover: function(){ //logic }
+			});
+- In on() method, if the selector is not passed then it is called Direct event else it is called Delegate event.
+- Event Delegation is the process of adding an event to a parent element which will be fired only when the selector parameter in on() function 
+  matches with the child elements(decendence). 
+- Delegate event example : 
+  $('ul').on('click', 'li', function () {
+		$(this).fadeOut(600); 
+  });
+- off() method is used to remove a event handler from an element. e.g 
+  $("body").off( "click", "#userName", myfunction ); // event name, selector and the event handler. 
+- $("body").off() to remove all the event handlers associated with the selector.
+-  $("body").off("click") will remove all the click events.
+- preventDefault() is used to override default behavior of HTML elements.

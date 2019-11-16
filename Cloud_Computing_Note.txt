@@ -1,0 +1,71 @@
+- Cloud Computing is a way for delivering services or resources on-demand.
+- Cloud Characteristics : 
+1) Elasticity : 
+2) On-denamd : 
+3) Provided pooled computing resources 
+4) Metered service usages : 
+5) Broad network access : 
+- Advantages of Cloud : Scalability, Collaboration, Security, Cost effective, Availability
+- Cloud computing is enabled through these key factors. Cloud Datacenters, Virtualization, Cloud APIs, Cloud storage
+- Virtualization Types : Hardware Virtualization, Software Virtualization, Storage Virtualization, Desktop Virtualization
+- Cloud Service Models : 
+1) IaaS (Infrastructure as a Service) (host): Combination of Physical server hardware,Physical storage, Networking components,Power,Cooling, Physical security
+- In this model, Cloud provider owns the physical infrastructure, and offers it to you to host platform and the applications that run on it. 
+- With IaaS, you are purchasing use of raw infrastructure. e.g AWS EC2
+2) PaaS (Platform as a Service) (build): Layer on top of phyhsical infrastructure,which provides virtualization of OS layer.No control ovet the underlying 
+ architecture inclding OS, storage, servers etc.The cloud provider gives the ability to the customer to deploy customer created apps using programming language,
+ tools etc that are provided by the Cloud provider. e.g AWS Elastic Beanstalk
+- With PaaS, you are purchasing use of say a Unix or a window host in virtual enviroment where in cloud provider manages installation of OS and hypervisor.
+3) SaaS (Software as a Service) (consume) : to layer of the overall cloud infrastructure, which offer complete applications to the cloud user.
+- In SaaS model, cloud provider, provides access annd maintainance to the application, and you as a customer can make use of it.
+- Cloud deployment model : 
+1) Public Cloud : 
+2) Private Cloud : 
+3) Hybrid Cloud : 
+4) Community Cloud : 
+-------------------------------
+Google cloud platform
+-------------------------------
+- Cloud computing is the use of remote servers on the internet to store,manage and process data rather than a local server or your personal computer.
+- Cloud providers : AWS, Google clopd platform, Microsoft Azure etc
+- Google cloud platform is a suite of cloud computing services that runs on the same infrastructure that goolge uses internally for its end users products such
+  as Google serach and Youtube.
+- Domains  : 
+1) Compute : Compute Engine, App Engine, Kubernetes Engine, Cloud Functions
+2) Storage : Datastore, Storage, Bigtable, SQL, Spanner
+3) Networking : VPC Network, Network Services, Interconnect
+-  Compute Engine : Row server.After choosing OS and desired configuration, We need to install necessary software to use it as per or requirement.eg as 
+   an application server.
+- App Engine : Extention of Compute Engine.Generally used for web server configration.We don't have to install required software manually.
+- Cloud Functions : Same as App Engine  but you do not host an application. Used for backend processing.
+- Kubernetes Engine : To deploy application which is running inside container on cloud.
+- Datastore : to store NoSQL (unstructured) kind of data.
+- Bigtable : to store NoSQL (unstructured) kind of data.Used with hadoop (Bigdata application).
+- Storage : File System storage service. Can be used to store application file in storage service.
+- SQL :  to store structured data. SQL can not be scaled horizonally.
+- Spanner : same as SQL but  it can be scaled horizonally.
+- VPC Network : Virtual private cloud. To create an network where two application deployed on cloud can talk with each other.
+- Network Services : Load balancing, Cloud DNS, Cloud CDN
+- Interconnect : 
+- GCP Resources : 1) Zonal : VM instaces, VM discs etc 2) Regional : Static IP address 3) Global : Network,Disk images,Snapshots,Networks 
+1) Compute Engine : IaaS 
+- Scalable, high-performance virtual machines.
+- Google compute engine delivers virtual machines running in google's inovative data centers and world wide fiber network.
+2) App Engine : PaaS
+- A flexible zero ops platform.
+3) Container(Kubernetes) Engine : PaaS
+- Deploy,manage and scale containerized applications
+4) Cloud Functions : SaaS
+- A serverless environment to build and connect cloud services.
+
+
+
+- Commands
+gcloud sql connect mysql-instance1 --user=root
+gcloud container clusters create webfrontend --zone $MY_ZONE --num-nodes 2
+kubectl version
+kubectl run nginx --image=nginx:1.10.0
+kubectl get pods
+kubectl expose deployment nginx --port 80 --type LoadBalancer
+kubectl get services
+kubectl scale deployment nginx --replicas 3

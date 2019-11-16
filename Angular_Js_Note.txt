@@ -1,0 +1,186 @@
+- AngularJS : "HTML enhanced for web app"
+- AngularJS is a very powerful JavaScript Framework. It is used in Single Page Application (SPA) projects. 
+- It extends HTML DOM with additional attributes and makes it more responsive to user actions. 
+- It extends HTML attributes with Directives, and binds data to HTML with Expressions.
+- It is a powerful JavaScript based development framework to create RICH Internet Application(RIA).
+- It provides developers options to write client side application (using JavaScript) in a clean MVC(Model View Controller) way.
+-----------
+Core Features : 
+-----------
+1) Data-binding − It is the automatic synchronization of data between model and view components.
+2) Scope − These are objects that refer to the model. They act as a glue between controller and view.
+3) Controller − These are JavaScript functions that are bound to a particular scope.
+4) Services − AngularJS come with several built-in services for example $http: to make a XMLHttpRequests. These are singleton objects which 
+   are instantiated only once in app.
+5) Filters − These select a subset of items from an array and returns a new array.
+6) Directives − Directives are markers on DOM elements (such as elements, attributes, css, and more). These can be used to create custom HTML 
+   tags that serve as new, custom widgets. AngularJS has built-in directives (ngBind, ngModel...)
+7) Templates − These are the rendered view with information from the controller and model. These can be a single file (like index.html) or 
+   multiple views in one page using "partials".
+8) Routing − It is concept of switching views.
+9) Model View Whatever − MVC is a design pattern for dividing an application into different parts (called Model, View and Controller), each 
+   with distinct responsibilities. AngularJS does not implement MVC in the traditional sense, but rather something closer to MVVM 
+   (Model-View-ViewModel). The Angular JS team refers it humorously as Model View Whatever.
+10) Deep Linking − Deep linking allows you to encode the state of application in the URL so that it can be bookmarked. The application can then 
+    be restored from the URL to the same state.
+11) Dependency Injection − AngularJS has a built-in dependency injection subsystem that helps the developer by making the application easier to 
+    develop, understand, and test.
+- AngularJS provides you one time binding expression to display the model values on first time only and  it doesn’t displays even model changes.
+  e.g {{::value}}
+-----------
+Expressions
+-----------
+- Expressions are used to bind application data to html. Expressions are written inside double braces like {{ expression}}. 
+  Expressions behaves in same way as ng-bind directives.
+- Expressions can contain literals, operators, and variables.
+-----------
+Module
+-----------
+- AngularJS supports modular approach.module defines an application.module is a container for the different parts of an application. 
+  Modules are used to separate logics say services, controllers, application etc. e.g 
+  var app = angular.module("myApp", []);
+- After creating module you can add controllers, directives, filters, and more, to your AngularJS application.
+- We can inject dependencies of other modules by passing it into array of second args. e.g var app = angular.module("myApp", ["ngRoute"]);
+-----------
+Directives
+-----------
+- In Angular JS , Directives are used to extends HTML with new attributes.
+- AngularJS has a set of built-in directives which offers diffrent functionality.
+1) ng-app − It defines the root element of an AngularJS application and links an AngularJS application to HTML.It starts an AngularJS Application.
+2) ng-model − It binds the value of HTML controls (input, select, textarea) to application data.
+3) ng-bind − This directive binds the AngularJS Application data to HTML tags. (binds model to HTML tags).Another way is {{modelName}}
+4) ng-init − It defines initial values for an AngularJS application.
+5) ng-repeat − This directive repeats html elements for each item in a collection.
+6) ng-controller - It defines controller of an application which is declared in js file.
+- We can create your own custom directives. e.g
+	<my-custom-directive></my-custom-directive>
+	<script>
+		var app = angular.module("myApp", []);
+		app.directive("myCustomDirective", function() {
+			return { 
+				restrict : "A",
+				template : "<h1>This is my custom Directive!</h1>" 
+			};
+		});
+	</script>
+- We can invoke a directive by using: 1) Element name (E) 2) Attribute (A) 3) Class (C) 4) Comment (M).
+- By adding a restrict property , We can restrict our custom directives to only be invoked by some of the methods.
+- By default the value is EA,means both Element names and attribute names can invoke the directive.
+- AngularJS applications supports  auto-bootstrapping for only one ng-app directive per HTML document.If you want more ng-app,you need to manually 
+  bootstrap them using angular.bootstrap() function. e.g 
+  angular.bootstrap(document,['myApp1','myApp2'],'{strictDi:true}');
+-----------
+ng-model
+-----------
+- It binds the value of HTML controls (input, select, textarea) to application data (variable created in AngularJS).
+- It is two way binding. means any variable get modified from html input fields, it will be reflected in corresponding angaulr js variable also. and vice a versa.
+- ng-model directive can provide type validation for application data (number, e-mail, required). e.g 
+  <form ng-app="" name="myForm">
+	  <input type="email" name="emailAddress" ng-model="text">
+	  <span ng-show="myForm.emailAddress.$error.email">Invalid e-mail address</span>
+  </form>
+- ng-model directive adds/removes the following classes, according to the status of the form field:
+  ng-empty,ng-not-empty,ng-touched,ng-untouched,ng-valid,ng-invalid,ng-dirty,ng-pending,ng-pristine
+-----------
+ng-controller 
+-----------
+- A controller is a JavaScript object containing attributes/properties and functions. Each controller accepts $scope as a parameter which refers to the 
+  application/module that controller is to control. e.g 
+   app.controller("myCtrl", function($scope) {
+		$scope.prop1 = "val1";
+		$scope.method1 = function(inputArg){
+			// business logic
+		};
+	});
+- It is used to control the data of AngularJS applications. 
+-----------
+$Scope
+-----------
+- Scope is an object that refers to the application model. It binds HTML (view) and JavaScript(controller).
+- Scope is a special javascript object which plays the role of joining controller with the views. Scope contains the model data. In controllers, model data is 
+  accessed via $scope object.
+- Scope are controllers specific. If we defines nested controllers then child controller will inherit the scope of its parent controller.
+- All applications have a $rootScope which is the scope created on the HTML element that contains the ng-app directive.The rootScope is available in the entire 
+  application.If a variable has the same name in both the current scope and in the rootScope, the application uses the one in the current scope. e.g
+  var app = angular.module('myApp', []);
+  app.run(function($rootScope) {
+		$rootScope.prop1 = 'value1';
+  });
+
+-----------
+Filters
+-----------
+- Filters are used to modify the data and can be clubbed in expression or directives using pipe character.
+1 uppercase : converts a text to upper case text. e.g <p> {{ name | uppercase }} </p>
+2 lowercase : converts a text to lower case text. e.g <p> {{ name | lowercase }} </p>
+3 currency : formats text in a currency format.  e.g <p> {{ name | currency  }} </p>
+4 filter : filter the array to a subset of it based on provided criteria. e.g <ul> <li ng-repeat="x in names | filter : 'i'"> {{ x }} </li> </ul>
+5 orderby : orders the array based on provided criteria. e.g <ul> <li ng-repeat="x in names | orderBy:'country'"> {{ x.name + ',' + x.country }} </li> </ul>
+6 date : Format a date to a specified format.
+7 json : Format an object to a JSON string.
+8 limitTo : Limits an array/string, into a specified number of elements/characters.
+9 number : Format a number to a string.
+-----------
+Service
+-----------
+- $http : It works as a service to read data from the server.AngularJS needs data in JSON format. Once the data is ready, $http: can be used 
+  to get the data from server
+- ng-view tag : simply creates a place holder where a corresponding view (html or ng-template view) can be placed based on the configuration.
+- ng-template directive : is used to create an html view using script tag. It contains "id" attribute which is used by $routeProvider to map a 
+  view with a controller.
+- $routeProvider is the key service which set the configuration of urls, map them with the corresponding html page or ng-template, and attach a 
+  controller with the same.
+- AngularJS supports the concepts of "Separation of Concerns" using services architecture. Services are javascript functions and are responsible 
+  to do a specific tasks only. 
+  This makes them an individual entity which is maintainable and testable. Controllers, filters can call them as on requirement basis. 
+- Services are normally injected using dependency injection mechanism of AngularJS.
+- In built services : $http:, $route, $window, $location,$timeout,$interval etc.
+- Two ways to create a service are : 1) factory 2) service
+- Dependency Injection components : 
+- value : It is simple javascript object and it is used to pass values to controller during config phase.
+- factory : It is a function which is used to return value. It creates value on demand whenever a service or controller requires. It normally 
+  uses a factory function to calculate and return the value.
+- service : It is a singleton javascript object containing a set of functions to perform certain tasks. Services are defined using service() 
+  functions and then injected into controllers.
+- provider : It is used by AngularJS internally to create services, factory etc. during config phase.Provider is a special factory method with 
+  a method get() which is used to return the value/service/factory.
+- $http service is one of the most common used services in AngularJS applications. The service makes a request to the server, and lets your 
+  application handle the response. e.g 
+   $http.get("welcome.htm").then(function (response) {
+        $scope.myWelcome = response.data;
+    });
+- AngularJS HTML DOM : 
+  * ng-disabled directive binds AngularJS application data to the disabled attribute of HTML elements (disables a given control).
+  * ng-show : shows a given control.
+  * ng-hide : hides a given control.
+- AngularJS Events : 
+  * ng-click : represents a AngularJS click event.
+  * ng-include directive is used to embed HTML pages within a HTML page.
+------------
+- ng-src
+--------------------------------------------------------------
+<body ng-app="myApp">
+<p><a href="#/!">Main</a></p>
+<a href="#!red">Red</a>
+<a href="#!green">Green</a>
+<a href="#!blue">Blue</a>
+<div ng-view></div>
+<script>
+	var app = angular.module("myApp", ["ngRoute"]);
+	app.config(function($routeProvider) {
+		$routeProvider
+		.when("/", {
+			templateUrl : "main.htm"
+		})
+		.when("/red", {
+			templateUrl : "red.htm"
+		})
+		.when("/green", {
+			templateUrl : "green.htm"
+		})
+		.when("/blue", {
+			templateUrl : "blue.htm"
+		});
+	});
+</script>
+</body>
