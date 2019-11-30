@@ -10,7 +10,8 @@
   rconst : for constructor 
   rpce   : for pure component
   
-- React is an open source javascript library for building user interfaces (UI). Not a framework. Focus on UI. Rich echosystem.React is declarative.
+- React is an open source javascript library for building user interfaces (UI). Not a framework. Focus on UI. Rich echosystem.React is declarative.Devloped by Facebook.
+- Virtual DOM is an abstract, lightweight copy of DOM. It can be changed as and when we want and then can be saved to the real DOM.
 - React has a Component based architecture.Components describe a part of the user interface.They are reusable and can be nested inside other components.
   e.g Root(App) component, Header, Side Nav, Main Content, Footer
 - Component Types : 
@@ -20,7 +21,7 @@
 	}
   2) Statefull class component : Class extending Component class.optionally receives object of properties (props) and return HTML (JSX). Can also maintain 
      private internal state. e.g  
-    class default export Welcome extends React.component{
+     export default class Welcome extends React.component{		// OR React.createClass({})
 		render(){
 			return <h1>Hello {props.name} </h1>;
 		}
@@ -34,7 +35,8 @@
 - When you create react app, it will automatically configure Development server, Webpack (for bundling files) , Babel (for compiling JS code)
 - JSX (Javascript XML) - Extention to the javascript language syntax.It help us write XML like code for elements and components.
 - JSX tags have tag name,attributes and children.JSX is not necessary to write React applications.However,it makes your react code simpler and elegant.
-- JSX ultimately traspiles to pure Javascript which is understood by the browsers. e.g 
+- JSX ultimately traspiles to pure Javascript which is understood by the browsers.Faster because it performs optimization while compiling code to JavaScript.
+  Type-safe and most of the errors can be caught during compilation. e.g 
   return ( <div id="greetDiv"><h1>Hello Vishal<h1></div>); // with JSX
   return React.createElement("div" , {id : "greetDiv"} , React.createElement("h1",null,"Hello Vishal")); // without JSX
 - JSX syntax diffrence : 
@@ -49,7 +51,23 @@
   2) Code has to be executed after the state has been updated ? Place the code in the call back function which is the second arg to the setState method
   3) When yo have to update the state based on the the previous state value, pass in a function as an arg instead of  the regular object.
 - Object destructuring   : const { firstName,lastName } = this.props;
-- In list rendering e.g persons.map(p => <Person key={p.id} person={p} /> ) :
+- Event Handling in FC : <button onClick={clickHandler}>FunctionClick</button>  (Define function inside {}. Don't invoke it)
+- Event Handling in CC : <button onClick={this.clickHandler}>ClassClick</button> (without se of this inside clickHandler method)
+- Binding event handler in CC to use this keyeord inside event handler
+  1) <button onClick={this.clickHandler.bind(this)}>ClassClick</button>				// Inline using  bind method
+  2) <button onClick={() => this.clickHandler()} > EventBind - Click</button>		// using arrow fn
+  3) constructor() { this.clickHandler = this.clickHandler.bind(this); }			// Inside constructor
+  4) clickHandler = () => {  console.log(this); };									// by declaring event handler using arrow fn
+- Method as props : to update parent from child component. yo can pass parameter from child to parent also. e.g 
+  <ChildComponent greetHandler={this.greetParent} />						 // Inside parent comp
+  greetParent(childName) { alert(`Hello from ${childName}`); }
+  <button onClick={() => props.greetHandler("child")}>Greet Parent</button>  // Inside child comp
+- Conditional rendernig : 
+  1) using if/else : However, it don't work inside JSX.
+  2) Element variablles : 
+  3) Ternary conditional operation (?) : can be used inside JSX.
+  4) Short circuit operator : 
+- In list rendering e.g { persons.map(p => <Person key={p.id} person={p} /> ) } :
   * "key" is a special string attribute you need to include when creating list of elements.
   * keys give the elements a stable identity.
   * keys help React identify which items have changed,are added,or are removed.

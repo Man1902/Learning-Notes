@@ -1,68 +1,18 @@
------------ Design Pattern ----------------------------
-- A design pattern is a general reusable solution to a commonly occurring problem within a given context in software design.
-- A design pattern is not a finished design that can be transformed directly into source or machine code. It is a description or template for 
-  how to solve a problem that can be used in many different situations.
-- The types of design patterns are 1) Creational 2) Structural 3) Behavioral design patterns.
+- A design pattern is a general reusable solution to a commonly occurring problem.
 -------------------------------
 1) Creational design pattern : 
 -------------------------------
-- Creational design patterns are design patterns that deal with "object creation mechanisms", trying to create objects in a manner suitable 
-  to the situation.
-- Types of Creational design pattern are : 
-  1) Singleton Pattern 2) Factory Pattern 3) Abstract Factory Pattern 4) Builder Pattern 5) Prototype Pattern
-1.1) Singleton pattern : Define a class that has only one instance and provides a global point of access to it
-- This pattern involves a single class which is responsible to create an object while making sure that only single object gets created.This 
-  class provides a way to access its only object which can be accessed directly without need to instantiate the object of the class.
-- This pattern restricts the instantiation of a class and ensures that only one instance of the class exists in the java virtual machine.
-- Common concepts to implement Singleton pattern : 
-  * Private constructor to restrict instantiation of the class from other classes.
-  * Private static variable of the same class that is the only instance of the class.
-  * Public static method that returns the instance of the class, this is the global access point for outer world to get the instance of the 
-    singleton class.
-- Three appraoch to create to initialize sinlglton class object : 
-  1) Eager initialization : The instance of Singleton Class is created at the time of class loading.here, drawback of it is that instance is 
-     created even though client application might not be using it. e.g private static final MySingletonClass instance = new MySingletonClass();
-  2) Static block initialization : It is similar to eager initialization, except that instance of class is created in the static block that 
-     provides option for exception handling. e.g 
-     static{
-		instance = new MySingletonClass();
-	 }
-  3) Lazy Initialization : It creates the instance in the global access method at the time of first call to this class.But, this appraoch can 
-     cause issues if multiple threads are inside the if loop at the same time. It will destroy the singleton pattern and both threads will 
-	 get the different instances of singleton class.e.g 
-	 public static MySingletonClass getInstance(){
-		if(instatnce == null){
-			instatnce = new MySingletonClass();
-		}
-		return instatnce;
-	 }
- 4) The easier way to create a thread-safe singleton class is to make the global access method synchronized or use synchronized block inside global access mrthod, 
-  so that only one thread can execute this method at a time.  e.g 
-	 public static MySingletonClass getInstance(){
-		if(instatnce == null){
-			synchronized (MySingletonClass.class) {
-				if(instatnce == null){
-					instatnce = new MySingletonClass();
-				}
-			}
-		}
-		return instatnce;
-	 }
- 5) Bill Pugh Singleton Implementation implementation for thread-safe by using static inner class.
-    private static class SingletonHelper{
-        private static final MySingletonClass INSTANCE = new MySingletonClass();
-    }
-	 public static MySingletonClass getInstance(){
-        return SingletonHelper.INSTANCE;
-    }
- 6) Enum Singleton to avoid issue of Reflection problem
-    public enum EnumSingletonClass {
-		OBJ;
-		public void doTask() {
-			System.out.println("My stuff");
-		}
-	}
- 7) Serialization and Singleton : We have impement readResolve() method inside Single class to avoid problem during De-Serialization
+- deal with "object creation mechanisms", trying to create objects in a manner suitable to the situation.
+1.1) Singleton pattern : 
+- Define a class that has only one instance and provides a global point of access to it.
+- Private constructor ,  Private static variable , Public static method.
+  1) Eager initialization : at the time of class loading
+  2) Static block initialization : provides option for exception handling
+  3) Lazy Initialization : 
+  4) Thread safe Lazy Initialization : 
+  5) Bill Pugh Singleton Implementation : thread-safe using private static inner class.  
+  6) Enum Singleton : to avoid issue of Reflection problem
+  7) Serialization and Singleton : We have impement readResolve() method to avoid problem during De-Serialization
 1.2) Factory Pattern (Virtual Constructor) :
 - Factory design pattern is used when we have a super class with multiple sub-classes and based on input, we need to return one of the sub-class.
 - It can be implemented by creating objects via a factory method, which is either specified in an interface and implemented in implementing 

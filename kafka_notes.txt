@@ -1,0 +1,97 @@
+- Apache kafka is high throughput distributed publish-subscribe messaging system.
+- Kafka is fast,scalable,durable,fault-tolerant and distributed by design.
+- Topic : is a category or feed name to which records are published.
+- Partition : Topics are broken up into ordered commit logs called partitions.
+- offset : Each message in a partition is assigned and sequence id called an offset.
+- Producer : can be any application who can publish messages to a topic.
+- Consumer : can be any application  that subscribes to a topic and consume the messages.
+- Broker : kafka cluster is a set of servers, each of which is called a broker.
+- Zookeeper : is used for managing and cordinating kafka broker.
+- Kafka features : 
+ * High throughput : Provides supports for hundred of thousands of messages with modest hardware.
+ * Sacalability : Highly sacalable distributed system with no downtime.
+ * Stream processing : can be used along with real time streaming applications like spark and storm.
+ * Durability : Provides supports to persiting messages on disk.
+ * Replication : Messages can be replicated across clsuters,which supports multiple subscribers.
+- Type of kafka cluster : 
+ 1) Single Node Single Broker Cluster
+ 2) Single Node Multiple Broker Cluster
+ 3) Multiple Node Multiple Broker Cluster
+- kafka server (broker) conig properties : 
+ 1) broker.id=0 						// The id of the broker. This must be set to a unique integer for each broker
+ 2) listeners=PLAINTEXT://:9093			// server port
+ 3) log.dirs=C:/kafka-logs				// to store log files
+ 4) zookeeper.connect=localhost:2181	// zookeeper conection string to from a cluster
+ 5) delete.topic.enable=false			// default is false
+ 6) auto.create.topics.enable=true		// default is true
+ 7) default.replication.factor=1		//  default is 1
+ 8) num.partitions=1					//  default is 1
+ 9) log.retention.hours=168				// default is 7 days
+10) log.retention.bytes=1024			// applys to partion not topic
+- Callback and Acknowledgment Appraoch: 
+ 1) Send and Forget : 
+ 2) Synchronous Send : 
+ 3) Asynchronous Send : using callback
+- Default Partitioner : 
+  1) If partition is specified in the record, use it.
+  2) If no partition is specified in the record,but a key is present, choose a partition based on a hash of a key
+  3) If no partition or key is present, choose a partition in a round-robin fashion.
+- To provide Custom Partitioner , implement Partitioner interface.
+- To provide Custom Partitioner , implement Partitioner interface.
+- Prdoucer conig properties : 
+  1) bootstrap.servers=localhost:9092,localhost:9093
+  2) key.serializer=org.apache.kafka.common.serialization.StringSerializer
+  3) value.serializer=org.apache.kafka.common.serialization.StringSerializer
+     value.serializer=com.learing.kafka.producer.CustomSerializer
+  4) partitioner.class=com.learing.kafka.producer.CustomPartitioner			 // to provide custom partitioner class
+  5) acks = 0	// 0   : No Ack.Possible loss og messages.High throughput.No Retries.	
+			    // 1   : only leader will ack.  
+				// All : leader will ack after receiving ack from all replica.gives you highest reliability while cost you hightest latency.
+  6) retries=0   
+  7) max.in.flight.requests.per.connection=5	// default is 5. used to allow no of msessages to be send without receiving response(ack).
+- Consumer Group : used to read and process data in paallel.
+- Partitions : are never shared amomng members of same group at the same time.
+- Group Coordinator : maintains a list of active consumers.Initiates a rebalance activity.Communicate about new assignment to consumers.
+- Rebalance : Initiated when the list of consumers is modified
+- Group leader : executes a rebalance activity. Sends new partition assignment to coordinator.
+- Current Offset : Sent Records. Used to avoid resending same record to the same consumer.  
+- Committed Offset : Processed Records.Used to avoid resending same same  to the new consumer in the event of partition Rebalance. 
+1) Auto commit : 
+  * enable.auto.commit=true (default)
+  * auto.commit.interval.ms=5 (default). kafka will commit your current offset every 5 sec
+2) Manual commit : 
+  * Commit Sync : 
+  * Commit Async :  
+- ConsumerRebalanceListner : 
+  * Maintain  a list of offsets that are processed and ready to be committed.
+  * Commit the offsets when partitions are going away.
+- 
+
+ 
+ - Note : https://github.com/LearningJournal/ApacheKafkaTutorials
+ 
+- Commands :  
+.\bin\windows\zookeeper-server-start.bat .\config\zookeeper.properties		// To start zookeepr server
+
+.\bin\windows\kafka-server-start.bat .\config\server.properties				// To start kafka broker 
+.\bin\windows\kafka-server-start.bat .\config\server-one.properties			// To start second kafka broker 
+
+.\bin\windows\kafka-topics.bat --zookeeper localhost:2181 --create --topic my-topic1 --replication-factor 1 --partitions 1		// To Create Kafka Topic  
+.\bin\windows\kafka-topics.bat --zookeeper localhost:2181 --create --topic my-topic2 --replication-factor 3 --partitions 1		// To Create Topic for three brokers
+.\bin\windows\kafka-topics.bat --list --zookeeper localhost:2181 			// To get a list of topics in Kafka server
+.\bin\windows\kafka-topics.bat --describe --topic my-topic2 --zookeeper localhost:2181		// To check which broker is listening on the current created topic
+.\bin\windows\kafka-topics.bat --zookeeper localhost:2181 --alter --topic my-topic1 --partitions 2		// To modify a created topic
+.\bin\windows\kafka-topics.bat --zookeeper localhost:2181 --delete --topic my-topic1		// To delete a topic
+
+.\bin\windows\kafka-console-producer.bat --broker-list localhost:9092 --topic my-topic1		// Start Producer to Send Messages
+
+.\bin\windows\kafka-console-consumer.bat --zookeeper localhost:2181 --topic my-topic1 --from-beginning			// Start Consumer to Receive Messages OR
+.\bin\windows\kafka-console-consumer.bat --bootstap-server localhost:9092 --topic my-topic1 --from-beginning	// Start Consumer to Receive Messages 
+
+
+
+
+
+
+
+

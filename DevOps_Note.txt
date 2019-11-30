@@ -187,7 +187,7 @@ Account : docerId : username Mail Id : mail@gmail.com
   ADD : 
   EXPOSE : to delcare port
   ENTRYPOINT : 
-- Docker comnpose makes it easier to configure and run applications made up  of mutliple containers.e.g by defining web app and DB containers configration 
+- Docker compose makes it easier to configure and run applications made up  of mutliple containers.e.g by defining web app and DB containers configration 
   in one YAML file and then running those contected containers with a single command.
 - Docker swarm provides native clustering capabilities to turn a group of Docker engines into a single, virtual Docker Engine.
 

@@ -1,89 +1,233 @@
-- IoC is a design principle that decouples objects of an object-oriented program from their dependencies (collaborators), that is, the objects they work with. 
-  Usually, this decoupling is achieved by externalizing the responsibility of object creation and Dependency Injection to an external component, such as an IoC container.
-- 
-------------
-- Spring is a lightweight framework. It can be thought of as a framework of frameworks.
-- Inversion Of Control (IOC) and Dependency Injection are the design patterns that are used to remove dependency from the programming code(DI).
-- In Spring framework, IOC container is responsible to inject the dependency. We provide metadata to the IOC container either by XML file or annotation.
-- DI makes the code loosely coupled so it can be easy to maintain.
-- In DI ,Object should have dependencies injected into them instead of creating them.
-- Open Close Principle : Object should be open for extention but, close for modification.(using abstraction)
-- Spring modules : 
-  1) Spring Core Container : Core, Beans, Context, Expression
-  2) Web (MVC / Remoting) : Web,Servlet,Portlet,Struts
-  3) Data Access/Inegration  : JDBC,ORM,OXM,JMS,Transactions
-  4) AOP , Aspects , Instrumentation
-  5) Testing
-- The main tasks performed by IoC container are:
-   to instantiate the application class.
-   to configure the object.
-   to assemble the dependencies between the objects.
-- Two types of IoC containers : 1) BeanFactory 2) ApplicationContext
-- Spring framework provides two ways to inject dependency : 1) By Constructor 2) By Setter method.
-- The <constructor-arg> subelement of <bean> is used for constructor injection.
-- If we have dependent object in the collection, we can inject these information by using the "ref" element inside the list, set or map
-- The "entry" attribute of map is used to define the key and value information.
-- By using the parent attribute of bean, we can specify the inheritance relation between the beans. In such case, parent bean values will be inherited to the current bean.
-- The <property> subelement of <bean> is used for setter injection.
-- Partial dependency can be injected using setter injection but it is not possible by constructor.
--* Setter injection overrides the constructor injection. If we use both constructor and setter injection, IOC container will use the setter injection.
-- We can easily change the value by setter injection. It doesn't create a new bean instance always like constructor. 
-  So setter injection is flexible than constructor injection.
-- Autowiring inject the object dependency "implicitly". It internally uses setter or constructor injection.
-- Autowiring can't be used to inject primitive and string values. It works with reference only.
-- Autowiring Modes :
-  1) byName : Injects the object dependency according to name of the bean. In such case, property name and bean name must be same. It internally calls setter method.
-  2) byType : Injects the object dependency according to type.But there must be only one bean of a type.So property name and bean name can be different. It internally calls setter method.
-  3) constructor : Injects the dependency by calling the constructor of the class. It calls the constructor having large number of parameters.
-- Spring framework provides facility to inject bean using factory method. To do so, we can use two attributes of bean element.
-  1) factory-method: represents the factory method that will be invoked to inject the bean.
-  2) factory-bean: represents the reference of the bean by which factory method will be invoked. It is used if factory method is non-static.
-- A method that returns instance of a class is called factory method.
-- Factory method types : 
-  1) A "static" factory method that returns instance of its "own" class. It is used in singleton design pattern.
-  2) A "static" factory method that returns instance of "another" class.
-  3) A "non-static" factory method that returns instance of another class.
-- Aspect-Oriented Programming (AOP) complements Object-Oriented Programming (OOP) by providing another way of thinking about program structure. 
-  The key unit of modularity in OOP is the "class", whereas in AOP the unit of modularity is the aspect. 
-- AOP breaks the program logic into distinct parts (called concerns). It is used to increase modularity by cross-cutting concerns.
-- A cross-cutting concern is a concern that can affect the whole application and should be centralized in one location in code as possible, such as transaction management, authentication, logging, security etc.
-- It provides the pluggable way to dynamically add the additional concern before, after or around the actual logic.
-- Aspect: A modularization of a concern that cuts across multiple classes. Transaction management is a good example of a crosscutting concern in enterprise Java applications.
-- Join point: a point during the execution of a program, such as the execution of a method or the handling of an exception. In Spring AOP, a join point always represents a method execution.
-- Advice: represents an action taken by an aspect at a particular join point.
-- Pointcut: A predicate that matches join points. Advice is associated with a pointcut expression and runs at any join point matched by the pointcut
-- Target object: object being advised by one or more aspects. Also referred to as the advised object. Since Spring AOP is implemented using runtime proxies, this object will always be a proxied object.
-- AOP proxy: an object created by the AOP framework in order to implement the aspect contracts (advise method executions and so on). 
-- Weaving: linking aspects with other application types or objects to create an advised object. This can be done at compile time (using the AspectJ compiler, for example), load time, or at runtime. Spring AOP, like other pure Java AOP frameworks, performs weaving at runtime.
-- Types of advice:
-1) Before advice: Advice that executes before a join point, but which does not have the ability to prevent execution flow proceeding to the join point (unless it throws an exception).
-2) After returning advice: Advice to be executed after a join point completes normally: for example, if a method returns without throwing an exception.
-3) After throwing advice: Advice to be executed if a method exits by throwing an exception.
-4) After (finally) advice: Advice to be executed regardless of the means by which a join point exits (normal or exceptional return).
-5) Around advice: Advice that surrounds a join point such as a method invocation. This is the most powerful kind of advice.  
-   Around advice can perform custom behavior before and after the method invocation. It is also responsible for choosing whether to proceed to the join point or to shortcut the advised method execution by returning its own return value or throwing an exception.
-- The concept of join points, matched by pointcuts, is the key to AOP which distinguishes it from older technologies offering only interception. Pointcuts enable advice to be targeted independently of the Object-Oriented hierarchy.   
-- Aspect is a class that contains advices, joinpoints etc.
-- Interceptor is an aspect that contains only one advice.
-- To enable @AspectJ support with Java @Configuration add the @EnableAspectJAutoProxy annotation.
-- To enable @AspectJ support with XML based configuration use the aop:aspectj-autoproxy element.
-- Spring AspectJ AOP implementation annotations:
-1) @Aspect declares the class as aspect.
-2) @Pointcut declares the pointcut expression.the method serving as the pointcut signature must have a void return type
-3) @Before declares the before advice. It is applied before calling the actual method.
-4) @After declares the after advice. It is applied after calling the actual method and "before returning result".
-5) @AfterReturning declares the after returning advice. It is applied after calling the actual method and before returning result. But you can get the result value in the advice.
-6) @Around declares the around advice. It is applied before and after calling the actual method.
-7) @AfterThrowing declares the throws advice. It is applied if actual method throws exception.
-- In Spring AOP, it is not possible to have aspects themselves be the target of advice from other aspects. The @Aspect annotation on a class marks it as an aspect, and hence excludes it from auto-proxying.
-- Ex : @Before("execute(* com.learning..*.get*(*))")
-	1st * : any return type  
-	.. : any numbger of subpackage after com.learning
-	2nd * : any class 
-	3rd * : any method starting from get 
-	4th * : any sinlge argument
-- Spring MVC : 
-- In Spring Web MVC, "DispatcherServlet" class works as the front controller. It is responsible to manage the flow of the spring mvc application.
-- @Controller annotation is used to mark the class as the controller in Spring.
-- @RequestMapping annotation is used to map the request url. It is applied on the method.
-- 
+---------- SpringBoot ----------
+- SpringBoot has been built on top of existing spring framework.Using SpringBoot we can avoid all the boilerplate code and configurations that we have to do in 
+  normal spring application.
+- SpringBoot makes it easy to create stand-alone,production grade spring based application that you can just run.
+- SpringBoot helps us use the existing spring functionalites more robustly and with minimum efforts.
+- SpringBoot favors convention over configration.It provides automatic configuration.  
+- SpringBoot Advantages : 
+ * Embedded servers (Tomcat,Jetty and Undertow) which are easy to deploy with the containers
+ * It helps in monitoring the multiple components
+ * It helps in configuring the components externally
+- Annotations : @SpringBootApplication or @EnableAutoConfiguation, @ComponentScan, @EnableJpaRepositories, @EntityScan
+-  @SpringBootApplication = @EnableAutoConfigueation + @SpringBootConfiguration + @ComponentScan
+- SpringBoot Features : 
+ 1) AutoConfiguration : It detects the presence of certain Class/JAR in the Classpath and then automatically configure it for you.
+ 2) Starter POMs : It take away pain by finding and adding common dependencies in your project.
+ 3) Spring Boot CLI : It allows you to create Spring based web application using Groovy programming language.
+ 4) Actuator : is used to access and monitor current state of running application in production envirornment.By using Actuator you can find out exactly which 
+    beans are configured in the Application context, what are auto-configuration decisions made, what environment variables, system properties, command line 
+	arguments are available to an application and many more.It provides several endpoints to retrieve this data.
+ 5) Spring Boot Initializer : It is a web application that can be used to generate Spring Boot project structure(to bootstrap a Spring Boot application).
+- using the exclude attribute or spring.autoconfigure.exclude property, we can disable a specific auto-configuration. e.g 
+  @SpringBootApplication(exclude = DataSourceAutoConfiguration.class) OR
+  spring.autoconfigure.exclude = org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+- Spring Boot - Tomcat Deployment : 
+  1) extend SpringBootServletInitializer class in Spring Boot Application main class.
+      @Override
+      protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+		return application.sources(SpringBootDemoApp.class);
+	 }
+  2) In pom.xml file add : 1) <packaging>war</packaging>  2) Insidde <properties> add : <start-class>com.learning.springboot.SpringBootDemoApp</start-class>
+  3) mvn package
+  4) Run the Tomcat Server, and deploy the WAR file under the webapps directory.
+  5) Access http://localhost:8080/SpringBootDemo-0.0.1-SNAPSHOT/
+- ApplicationRunner and CommandLineRunner interfaces lets you to execute the code after the Spring Boot application is started.
+- Exception Handling : 
+  @ControllerAdvice
+  public class ProductExceptionHandler {
+	@ExceptionHandler(value = ProductNotfoundException.class)
+    public ResponseEntity<Object> exception(ProductNotfoundException e) {
+		return new ResponseEntity<>("Product not found", HttpStatus.NOT_FOUND);
+   }
+ }
+- Interceptor : You can use the Interceptor to perform operations Before sending the request to the controller and Before sending the response to the client.
+  * you can use an interceptor to add the request header before sending the request to the controller and add the response header before sending the response to the client
+  * implement HandlerInterceptor (I) or   HandlerInterceptorAdapter (C) : preHandle() , postHandle() , afterCompletion()
+  * You will have to register this Interceptor with InterceptorRegistry by using WebMvcConfigurerAdapter.
+    @Component
+    public class ProductServiceInterceptorAppConfig extends WebMvcConfigurerAdapter {
+		@Autowired
+		ProductServiceInterceptor productServiceInterceptor;
+		@Override
+		public void addInterceptors(InterceptorRegistry registry) {
+			registry.addInterceptor(productServiceInterceptor);
+		}
+	}
+- RestTemplate : is used to consume RESTful Web Services.
+  HttpHeaders headers = new HttpHeaders();
+  headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+  HttpEntity <String> entity = new HttpEntity<String>(headers);
+  ResponseEntity<ProductResponse> resonse = restTemplate.exchange("http://localhost:8080/products", HttpMethod.GET, entity, ProductResponse.class); // 1)
+  HttpEntity<Product> entity = new HttpEntity<Product>(product,headers);
+  ResponseEntity<ProductResponse> resonse = restTemplate.exchange("http://localhost:8080/products", HttpMethod.POST, entity, ProductResponse.class); // 2)
+  HttpEntity<Product> entity = new HttpEntity<Product>(product,headers);
+  ResponseEntity<ProductResponse> resonse = restTemplate.exchange("http://localhost:8080/products/1", HttpMethod.PUT, entity, ProductResponse.class); // 3)
+  ResponseEntity<String> resonse = restTemplate.exchange("http://localhost:8080/products/1", HttpMethod.DELETE, entity, String.class); // 4)
+- Scheduling : is a process of executing the tasks for the specific time period.@EnableScheduling annotation is used to enable the scheduler for your application.
+  @Scheduled(cron = "0 * 9 * * ?")			// every minute starting at 9:00 AM and ending at 9:59 AM, every day
+  @Scheduled(fixedRate = 1000)				// to execute the tasks at the specific time.It does not wait for the completion of previous task
+  @Scheduled(fixedDelay = 1000, initialDelay = 1000)	// It should wait for the previous task completion.
+  public void cronJobSch() throws Exception {
+		// scheduler task
+  }
+- Spring Boot Actuator provides secured endpoints for monitoring and managing your Spring Boot application.By default, all actuator endpoints are secured.
+  * To enable Spring Boot actuator endpoints , add spring-boot-starter-actuator maven dependency
+  * management.security.enabled = false
+  * Important Actuator endpoints : /metrics , /env , /beans , /health , info , /trace
+  
+1) Eureka Server (Discovery Server): Service Registry and Discovery :  
+- Eureka server : spring-cloud-starter-netflix-eureka-server dependency and @EnableEurekaServer 
+  eureka.client.register-with-eureka=false
+  eureka.client.fetch-registry=false
+  eureka.instance.hostname = peer1 , eureka.client.serviceUrl.defaultZone  = http://peer2:8761/eureka (To handle multiple instance)
+- Eureka client : @EnableEurekaClient , @LoadBalanced (for clinet side load balancing)
+  eureka.client.serviceUrl.defaultZone  = http://localhost:8761/eureka (Optional)
+  eureka.instance.instance-id=${spring.application.name}-${random.int}  // if server po	rt is 0
+
+2) Zuul Proxy Server/Edge Server : API Gateway /Routing : @EnableZuulProxy
+- It is a gateway application that handles all the requests and does the dynamic routing of microservice applications.
+	  spring.application.name=zuul-server	
+	  server.port=9090
+	  zuul.prefix=/api
+	  zuul.routes.customer-service.path=/customer-service/**
+	  zuul.routes.customer-service.service-id=customer-service
+	  #zuul.routes.customer-service.url=http://localhost:9091  # actual link of customer ms
+	  zuul.routes.order-service.path=/order-service/**
+	  zuul.routes.order-service.service-id=order-service 
+- Here, http://localhost:9090/api/customer-service/customers will be redirectted to http://customer-service/customers or http://localhost:9091/customers
+
+3) Configuration Server : 
+- It is a centralized application that manages all the application related configuration properties.
+- place your client config file in given folder with name as config-client.properties (config-client is name of client app)
+- Configuration Server : @EnableConfigServer
+	  spring.application.name=config-server
+	  server.port=8090
+	  #spring.cloud.config.server.git.uri=https://github.com/spring-cloud-samples/config-repo		# OR
+	  spring.cloud.config.server.native.searchLocations=classpath:/configs
+	  spring.profiles.active=native
+- Configuration Client : @RefreshScope
+	  spring.application.name=customer-service
+	  server.port=9091
+	  spring.cloud.config.uri = http://localhost:8090
+- use http://localhost:9091/refresh  link to get updated properties
+  
+4) Hystrix : Fault tolerance / Circuit braker : provides fallback option.
+   * Add spring-cloud-starter-hystrix dependency and @EnableHystrix OR @EnableCircuitBreaker OR and @EnableHystrixDashboard (for monitoring)
+   * For request API, define @HystrixCommand to provide fallback method
+	   @HytrixCommand(fallbackMethod="failoverMethod") OR 
+	   @HytrixCommand(fallbackMethod="failoverMethod", commamndProperties={
+			@HytrixProperty(name="execution.isolation.thread.timeoutInMilliseconds", value=500)
+	   })
+   
+5) Spring Cloud Sleuth & ZipKin server : For tracing and monitoring Micro Service Logs   
+   * Add spring-cloud-starter-sleuth dependency 
+   * Spring cloud Sleuth logs are printed in the following format : [application-name,traceid,spanid,zipkin-export] 
+     traceid : across MS , spanid :  within MS , zipkin-export : false (default)
+   * Zipkin server : (monitors and manages the Spring Cloud Sleuth logs) 
+      * Add zipkin-server , zipkin-autoconfigure-ui dependencies and @EnableZipkinServer
+	  * Accces server : http://localhost:9091/zipkin/
+   * Zipkin client : 
+	  * Add spring-cloud-sleuth-zipkin dependency
+      * Add Always Sampler Bean to export the logs into Zipkin server.
+			@Bean
+			public AlwaysSampler defaultSampler() { return new AlwaysSampler(); }
+	  * Configure Zipkin Server : spring.zipkin.baseUrl = http://localhost:9091/zipkin/ 
+	  * Trace logs by trace id : http://localhost:9411/zipkin/traces/{traceid}/
+   
+6) Ribbon (Client side Load balancing) : 
+- @RibbonClient(name="my-microservice-name", configuration=RibbonConfig.class)   and configuration in property file and @LoadBalanced in RestTemplate Bean
+
+7) Spring Cloud security using OAuth : @EnableAuthorizationServer, @EnableResourceServer, @EnableOAuth2Client
+- oAuth2 is a protocol for token basded authorization.
+- It's a way of delegate access without sharing credencials. It can grant a client to perform certain action on behalf of user.
+- We can have 3rd party oAuth providers such as Google,Facebook,Github or own oAuth servr.
+- Client : 
+- Resourse Owner : 
+- Authorization Server : 
+- Resourse Server :
+- Grant Types : Authorization Code, , Implicit, Password, Device Code
+
+- Spring Security default behaviour in spring boot (After adding spring-boot-starter-security dependency)
+  * Adds mandatory authentication for all URLs.
+  * Adds login form.
+  * Handle login error
+  * Creates a user and sets a default password. (Spring secrity generates a new password each time you start the app).To overirde this default behaviour,set
+    spring.security.user.name and spring.security.user.password properties in application.properties file.
+
+- Swagger2 is used to generate the REST API documents for RESTful web services.
+ * Add springfox-swagger2 and springfox-swagger-ui mavnn dependencies
+ * Add @EnableSwagger2 in your main Spring Boot application.
+ * Create Docket Bean to configure Swagger2.
+		@Bean
+		public Docket productApi() {
+			return new Docket(DocumentationType.SWAGGER_2)
+					.select().apis(RequestHandlerSelectors.basePackage("com.learning.ms.controller"))
+					.build();
+		}
+ * Access Swagger UI : http://localhost:9091/swagger-ui.html
+
+---------- Spring ----------  
+- Spring is Java EE framework which is based on two design principles : Dependecy Injection and Aspect oriented programing.
+- Advantages : Lightweight, Loose coupling (DI), Declarative programing (AoP), Eliminates boilerplate code(using templates), Provides declarative supports for
+  caching,validation and transactions.
+- Spring favors interface class separation.
+- By IoC principle, "control of object creation is inverted to framework".Spring IoC container control and manages the lifecyce of spring bean objects.
+- Throgh DI pattern, You can implement IoC to achieve loose coupling.In DI ,Object should have dependencies injected into them instead of creating them.
+- IoC container : 1) BeanFactory 2) ApplicationContext (built on top of BeanFactory with some extra functionalities)
+- Spring Bean : POJO class object that is initialized through Spring container. 
+- Spring Bean scopes : singleton (default), prototype, request, session, global-session.
+-* shared instance variables can create data inconsistency issue in singleton bean.
+- By default container creates and configures all singleton beans during initialization.To stop this we can use "lazy-init" attribute or @Lazy annotation in 
+  bean configuration.
+- For Inner bean (bean inside anothe bean),container ignores id,name and scope values.Inner beans are always anonymous(scoped prototype always) and they are 
+  always created with the outer bean.It is not possible to inject inner beans into other beans excpet its enclosing(parent) outer bean.
+- Bean can be created through Annotation based/XML based/Java based configuration.
+- To handle resource during spring bean life cycle, you can use : 1) InitializingBean (for post-initialization) and DisposableBean (for pre-destroy)
+  2) init-method and destroy-method attibute in Bean tag 3) @PostConstruct and @PreDestroy
+- "BeanPostProcessor" is used to provide some logic beofre or after bean initialization for all beans.It is used to provide common logic for all beans.
+   Method execution seq : BeanPostProcessor's postProcessBeforeInitialization -> init method of indiviual bean -> 
+   BeanPostProcessor's postProcessAfterInitialization -> destroy method of indiviual bean 
+- Spring Aware interfaces (similar to servlet listeners) are used to inject "Spring framework beans" in our custom bean to perform some specific tasks.
+  e.g ApplicationContextAware, ServletContextAware, ServletConfigAware, BeanFactoryAware, BeanNameAware
+- DI types : 1) By constuctor (<constuctor-arg>) 2) By setter method ( <property> )
+- Partial dependency can be injected using setter injection. Setter injection overrides the constuctor injection.
+- Autowiring inject object(reference only) dependency Automatically. Type : 1) byType 2) byName 3) constructor
+- @Autowired annotation by default try to autowire by type.If multiple beans are of same type present, it will try to wire byName.if name is diffrent it will
+  throw error.In this case we can use @Qulifier to inject specific bean.
+- Core Annotation : @Configuration, @ComponentScan, @Component, @Bean, @Scope, @Autowired(default:autowired by type), @Qualifier, @Lazy
+- AoP is used to implement common cross cutting concerns(logging, transaction management, security, validation etc). It takes out the direct dependency
+  of cross cutting tasks and provides pluggable centralized handling to add additional concern before, after or around the actual logic.It prompotes the 
+  sepration of concerns.
+- Spring AOP can be applied only to the beans created through spring context.  
+  1) Aspect (@Aspect) class : implements common concerns  2) Join point : specific point (In Spring AoP method execution only) at which aspect's common concerns
+  can be apply  3) Advice : common task define in aspect class  4) Pointcut (@Pointct) : expressions that matches join points.  5) Target object : on which 
+  advices are applied.Spring AOP is implemented using runtime proxies.so, this    object is always proxied object  6) Interceptor : Aspect having one advice
+  method.
+- Advice types : 1) @Before 2) @After (before returning) 3) @AfterReturning 4) @AfterThrowing 5) @Around
+- In spring AOP, Aspect class can not be target of advice for other aspect class.
+- final method can not be adviced as it can not be overridden.so, spring can not create a proxy for that.
+- JdbcTemplate eliminates boiler plate code.It take care of creation and release of resources.Handles exception and provides the informative exception messages.
+- JdbcTemplate has datasource property (of type DriverManagerDataSource) which contains database realted information (username, password, url etc)
+- Spring ORM is used to to interact with hibernate,JPA. It handles exception in better way. HibernateTemplate provides way to connect spring with ORM in easy manner.
+- LocalSessionFactoryBean has datasource property (of type BasicDataSource) which contains information about hibernateProperties and mappingResources.
+- Spring MVC is used to create flexible loosely coupled web application.
+- DispatcherServlet works as the front controller.It is responsible to manage the flow of the spring mvc application.single web application can have muliple
+  DispatcherServlet (with diffrent name and mapping url)
+- ContextLoaderListener loads root context and defines common spring bean configurations that will be visible to all other contexts.
+- Spring MVC Annotations : @Controller, @RestController, @RequestMapping, @GetMapping, @PostMapping, @RequestParam (to bind request parameter), @PathVaraible
+  (extract parameter value form the URI), @ReqestHeader, @CookieValue, @ModelAttribute (used for data binding), @ControllerAdvice (to add model value globally
+  or can be used to define exception handling globally), @SessionAttribute, @RequestAttribute, @RequestBody, @ResponseBody, @ExceptionHandler, @ResponseStatus
+- We can narrow the request mapping based on consumes/produces, reuqest/header parameter.
+- Exception handling : 1) Controller based : by defining exception handling method using @ExceptionHandler
+  2) Gloabal Exception Handler : by defining global exception handling method using @ControllerAdvice and @ExceptionHandler for all controller.
+  3) HandlerExceptionResolver or SimpleMappingExceptionResolver(C)
+- Interceptor (like servlet filter) are used to intercept client request(HandlerInterceptor(I) or HandlerInterceptorAdapter(C))
+  Methods : 1) preHandle : before handed over to handler method 2) postHandle : called when handler method is invoked but DispatcherServlet is yet to render the 
+  view  3) afterCompletion : called once the handler is executed and view is rendered
+- ViewResolver : InternalResourceViewResolver, ResourceBundleViewResolver (default : views.properties), XmlViewResolver (default : views.xml)
+- If mutliple view resolver are configured, “order” property is used to set priority. (lower value : high priority)
+- LocaleResolver  : SessionLocaleResolver,LocaleChangeInterceptor 
+- BeanNameUrlHandlerMapping and SimpleUrlHandlerMapping.
+- SpringSecurity is used to provide Athentication and Authorization.
+- OAuth is an open authorization protocol,which allows accessing and sharing of resources on one site with another site without using their credentials.
+- Resource Owner, Resource Server, Client Application, Authorization Server
