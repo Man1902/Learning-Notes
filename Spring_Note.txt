@@ -11,16 +11,39 @@
 - Annotations : @SpringBootApplication or @EnableAutoConfiguation, @ComponentScan, @EnableJpaRepositories, @EntityScan
 -  @SpringBootApplication = @EnableAutoConfigueation + @SpringBootConfiguration + @ComponentScan
 - SpringBoot Features : 
- 1) AutoConfiguration : It detects the presence of certain Class/JAR in the Classpath and then automatically configure it for you.
- 2) Starter POMs : It take away pain by finding and adding common dependencies in your project.
- 3) Spring Boot CLI : It allows you to create Spring based web application using Groovy programming language.
- 4) Actuator : is used to access and monitor current state of running application in production envirornment.By using Actuator you can find out exactly which 
-    beans are configured in the Application context, what are auto-configuration decisions made, what environment variables, system properties, command line 
-	arguments are available to an application and many more.It provides several endpoints to retrieve this data.
- 5) Spring Boot Initializer : It is a web application that can be used to generate Spring Boot project structure(to bootstrap a Spring Boot application).
-- using the exclude attribute or spring.autoconfigure.exclude property, we can disable a specific auto-configuration. e.g 
-  @SpringBootApplication(exclude = DataSourceAutoConfiguration.class) OR
-  spring.autoconfigure.exclude = org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+1) AutoConfiguration : 
+   * It detects the presence of certain Class/JAR in the Classpath and then automatically configure it for you.
+   * Note that the auto-configuration is only in effect if the auto-configured beans are not defined in the application.If you define your bean, then the default
+     one will be overridden.
+   * using the exclude/excludeName attribute or spring.autoconfigure.exclude property, we can disable a specific auto-configuration. e.g 
+	 @SpringBootApplication(exclude = DataSourceAutoConfiguration.class) OR
+	 spring.autoconfigure.exclude = org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration	 
+   * To Create a Custom Auto-Configuration : 
+     * we need to create a class annotated as @Configuration.
+	 * register the class as an auto-configuration candidate, by adding the name of the class in the standard file resources/META-INF/spring.factories : 
+	   org.springframework.boot.autoconfigure.EnableAutoConfiguration=\com.baeldung.autoconfiguration.MySQLAutoconfiguration
+	   @ConditionalOnClass(DataSource.class) 			// if class present OR 
+	   @ConditionalOnMissingClass (DataSource.class)    // if class not present OR
+	   @ConditionalOnBean(name = "dataSource")			// if bean present OR
+	   @ConditionalOnMissingBean						// if bean not present OR
+	   @ConditionalOnMissingBean(type = "JpaTransactionManager") // OR
+	   @ConditionalOnProperty(name = "usemysql", havingValue = "local") // OR
+	   @ConditionalOnResource(resources = "classpath:mysql.properties") // OR
+	   public class MySQLAutoconfiguration {
+			//...
+	   }
+	 * we can also define custom conditions by extending the SpringBootCondition class and overriding the getMatchOutcome() method.
+2) Starter POMs : 
+   * It take away pain by finding and adding common dependencies in your project.
+3) Spring Boot CLI : 
+   * It allows you to create Spring based web application using Groovy programming language.
+4) Actuator : 
+   * Spring Boot Actuator provides secured endpoints for monitoring and managing your Spring Boot application.By default, all actuator endpoints are secured.
+   * To enable Spring Boot actuator endpoints , add spring-boot-starter-actuator maven dependency
+   * management.security.enabled = false
+   * Important Actuator endpoints : /metrics , /env , /beans , /health , info , /trace	
+5) Spring Boot Initializer : 
+   * It is a web application that can be used to generate Spring Boot project structure(to bootstrap a Spring Boot application).
 - Spring Boot - Tomcat Deployment : 
   1) extend SpringBootServletInitializer class in Spring Boot Application main class.
       @Override
@@ -70,22 +93,22 @@
   public void cronJobSch() throws Exception {
 		// scheduler task
   }
-- Spring Boot Actuator provides secured endpoints for monitoring and managing your Spring Boot application.By default, all actuator endpoints are secured.
-  * To enable Spring Boot actuator endpoints , add spring-boot-starter-actuator maven dependency
-  * management.security.enabled = false
-  * Important Actuator endpoints : /metrics , /env , /beans , /health , info , /trace
   
 1) Eureka Server (Discovery Server): Service Registry and Discovery :  
-- Eureka server : spring-cloud-starter-netflix-eureka-server dependency and @EnableEurekaServer 
-  eureka.client.register-with-eureka=false
-  eureka.client.fetch-registry=false
-  eureka.instance.hostname = peer1 , eureka.client.serviceUrl.defaultZone  = http://peer2:8761/eureka (To handle multiple instance)
-- Eureka client : @EnableEurekaClient , @LoadBalanced (for clinet side load balancing)
-  eureka.client.serviceUrl.defaultZone  = http://localhost:8761/eureka (Optional)
-  eureka.instance.instance-id=${spring.application.name}-${random.int}  // if server po	rt is 0
+   * Eureka server : 
+	 * Add spring-cloud-starter-netflix-eureka-server dependency and @EnableEurekaServer 
+	   eureka.client.register-with-eureka=false
+	   eureka.client.fetch-registry=false
+	   eureka.instance.hostname = peer1 , eureka.client.serviceUrl.defaultZone  = http://peer2:8761/eureka (To handle multiple instance)
+  * Eureka client : 
+    * Add spring-cloud-starter-netflix-eureka-client dependency and @EnableEurekaClient / @EnableDiscoveryClient
+	* @LoadBalanced with RestTemplate Bean for clinet side load balancing.
+	  eureka.client.serviceUrl.defaultZone  = http://localhost:8761/eureka (Optional)
+	  eureka.instance.instance-id=${spring.application.name}-${random.int}  // if server port is 0
 
-2) Zuul Proxy Server/Edge Server : API Gateway /Routing : @EnableZuulProxy
-- It is a gateway application that handles all the requests and does the dynamic routing of microservice applications.
+2) Zuul Proxy Server/Edge Server : API Gateway /Routing : 
+   * It is a gateway application that handles all the requests and does the dynamic routing of microservice applications.
+   * Add spring-cloud-starter-netflix-zuul dependency and @EnableZuulProxy. 
 	  spring.application.name=zuul-server	
 	  server.port=9090
 	  zuul.prefix=/api
@@ -94,22 +117,24 @@
 	  #zuul.routes.customer-service.url=http://localhost:9091  # actual link of customer ms
 	  zuul.routes.order-service.path=/order-service/**
 	  zuul.routes.order-service.service-id=order-service 
-- Here, http://localhost:9090/api/customer-service/customers will be redirectted to http://customer-service/customers or http://localhost:9091/customers
+   * Here, http://localhost:9090/api/customer-service/customers will be redirectted to http://customer-service/customers or http://localhost:9091/customers
 
-3) Configuration Server : 
-- It is a centralized application that manages all the application related configuration properties.
-- place your client config file in given folder with name as config-client.properties (config-client is name of client app)
-- Configuration Server : @EnableConfigServer
-	  spring.application.name=config-server
-	  server.port=8090
-	  #spring.cloud.config.server.git.uri=https://github.com/spring-cloud-samples/config-repo		# OR
-	  spring.cloud.config.server.native.searchLocations=classpath:/configs
-	  spring.profiles.active=native
-- Configuration Client : @RefreshScope
-	  spring.application.name=customer-service
-	  server.port=9091
-	  spring.cloud.config.uri = http://localhost:8090
-- use http://localhost:9091/refresh  link to get updated properties
+3) Configuration Server :
+   * It is a centralized application that manages all the application related configuration properties.
+   * place your client config file in given folder with name as config-client.properties (config-client is name of client app)
+   * Configuration Server : 
+     * Add spring-cloud-config-server dependency and @EnableConfigServer
+	   spring.application.name=config-server
+	   server.port=8090
+	   #spring.cloud.config.server.git.uri=https://github.com/spring-cloud-samples/config-repo		# OR
+	   spring.cloud.config.server.native.searchLocations=classpath:/configs
+	   spring.profiles.active=native
+   * Configuration Client : 
+     * Add spring-cloud-starter-config dependency and @RefreshScope
+		   spring.application.name=customer-service
+		   server.port=9091
+		   spring.cloud.config.uri = http://localhost:8090
+	 * use http://localhost:9091/refresh  link to get updated properties
   
 4) Hystrix : Fault tolerance / Circuit braker : provides fallback option.
    * Add spring-cloud-starter-hystrix dependency and @EnableHystrix OR @EnableCircuitBreaker OR and @EnableHystrixDashboard (for monitoring)
@@ -132,29 +157,12 @@
 			@Bean
 			public AlwaysSampler defaultSampler() { return new AlwaysSampler(); }
 	  * Configure Zipkin Server : spring.zipkin.baseUrl = http://localhost:9091/zipkin/ 
-	  * Trace logs by trace id : http://localhost:9411/zipkin/traces/{traceid}/
+	  * Trace logs by trace id : http://localhost:9091/zipkin/traces/{traceid}/
    
 6) Ribbon (Client side Load balancing) : 
 - @RibbonClient(name="my-microservice-name", configuration=RibbonConfig.class)   and configuration in property file and @LoadBalanced in RestTemplate Bean
 
-7) Spring Cloud security using OAuth : @EnableAuthorizationServer, @EnableResourceServer, @EnableOAuth2Client
-- oAuth2 is a protocol for token basded authorization.
-- It's a way of delegate access without sharing credencials. It can grant a client to perform certain action on behalf of user.
-- We can have 3rd party oAuth providers such as Google,Facebook,Github or own oAuth servr.
-- Client : 
-- Resourse Owner : 
-- Authorization Server : 
-- Resourse Server :
-- Grant Types : Authorization Code, , Implicit, Password, Device Code
-
-- Spring Security default behaviour in spring boot (After adding spring-boot-starter-security dependency)
-  * Adds mandatory authentication for all URLs.
-  * Adds login form.
-  * Handle login error
-  * Creates a user and sets a default password. (Spring secrity generates a new password each time you start the app).To overirde this default behaviour,set
-    spring.security.user.name and spring.security.user.password properties in application.properties file.
-
-- Swagger2 is used to generate the REST API documents for RESTful web services.
+7) Swagger2 is used to generate the REST API documents for RESTful web services.
  * Add springfox-swagger2 and springfox-swagger-ui mavnn dependencies
  * Add @EnableSwagger2 in your main Spring Boot application.
  * Create Docket Bean to configure Swagger2.
@@ -165,6 +173,90 @@
 					.build();
 		}
  * Access Swagger UI : http://localhost:9091/swagger-ui.html
+ 
+8.1) SpringSecurity : 
+	* SpringSecurity is used to provide Authentication (Who are you?) and Authorization (What you can do?).
+	* Spring security handles common vulnerabilities.
+	  1) Session fixation : attacker can hijack user's session.
+	  2) Clickjacking : 
+	  3) Cross site request forgery : 
+	* Using spring security , you can do : 
+	  1) Username / password authenitcation
+	  2) SSO / Okta  / LDAP
+	  3) App level Authorization
+	  4) Intra App Authorization like OAuth
+	  5) Microservices security (using tokens, JWT)
+	  6) Method level security
+	* Authentication : Who are you ?. Knowledge based (username/password , pincode) , Possesssion based (Phone/Text message, Id card) , Multi factor
+	* Authorization :  What can you do ? 
+	* Principal : Currently logged in user
+	* Granted Authority : Allowed permission to the authenticated user.
+	* Role : Group of authorities
+    * Spring Security default behaviour in spring boot (After adding spring-boot-starter-security dependency)
+		* Adds mandatory authentication for all URLs.
+		* Adds login form.
+		* Handle login error
+		* Creates a user and sets a default password. (Spring secrity generates a new password each time you start the app).
+	    * To override user and password for Spring Security default behaviour, configure spring.security.user.name, spring.security.user.password in properties file.
+	* Configure Authentication Manager and Authorization: 
+	     @EnableWebSecurity
+		 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+			 @Autowired
+			 private DataSource dataSource;
+			 @Autowired
+			 private UserDetailsService userDetailsService;
+			 
+			 @Override	 // 1) Configure Authentication Manager
+			 protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+				// Approach1: inMemoryAuthentication provider OR
+				auth.inMemoryAuthentication()
+					.withUser("user").password(passwordEncoder().encode("password")).roles("USER")
+					//.withUser("user").password("{noop}password").roles("USER")    // If password encoder bean is not configured
+					.and()
+					.withUser("admin").password("$2a$10$CrCNsBq/yD3.165JMlYcsuH1Oppmt8k.Tnq22KrHD2Wdhs7QP9Jcy").roles("ADMIN", "USER"); 
+					
+				// Approach2: DAO Authentication provider using UserDetailsService Impl OR
+				auth.userDetailsService(userDetailsService);		
+				
+				// Approach3: JDBC Authentication provider
+				auth.jdbcAuthentication()
+					.dataSource(dataSource)
+					.usersByUsernameQuery("select username,password,enabled from users where username = ? ")
+					.authoritiesByUsernameQuery("select username,authority from authorities where username = ? ");
+			}
+			
+			@Override	// 2) Configure Authorization
+			protected void configure(HttpSecurity http) throws Exception {
+				http.authorizeRequests()
+					.antMatchers("/admin").hasRole("ADMIN")
+					.antMatchers("/user").hasAnyRole("USER", "ADMIN")
+					.antMatchers("/", "/authenticate").permitAll()
+					.anyRequest().authenticated()
+					.and()
+					.formLogin(); 
+			}
+			@Bean
+			public PasswordEncoder passwordEncoder() {
+				return new BCryptPasswordEncoder();
+			}
+	 }
+	 
+8.2) JWT (JSON Web Token) Authorization : 	 
+	* 
+	  
+8.3) Spring Cloud security using OAuth : @EnableAuthorizationServer, @EnableResourceServer, @EnableOAuth2Client
+	* OAuth is an open authorization protocol,which allows accessing and sharing of resources on one site with another site without using their credentials.
+	* OAuth2 is a protocol for token basded authorization.
+	* It's a way of delegate access without sharing credencials. It can grant a client to perform certain action on behalf of user.
+	* We can have 3rd party oAuth providers such as Google,Facebook,Github or own oAuth server.
+	* OAuth2  terminologies : 
+	  1) Resourse : Protected resource which client needs to access. e.g freecharge client needed profile,mailId of google to login into freecharge using google account.
+	  2) Resourse Owner : An entity capable of granting access to a protected resource. e.g google account holder who can grant access of his google accont's
+  	     protected resorces to login into freecharge using google account.
+	  3) Resourse Server : The server hosting the protected resources. e.g google server
+	  4) Client : An application making protected resource reqqest on behalf of the resource owner and with its authorization. e.g freecharge app server.
+	  5) Authorization Server : The server that issuing access tokens to the client.
+	  6) Grant Types : Authorization Code (Auth token & Aceess token), Implicit (Access token only), Password, Device Code
 
 ---------- Spring ----------  
 - Spring is Java EE framework which is based on two design principles : Dependecy Injection and Aspect oriented programing.
@@ -173,7 +265,15 @@
 - Spring favors interface class separation.
 - By IoC principle, "control of object creation is inverted to framework".Spring IoC container control and manages the lifecyce of spring bean objects.
 - Throgh DI pattern, You can implement IoC to achieve loose coupling.In DI ,Object should have dependencies injected into them instead of creating them.
-- IoC container : 1) BeanFactory 2) ApplicationContext (built on top of BeanFactory with some extra functionalities)
+- IoC container : 
+  1) BeanFactory : 
+     * root interface for accessing the Spring container.
+	 * implementations use lazy loading,which means that beans are only instantiating when we directly calling them through the getBean() method.
+  2) ApplicationContext : 
+     * built on top of BeanFactory.
+	 * extra functionalities : Automatic BeanPostProcessor and BeanFactoryPostProcessor registration, Convenient MessageSource access (for i18n), 
+	   ApplicationEvent publication
+	 * It uses eager loading, so every bean instantiate after the ApplicationContext is started up.  
 - Spring Bean : POJO class object that is initialized through Spring container. 
 - Spring Bean scopes : singleton (default), prototype, request, session, global-session.
 -* shared instance variables can create data inconsistency issue in singleton bean.
@@ -184,7 +284,7 @@
 - Bean can be created through Annotation based/XML based/Java based configuration.
 - To handle resource during spring bean life cycle, you can use : 1) InitializingBean (for post-initialization) and DisposableBean (for pre-destroy)
   2) init-method and destroy-method attibute in Bean tag 3) @PostConstruct and @PreDestroy
-- "BeanPostProcessor" is used to provide some logic beofre or after bean initialization for all beans.It is used to provide common logic for all beans.
+- "BeanPostProcessor" is used to provide some logic before or after bean initialization for all beans.It is used to provide common logic for all beans.
    Method execution seq : BeanPostProcessor's postProcessBeforeInitialization -> init method of indiviual bean -> 
    BeanPostProcessor's postProcessAfterInitialization -> destroy method of indiviual bean 
 - Spring Aware interfaces (similar to servlet listeners) are used to inject "Spring framework beans" in our custom bean to perform some specific tasks.
@@ -228,6 +328,3 @@
 - If mutliple view resolver are configured, “order” property is used to set priority. (lower value : high priority)
 - LocaleResolver  : SessionLocaleResolver,LocaleChangeInterceptor 
 - BeanNameUrlHandlerMapping and SimpleUrlHandlerMapping.
-- SpringSecurity is used to provide Athentication and Authorization.
-- OAuth is an open authorization protocol,which allows accessing and sharing of resources on one site with another site without using their credentials.
-- Resource Owner, Resource Server, Client Application, Authorization Server

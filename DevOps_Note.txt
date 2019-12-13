@@ -100,7 +100,7 @@ git clone git@github.com:UserName/Demo.git	// To create local repository and clo
 git add Demofile1.txt  // To add file to the staging area.Before commit,file needs to be added to the Git index (staging area)
 git add -A			   // OR git add . : to add all files 
 git commit -m "adding first commit into local repo" 	// To commit file into local repo
-git commit -a -m "commiting all file together"  		//To commit allo file
+git commit -a -m "commiting all file together"  		//To commit all file
 git status				// to check the state of repository
 git log
 git log --oneline
@@ -156,84 +156,3 @@ git config --global user.email "mail@id.com"
 ------------------------------------------------------------------------
 01_DevOps -> 01_DevOps Tutorial For Beginners - DevOps Training - DevOps Tools - Edureka : Pending from 43 min
 
---------------
-Docker
---------------
-Note : Edureka till 5 done
-Account : docerId : username Mail Id : mail@gmail.com
-- Note : For Window7, add C:\Program Files\Docker Toolbox into path variable.
-- Virtualization : process of creating a guest OS (Virtul machine) on a top of host OS.It is a virtualization at hardware level.
-  Host OS -> Hypervisor (Virtual machine monitor) -> VM1(Guest OS -> App1) |  VM2(Guest OS -> App2) 
-- Pros : Multiple OS in same machine. Cons : Unsatable performance.Wastage of resource.Long boot-up process.
-- Containerization (Container based) is an OS level virtualization method for deploying and running distributed applications without launching an entire VM for
-  each application. Host OS -> Docker Engine -> Container1(App1) | Container2(App2)
-- Cons : Container on same host OS are lighter and smaller.Better resource utilization. Short boot-up process.
-- Docker is a container management service.(Build, Ship and Run).It is designed to make it easier to create,deploy and run applications by using containers.
-- Docker containers are lightweight alernatives to virtual machines and uses the host OS.You don't have to pre-allocate any RAM in containers.
-- Docker engine is a heart of docker system. Docker client <-- Rest API --> Docker Host (Docker Daemon)
-- Docker image is readonly template which is used to create container.Stored in Docker Hub or your local registry. (using build command)
-- Docker image is the collection of all files, libraries, binaries and other dependencies forming an executable software application.
-- Docker container is an isolated application platform.It contains everthing needed to run the application.It can be build from one and more images.
-- Docker registry is a storage component for Docker images.We can store the images in either public/private repositories.
-- Docker Hub is docker's own cloud repository.
-- Docker Architecture : 
-	        Client 								Docker Host						Registry
- (docker build | pull | run)		Docker Daemon, Containers and Images	
-- Docker daemon : Runs on host machine.It creates and manages docker objects : Images,containers,Networks,Volumes,data etc
-- Docker client : Primary user interface to Docker.It accepts commands from the user and communicates back and forth with a Docker daemon.
-- Docker file : It contains instruction for building a Docker image.
-  FROM : It inidicates the base image from which the container is built.
-  RUN : It indicates the command that needs to be executed on the image.
-  ADD : 
-  EXPOSE : to delcare port
-  ENTRYPOINT : 
-- Docker compose makes it easier to configure and run applications made up  of mutliple containers.e.g by defining web app and DB containers configration 
-  in one YAML file and then running those contected containers with a single command.
-- Docker swarm provides native clustering capabilities to turn a group of Docker engines into a single, virtual Docker Engine.
-
-
-- Commands (DockerId : username) : 
-docker --version
-docker --help
-docker login								// to pull and push images from Docker Hub 
-docker pull <ImgName:tag>					// to pull a docker image from Docker Hub.tag optional and default is latest
-docker tag <LocImgName:Tag> <DocId>/<Repo:Tag>	| Here Tag is Optional
-docker push <DocId>/<RepoName:Tag>			    | to push a docker image into Docker Hub. DocId is DocerId 
-docker run <ImgName:Tag>/<Id>				// to run that image
-docker run -p <H-port>:<C-port> <ImgName>	// H:host, C:Container
-docker images 								// to list down all images
-docker history <ImgName/Id>					// to see all the commands that were run with an image 
-docker inspect <ImgName/Id>					// to see the details of an image or container. 
-docker ps									// to list down all the running containers
-docker ps -a				    			// to list down all the containers (even if they are not running)
-docker build -t <ImgName:Tag> .				// to build an image OR 
-docker build -f Dockerfile -t <ImgName> .	// to build an image
-docker rmi <ImgName/Id>						// to delete the image
-docker start <ContId>						// to start the container
-docker stop <ContId>						// to stop the container
-docker kill <ContId>						// to stop the container forcefully
-docker rm <ContId>							// to delete the container OR 
-docker container run <ContId>				// to run container
-docker container start <ContId>				// to start container
-docker container stop <ContId>				// to stop container
-docker container kill <ContId>				// to kill runnig container
-docker container rm <ContId>				// to delete the container
-docker container logs <ContId>				// to check log of container
-docker exec -it <ContId> bash				// to access running container and perform operations inside the container
-docker commit <ContId> <DocId>/<ImgName>	// to creates a new image of an edited container on local repo
-docker export --output="backup" <ContId> 	// to export a docker image into a tar file (.tgz) in your local repo
-docker import dir/backup.tgz  				// to import a docker image into your local repo
-
-docker-compose build						| to run multiple container applications Note : this command is exected in 
-docker-compose up							| the directory where YML file is present for building the Compose
-
-docker swarm init -advertise-addr 192.168.1.100 | this commands creates a network of Docker engines/hosts to execute containers
-docker swarm join								| in parallel (for scalling up and high availability)
-docker swarm join-token							|
-docker swarm leave							    |
-docker service ls
-docker service ps
-docker service scale
-docker service stop
-docker service logs
-docker service rm 

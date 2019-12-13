@@ -18,14 +18,12 @@
   1) Small Focused (Componentization)
   2) Loosely coupled (Decoupling) 
   3) Langauage Neutral 
-  4) Bounded context
-  5) Business Capabilities
-  6) Autonomy (less dependent on cross team solution)
-  7) Continous Delievery
-  8) Responsibility (single business capability)
-  9) Decentralized Governance
- 10) Agility 
- 11 Products not projects
+  4) Bounded context  (single business capability)
+  5) Autonomy (less dependent on cross team solution)
+  6) Continous Delievery
+  7) Decentralized Governance
+  8) Agility 
+  9) Products not projects
 - Best practices to design microservices : 
  * Seprate data store for each microservices
  * Seprate build for each microservices

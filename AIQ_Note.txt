@@ -191,8 +191,7 @@ Cygnet
 General
 ----------
 * how to resolve cyclic dependecy in spring bean configuration.
-* Impl Observer Pattern.
-* 
+* Impl Observer Pattern. 
  
 
  

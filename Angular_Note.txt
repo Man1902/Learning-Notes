@@ -31,55 +31,97 @@ my-angular-app
 - Three ways to specify selectors : 1) selector: 'home' && <home></home> 2) selector: '.home' && <div class="home"> 3) selector: '[home]' && <div home>
 - Inline template : template : "<div> Hello </div>" or template :`-<div> Hello </div>` (for multiple lines)
 - Inline styles : styles : [`div { color : red}`]
-- Data binding in Angular refers to binding the data in the component instance to the HTML template.Any changes to the data automatically get updated in the view.
-- setInterval is a javascript API that lets you run a function at regular time intervals. setInterval( () => { console.log("Hello") } , 2000);
-- Template interpolation : {{ userName }} , {{ getFullName() }} , {{ count + 1 }}
-- *ngFor directive is used to iterator over array e.g <p *ngFor="let phoneNo of user.phone ">{{ phoneNo }}</p>
-- *ngIf directive is used for conditional check e.g  <div *ngIf="user.phone.length > 0">
-- ngSwitch : 
-  <div [ngSwitch]="color">
-	<div *ngSwitchCase="'red'"> Red Color </div>
-	<div *ngSwitchCase="'blue'"> Blue Color </div>
-	<div *ngSwitchCaseDefault> Select again </div>
-  </div>
-  
-- @Input is used (inside ts file) to bind "attribute" of component selector. (for property biniding) e.g 
-  <app-address-card userName="Vishal Gana"></app-address-card> (in html file)
-  @Input('userName') userName: string; (in ts file). 
-  This userName value can't be used inside constructor of ts class. as Angular will populate component's attrribute value after creation of component.
-  However we can use it inside ngOnInit life cycle method. 
+- Data binding (Property binding) in Angular refers to binding the data in the component instance to the HTML template.Any changes to the data automatically get
+  updated in the view.
 - One way databinding : <input type="text" [value]="userName" > or <input type="text" [ngModel]="userName" > or <app-address-card [user]="userFromAppComp" />
 - Two way databinding : <input type="text" [(ngModel)]="userName" >  // Syntax : [(ngModel)] or <app-address-card [(user)]="userFromAppComp" />
 - To use ngModel directive for databinding, You have to import "FormsModule" in app.module.ts file.
+- Event binding : <button (click)="eventHandler($event)" >Click</button>  (in html) // $event optional
+  eventHandler(event) { // method llogic }		(in component ts file)
+- Template interpolation : {{ userName }} , {{ getFullName() }} , {{ count + 1 }}
 - Interpolation {{ }} lets you render the property value as text; property binding [ ] lets you use the property value in a template expression.
+- @Input is used (inside ts file) to bind "attribute" of component selector. (to pass data from parent comp to child comp) e.g 
+  <app-address-card userName="Vishal Gana"></app-address-card>  OR (in html file)
+  <app-address-card [userName]="userNameFromParentComp"></app-address-card>
+  @Input('userName') userName: string; (in ts file). 
+  This userName value can't be used inside constructor of ts class. as Angular will populate component's attrribute value after creation of component.
+  However we can use it inside ngOnInit life cycle method. 
 - To notify parent from child : 
   1) Inside child : 
 	  @Output() notify = new EventEmitter();
-	  onChildCompBtnClick(){
+	  onChildCompBtnClick(event){
 			notify.emit();
 			// child comp logic
 	  }
-	  <button (click)="onChildCompBtnClick()" >Child Click </button>  OR
+	  <button (click)="onChildCompBtnClick($event)" >Child Click </button> OR
 	  <button (click)="notify.emit()" >Child Click </button>  
   2) Inside parent : 
 	 <child-comp (notify)="onNotify()" ></child-comp>
 	 onNotify(){
 			// parent comp logic
 	 }
+- Template reference variable : 
+  <input #myInput type="text>
+  <button (click)="logMessage(myInput.value)" > Log </button>
+- CSS Class binding : <div class="success-class"></div> OR <div [class]="succClassFromComp"></div>
+  Conditional : 1) <div [class.isError]="errClassFromComp"></div> (if isError comp property is true) 
+                2) <div [ngClass]="cssClassObj"></div> , cssClassObj = {succClss : !this.isError , errClss : this.isError}
+- CSS Style bindining : <div [style.color]="'red'"></div> OR <div [style.color]="colorFromComp"></div> 
+  <div [style.color]="hasError ? 'red' : 'green'"></div> 
+  <div [ngStyle]="styleObjFromComp"></div> , styleObjFromComp = {color : "red" , fontStyle : "italic" }
 - If you will add style details in component's css file. It will be applied on that component only. To add global styling add it into src/style.css file.
+- setInterval is a javascript API that lets you run a function at regular time intervals. setInterval( () => { console.log("Hello") } , 2000);
+- Structural directives : 
+  1) *ngFor directive is used to iterator over array e.g <p *ngFor="let phoneNo of user.phone; index as i">{{ i + 1 }} {{ phoneNo }}</p>
+  2) *ngIf directive is used for conditional check e.g  
+     <div *ngIf="user.phone.length > 0; else elseBlock"> User Details </div>  OR
+	 <div *ngIf="displayName; then thenBlock; else elseBlock;"></div> 
+	 <ng-template #elseBlock> <h2>Else block content<h2> </ng-template>
+  3) ngSwitch : 
+	  <div [ngSwitch]="color">
+		<div *ngSwitchCase="'red'"> Red Color </div>
+		<div *ngSwitchCase="'blue'"> Blue Color </div>
+		<div *ngSwitchCaseDefault> Select again </div>
+	  </div>
+- Built in pipe : 
+  1) <h2> {{ name | lowercase }} </h2>	  
+  2) <h2> {{ name | upperrcase }} </h2>	  
+  3) <h2> {{ name | titlecase }} </h2>	  
+  4) <h2> {{ name | slice:3 }} </h2> OR <h2> {{ name | slice:3:7 }} </h2>		  
+  5) <h2> {{ 5.67 | number:'2.2-3' }} </h2>	  // 05.670
+  6) <h2> {{ 0.25 | percent }} </h2>	  // 25%
+  7) <h2> {{ 0.25 | currency }} </h2>	// $0.25 OR <h2> {{ 0.25 | currency:'EUR' }} </h2> OR <h2> {{ 0.25 | currency:'EUR':'code'  }} </h2>
+  8) <h2> {{ date | date:'short' }} </h2> OR <h2> {{ date | date:'shortDate' }} </h2> OR <h2> {{ date | date:'shortTime' }} </h2>
+- ng g pipe truncate : to create custom pipe
 - ng generate module view			        :  to create new module
   ng generate component view/view-component : to create new component in specific module (Here it is view module)
 - If you are creating new module and you want to allow its usage in other module also than you have to export it's component e.g  exports: [ViewModuleComponent] 
   and in dependent module you have to import that module e.g imports : [ViewModule]
 - ng generate service test		: to create new service 
 - @Component() : Angular component, @NgModule() : Angular module, @Injectable() : Angular service
-- To use service in your module,You have to explicitly decalre it inside module.ts file. e.g  providers: [TestService]. Here, We don't have to declare it for 
-  it's child modules also.(global service space)
+- To use service in your module,Befeor Angular 6, You have to explicitly decalre it inside module.ts file. e.g  providers: [TestService]. Here, We don't have to declare it for 
+  it's child modules also.(global service space). After Angular 6 , you can declare it using @Injectable({ providedIn : 'root' }) 
+- The providers property of @NgModule lets you specify the services or providers that you want to declare for your Angular App.
 - To use service inside component, You have to define it inside constructor.Angular will automatically inject Service dependency. e.g 
   constructor(private testService: TestService) { }
+- @Injectable() in service is must required if our service has dependency on another service.
 - To use built in HttpClient service, you have to import HttpClientModule.
-  let observableObj = this.http.get('https://api.github.com/users/koushikkothagal');
-  observableObj.subscribe((response) => console.log(response));
+- Observables : A sequence of items that arrives aynchronously ovr time. HTTP call - sinlge Item (HTTP response)
+  1) let observableObj = this.http.get('https://api.github.com/users/koushikkothagal');
+	 observableObj.subscribe((response) => console.log(response));
+  2) Inside EmployeeService : 
+		 getEmployees() : Observable<IEmployee[]> {
+			return this.http.get<IEmployee[]>(this.url)
+			                .catch(this.errorHandler);
+		 }	 
+		 errorHandler(error : HttpErrorResponse){
+			return Observable.throw(error.message || "Server Error");
+		 }
+     Inside EmployeeDetails comp : 
+	     public employees = [];
+		 ngOnInit(){
+			this.employeeService.getEmployees().subscribe(data => this.employees = data , error => this.errorMsg = error );
+		 }
 - ng build is used to build and package angular app into dist folder which can later be hosted using http-server. Here we don't need ng serve to start the app.
   1) ng build or ng build --prod  2) http-server dist/my-app/ 
 - ng new routing-demo --routing		:  to create new project with routing support
@@ -98,7 +140,7 @@ const routes: Route[] = [
       { path: '', redirectTo: 'profile' , pathMatch: 'full' },
       { path: 'profile', component: SettingsProfileComponent },
       { path: 'contacts', component: SettingsContactsComponent },
-	  { path: 'contacts/:contactId', component: SettingsContactsComponent },
+	  { path: 'contacts/:contactId', component: ContactComponent },
       { path: '**', component : PageNotFoundComponent } // for error handling
     ]
   },
@@ -110,13 +152,21 @@ const routes: Route[] = [
 })
 export class AppRoutingModule { }
 - In html file you have to add <router-outlet></router-outlet> to render routing view
-- for routing link yo can use : <a *ngFor="let route of routes" [routerLink]="route.url"> {{ route.linkName }} </a>  OR 
-  <a [routerLink]="homeLink">Settings</a> // value from ts file  OR <a routerLink="home">Home</a> // hardcoded value OR
+- for routing link you can use : <a *ngFor="let route of routes" [routerLink]="route.url"> {{ route.linkName }} </a>  OR 
+  <a routerLink="home" routerLinkActive="activeClass">Home</a> // hardcoded value OR
+  <a [routerLink]="homeLink">Home</a> // value from ts file  OR 
   <a [routerLink]="['contacts', contactId">Settings</a>
-- ActivatedRoute (can be used inside ts file) is specific to each routed component loaded by the Angular Router.It contains information about the route, its 
-	parameters, and additional data associated with the route.  
-- The providers property of @NgModule lets you specify the services or providers that you want to declare for your Angular App.
-
+- Router service :  to navigate from code with router parameter e.g  { path: 'departments/:id', component: DeptDetailComponent }
+  onDeptSelect(dept){	// Inside dept list comp
+		this.router.navigate(["/departments",dept.id]);		// provide Router service dependency inside constructor
+  }  
+- ActivatedRoute service : contains information about the route, its parameters, and additional data associated with the route.  
+  ngOnInit() {	// Inside dept detail comp
+		this.activatedRoute.paramMap.sbscribe((params : ParamMap) => {
+			let id = params.get("id");
+			this.deptId = id;
+		});
+  }
    
 - Commands : 
   npm install -g @angular/cli 		// To install angular CLI
@@ -124,6 +174,7 @@ export class AppRoutingModule { }
   ng new first-project				// To create new project
   ng serve							// to start angualr application on http://localhost:4200/
   ng generate component hello-world  or ng g c hello-word 	// to create new component 
+  ng g c employee --it --is 		// comp with inline style and css 
   ng generate module view			// to create new module
   ng generate component view/view-component		//  to create new component in specific module (Here it is view module)
   ng generate service test 			// to create new service

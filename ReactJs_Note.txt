@@ -52,7 +52,7 @@
   3) When yo have to update the state based on the the previous state value, pass in a function as an arg instead of  the regular object.
 - Object destructuring   : const { firstName,lastName } = this.props;
 - Event Handling in FC : <button onClick={clickHandler}>FunctionClick</button>  (Define function inside {}. Don't invoke it)
-- Event Handling in CC : <button onClick={this.clickHandler}>ClassClick</button> (without se of this inside clickHandler method)
+- Event Handling in CC : <button onClick={this.clickHandler}>ClassClick</button> (without use of this inside clickHandler method)
 - Binding event handler in CC to use this keyeord inside event handler
   1) <button onClick={this.clickHandler.bind(this)}>ClassClick</button>				// Inline using  bind method
   2) <button onClick={() => this.clickHandler()} > EventBind - Click</button>		// using arrow fn

@@ -37,25 +37,24 @@
   2) If no partition is specified in the record,but a key is present, choose a partition based on a hash of a key
   3) If no partition or key is present, choose a partition in a round-robin fashion.
 - To provide Custom Partitioner , implement Partitioner interface.
-- To provide Custom Partitioner , implement Partitioner interface.
 - Prdoucer conig properties : 
   1) bootstrap.servers=localhost:9092,localhost:9093
   2) key.serializer=org.apache.kafka.common.serialization.StringSerializer
   3) value.serializer=org.apache.kafka.common.serialization.StringSerializer
      value.serializer=com.learing.kafka.producer.CustomSerializer
   4) partitioner.class=com.learing.kafka.producer.CustomPartitioner			 // to provide custom partitioner class
-  5) acks = 0	// 0   : No Ack.Possible loss og messages.High throughput.No Retries.	
+  5) acks = 0	// 0   : No Ack.Possible loss of messages.High throughput.No Retries.	
 			    // 1   : only leader will ack.  
 				// All : leader will ack after receiving ack from all replica.gives you highest reliability while cost you hightest latency.
   6) retries=0   
   7) max.in.flight.requests.per.connection=5	// default is 5. used to allow no of msessages to be send without receiving response(ack).
-- Consumer Group : used to read and process data in paallel.
+- Consumer Group : used to read and process data in parallel.
 - Partitions : are never shared amomng members of same group at the same time.
 - Group Coordinator : maintains a list of active consumers.Initiates a rebalance activity.Communicate about new assignment to consumers.
 - Rebalance : Initiated when the list of consumers is modified
 - Group leader : executes a rebalance activity. Sends new partition assignment to coordinator.
 - Current Offset : Sent Records. Used to avoid resending same record to the same consumer.  
-- Committed Offset : Processed Records.Used to avoid resending same same  to the new consumer in the event of partition Rebalance. 
+- Committed Offset : Processed Records.Used to avoid resending same record to the new consumer in the event of partition Rebalance. 
 1) Auto commit : 
   * enable.auto.commit=true (default)
   * auto.commit.interval.ms=5 (default). kafka will commit your current offset every 5 sec

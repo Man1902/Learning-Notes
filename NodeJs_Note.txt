@@ -20,7 +20,7 @@
 		// module code
   })
   
-- Node buil in Modules : 
+- Node built in Modules : 
 1) os : 
 - Provides information about the operation system . 
    var os = require('os');

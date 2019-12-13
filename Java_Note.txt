@@ -38,7 +38,7 @@
 -* All static components are stored inside single "class level object" (of type java.lang.Class).(common for all objects).
 - Non-static components are stored inside the object memory where each object will have their own copy.
 -* In constructor,1st statement must be either super() or this().After executing it,it will invoke IIB and after that remaining statements are executed.
-- OOP principles : 1) Inheritance 2) Polymorphism 3) Abstraction 4) Encapsulation 5) Association 6) Aggregation 7) Aggregation
+- OOP principles : 1) Inheritance 2) Polymorphism 3) Abstraction 4) Encapsulation 5) Association 6) Aggregation 7) Composition
 1) Inheritance : IS-A relationship
    * used to to reuse already present tried and tested code.
    * Constructors,SIB and IIB of super class will not be inheriting.But they are executed while creating an object to sub class.(Order : SIB,IIB,Constructor)
