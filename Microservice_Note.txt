@@ -1,41 +1,33 @@
 - Monolitihc Architecture is like a big container wherein all the software components of an application are assembled together and tightly packaged.  
 - Monolitihc Architecture Cons / Problems  : 
- * Large and complex application : modularity breaks down.Difficult to understand and implement the new changes. Qality of code decline over time.
+ * Large and complex application : modularity breaks down.Difficult to understand and implement the new changes. Quality of code decline over time.
  * Slow development : As application grow in size,it is difficult to understand and modify. Makes developer less productive.
- * Block continuous deployment : In order to update one component, need to redploy whole application.
+ * Block continuous deployment : In order to update one component, need to redeploy whole application.
  * Unscalable (as some compoments are CPU insentive and some are Memory insentive).Each components can not be scale individually.
  * Unreliable (as all component are tighly coupled).If one service fails, It will lead down fall of the entire application.
  * Inflexible (Difficult to adopt new framewrok/language)
 - Microservices is an architectural style that structures an application as a collection of small autonomous services, modelled around a business domain.
-- In Microservices Architecture,each service is self-contained and implements a single business capability.
-- Advantages of Microservices Architecture :
- * Independent Development (Easy to build and Maintain)
- * Independent Deployment (Continuous Delievery)
- * Fault Isolation
- * Mixed technology stack
- * Granular scaling (single service can be easily scale up without having to scale the entire application)
-- Features of Microservices Architecture : 
-  1) Small Focused (Componentization)
-  2) Loosely coupled (Decoupling) 
-  3) Langauage Neutral 
-  4) Bounded context  (single business capability)
-  5) Autonomy (less dependent on cross team solution)
-  6) Continous Delievery
+- Advantages / Features of Microservices Architecture :
+  1) Independent Development (Easy to build and Maintain).Loosely coupled (Decoupling)
+  2) Independent Deployment (Continuous Delievery)
+  3) Fault Isolation
+  4) Mixed technology stack (Langauage Neutral)
+  5) Granular scaling (single service can be easily scale up without having to scale the entire application)
+  6) Small Focused / Bounded context (Componentization) : single business capability
   7) Decentralized Governance
-  8) Agility 
-  9) Products not projects
 - Best practices to design microservices : 
  * Seprate data store for each microservices
  * Seprate build for each microservices
  * Deploy in container
  * Treat servers a stateless
 - Challangges with Microservices : 
- * Configuration management
- * Debugging 
- * Consistency
- * Automating the components
- * Dynamic Scale Up and Scale Down
- * Fault Tolerance
+  1) To identify Bounded Contexnt
+  2) Configuration management
+  3) Visibility / Debugging : Centeralize logging and monitoring
+  4) Fault Tolerance
+  5) Automating the components (Build,Deployment,monitoring etc)
+  6) Dynamic Scale Up and Scale Down
+  7) Consistency
  
 				SOA																Microservices
 * Follows “share-as-much-as-possible” architecture approach		* Follows “share-as-little-as-possible” architecture approach
@@ -52,6 +44,32 @@
 * Uses Middleware for communication (Messaging Middleware)		* Uses API layer for communication (e.g REST)
 - Cohesion refers to the degree to which the elements inside a module belong together.Good design has high cohrsion and low coupling.
 
+- Microservices architecture patterns :  
+1) Decomposition : 
+   1) Decompose by business capability : 
+   2) Decompose by subdomain : 
+   3) Self-contained Service : 
+   4) Service per team : 
+2) Data management :    
+   1) Database per service : 
+      * Keep each microservice’s persistent data private to that service and accessible only via its API. A service’s transactions only involve its database.
+	    * Private-tables-per-service – each service owns a set of tables that must only be accessed by that service
+        * Schema-per-service – each service has a database schema that’s private to that service
+        * Database-server-per-service – each service has it’s own database server.
+	  * benefits : 
+        * Helps ensure that the services are loosely coupled. Changes to one service’s database does not impact any other services.
+	    * Each service can use the type of database that is best suited to its needs.
+      * drawbacks : 	 
+	    * Implementing business transactions that span multiple services is not straightforward. Distributed transactions are best avoided because of the CAP theorem. 
+		* Implementing queries that join data that is now in multiple databases is challenging.
+   2) Shared database : 
+      * Use a (single) database that is shared by multiple services. Each service freely accesses data owned by other services using local ACID transactions.
+      * benefits : developer uses familiar and straightforward ACID transactions to enforce data consistency.single database is simpler to operate
+      * drawbacks  : 
+        * Development time coupling (when schema changes happen)
+		* Runtime coupling : because all services access the same database they can potentially interfere with one another (lock issue)
+   3) Saga : 
+      * 
 - Patterns for distributed transactions within a microservices architecture : 
 1) 2pc (two-phase commit) : 
 - It has two phases: A prepare phase and a commit phase.
@@ -73,10 +91,32 @@
   It does not have read isolation.
 - To address the complexity issue of the Saga pattern, it is quite normal to add a process manager as an orchestrator. The process manager is responsible for 
   listening to events and triggering endpoints.
----------------------------------
-- Design pattern used in Microservice Architecture (e.g Service Discovery and Registry)
-- Distributed transactions management in microservices(Patterns for distributed transactions within a microservices architecture)
-- Fault toerance
-- Security across distributed services
-- Configuration Server
-----------------------------
+--------------------------------------------------------
+- 12 Factor App  (best practices for cloud native app):
+1) Codebase : 
+   * One codebase tracked in revision control(VCS), many deploys.
+2) Dependencies : 
+   * Explicitly declare and isolate dependencies.
+3) Config : 
+   * Store config in the environment.
+4) Backing service : 
+   * Treat backing services as attached resources.
+   * It can be configurable and can be switch easily from one backing service to other one by changig configuration. 
+5) Build, release, run : 
+   * strictly seprate build and run stages.
+   * Should be independent of environment.
+6) Processes : 
+   * Execute app as one or more stateless processes.
+7) Port binding : 
+   * Export services via port binding
+8) Concurrency : 
+   * Scale out via the process model. Vertical or Horizontal scaling.
+9) Disposability : 
+   * Maximize robustness with fast startup and graceful shutdown.
+10)Dev/Prod parity : 
+   * Keep development, staging, and production as similar as possible.
+11)Logs : 
+   * Treat logs as event streams.
+12)Admin processes : 
+   * Run admin/management tasks as one-offf processes.
+   

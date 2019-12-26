@@ -106,8 +106,9 @@
 	  eureka.client.serviceUrl.defaultZone  = http://localhost:8761/eureka (Optional)
 	  eureka.instance.instance-id=${spring.application.name}-${random.int}  // if server port is 0
 
-2) Zuul Proxy Server/Edge Server : API Gateway /Routing : 
+2.1) Zuul Proxy Server/Edge Server : API Gateway /Routing : 
    * It is a gateway application that handles all the requests and does the dynamic routing of microservice applications.
+   * It does not support reactive programming.
    * Add spring-cloud-starter-netflix-zuul dependency and @EnableZuulProxy. 
 	  spring.application.name=zuul-server	
 	  server.port=9090
@@ -119,6 +120,9 @@
 	  zuul.routes.order-service.service-id=order-service 
    * Here, http://localhost:9090/api/customer-service/customers will be redirectted to http://customer-service/customers or http://localhost:9091/customers
 
+2.2) Spring Cloud Gateway :   
+   * Add spring-cloud-starter-gateway dependency
+   
 3) Configuration Server :
    * It is a centralized application that manages all the application related configuration properties.
    * place your client config file in given folder with name as config-client.properties (config-client is name of client app)
@@ -127,27 +131,39 @@
 	   spring.application.name=config-server
 	   server.port=8090
 	   #spring.cloud.config.server.git.uri=https://github.com/spring-cloud-samples/config-repo		# OR
+	   #spring.cloud.config.server.git.uri=${HOME}/config-repo		# local git repo OR
 	   spring.cloud.config.server.native.searchLocations=classpath:/configs
 	   spring.profiles.active=native
    * Configuration Client : 
-     * Add spring-cloud-starter-config dependency and @RefreshScope
+     * Add spring-cloud-starter-config, spring-boot-starter-actuator dependency and @RefreshScope
 		   spring.application.name=customer-service
 		   server.port=9091
 		   spring.cloud.config.uri = http://localhost:8090
-	 * use http://localhost:9091/refresh  link to get updated properties
+		   management.security.enabled = false
+	 * use http://localhost:9091/refresh  actuator link (post method) to get updated properties
   
-4) Hystrix : Fault tolerance / Circuit braker : provides fallback option.
-   * Add spring-cloud-starter-hystrix dependency and @EnableHystrix OR @EnableCircuitBreaker OR and @EnableHystrixDashboard (for monitoring)
+4) Hystrix : Fault tolerance / Circuit bre aker : provides fallback option.
+   * Add spring-cloud-starter-hystrix dependency and @EnableHystrix OR @EnableCircuitBreaker 
+     
    * For request API, define @HystrixCommand to provide fallback method
-	   @HytrixCommand(fallbackMethod="failoverMethod") OR 
-	   @HytrixCommand(fallbackMethod="failoverMethod", commamndProperties={
+	   @HytrixCommand(fallbackMethod="greetUserFailOver") OR 
+	   @HytrixCommand(fallbackMethod="greetUserFailOver" , commandKey="greeting" , groupKey ="greeting") OR 
+	   @HytrixCommand(fallbackMethod="greetUserFailOver", commamndProperties={
 			@HytrixProperty(name="execution.isolation.thread.timeoutInMilliseconds", value=500)
 	   })
-   
-5) Spring Cloud Sleuth & ZipKin server : For tracing and monitoring Micro Service Logs   
+	   public String greetUser(String userName){ return "Hello "+userName; }
+	   public String greetUserFailOver(String userName){ return "Default greeting"; }
+   * fallback method has to use the same signature as the ‘original method’.
+   * HystrixDashboard :  To give dashboard view of Hystrix stream for monitoring
+     * Add spring-cloud-starter-hystrix-dashboard,spring-boot-starter-actuator dependency and @EnableHystrixDashboard.
+	 * To access dashboard :  http://localhost:8080/hystrix 
+	 * To monitor any service : http://localhost:8081/hystrix.stream (inside dashboard)
+	 
+5) Spring Cloud Sleuth & ZipKin server : For distributed log tracing and monitoring  in Micro Services
    * Add spring-cloud-starter-sleuth dependency 
    * Spring cloud Sleuth logs are printed in the following format : [application-name,traceid,spanid,zipkin-export] 
      traceid : across MS , spanid :  within MS , zipkin-export : false (default)
+   * It send traceid and spanid by setting it inside headers (e.g X-B3-TraceId , X-B3-SpanId)
    * Zipkin server : (monitors and manages the Spring Cloud Sleuth logs) 
       * Add zipkin-server , zipkin-autoconfigure-ui dependencies and @EnableZipkinServer
 	  * Accces server : http://localhost:9091/zipkin/
@@ -257,6 +273,52 @@
 	  4) Client : An application making protected resource reqqest on behalf of the resource owner and with its authorization. e.g freecharge app server.
 	  5) Authorization Server : The server that issuing access tokens to the client.
 	  6) Grant Types : Authorization Code (Auth token & Aceess token), Implicit (Access token only), Password, Device Code
+	 
+9) Spring Kafka : 
+   * Add spring-kafka dependency.
+   * producer :    
+     1) configure kafkaTemplate and producerFactory bean 
+	    @Bean
+		public KafkaTemplate<String, User> userKafkaTemplate() {
+			return new KafkaTemplate<>(userProducerFactory());
+		}
+	    @Bean
+		public ProducerFactory<String, User> userProducerFactory() {
+			Map<String, Object> config = new HashMap<>();
+			config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "127.0.0.1:9092");
+			config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+			config.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
+			return new DefaultKafkaProducerFactory<>(config);
+		}
+		
+	 2) send message  
+	    userKafkaTemplate.send(TOPIC, user); // OR
+        Map<String, Object> headers = new HashMap<>();
+        headers.put(KafkaHeaders.TOPIC, TOPIC);
+        Message<User> message = new GenericMessage<>(user, headers);
+        userKafkaTemplate.send(message);
+   * consumer : 
+     1) configure ConcurrentKafkaListenerContainerFactory and ConsumerFactory bean
+	    @Bean
+		public ConcurrentKafkaListenerContainerFactory<String, User> userKafkaListenerFactory() {
+			ConcurrentKafkaListenerContainerFactory<String, User> factory = new ConcurrentKafkaListenerContainerFactory<>();
+			factory.setConsumerFactory(userConsumerFactory());
+			return factory;
+		}
+		@Bean
+		public ConsumerFactory<String, User> userConsumerFactory() {
+			Map<String, Object> config = new HashMap<>();
+			config.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "127.0.0.1:9092");
+			config.put(ConsumerConfig.GROUP_ID_CONFIG, "group_json");
+			config.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+			config.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
+			return new DefaultKafkaConsumerFactory<>(config, new StringDeserializer(),new JsonDeserializer<>(User.class));
+		}
+	 2) consume message : 
+	    @KafkaListener(topics = "my-topic1", groupId = "group_json", containerFactory = "userKafkaListenerFactory")
+		public void consumeJson(User user) {
+			System.out.println("Consumed JSON Message: " + user);
+		}
 
 ---------- Spring ----------  
 - Spring is Java EE framework which is based on two design principles : Dependecy Injection and Aspect oriented programing.

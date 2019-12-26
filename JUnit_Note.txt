@@ -27,26 +27,25 @@
 
 --- Current Version 4
 - JUnit is an open-source unit testing framework.
-- To perform unit testing, we need to create test cases. The unit test case is a code which ensures that the program logic works as expected.
-- @Test annotation specifies that method is the test method.
-- @Test(timeout=1000) annotation specifies that method will be failed if it takes longer than 1000 milliseconds (1 second).
-- @Test(expected = Exception.class) is used to test whether the code throws a desired exception or not. 
-- @Ignore is used to ignore the test and that test will not be executed.It can be used at class level also.
-- @BeforeClass annotation specifies that method(public static void method) will be invoked only once, before starting all the tests.
-- @Before annotation specifies that method will be invoked before each test.
-- @After annotation specifies that method will be invoked after each test.
-- @AfterClass annotation specifies that method will be invoked only once, after finishing all the tests.
+- Annotations : 
+  1) @Test                             : specifies method as test method
+  2) @Test(timeout=1000)               :  method will be failed if it takes longer than 1 sec.
+  3) @Test(expected = Exception.class) : used to test whether the code throws a desired exception or not
+  4) @Ignore                           : to ignore the test 
+  5) @BeforeClass                      : (public static void method) to invoke method only once, before starting all the tests
+  6) @Before                           : to invoke method before each test
+  7) @After                            : to invoke method before each test
+  8) @AfterClass                          : to invoke method only once, after finishing all the tests
 - "org.junit.Assert" class provides methods to assert the program logic.
-- The common methods of Assert class : 
-  1) void assertEquals(boolean expected,boolean actual): checks that two primitives/objects are equal. It is overloaded.
-  2) void assertTrue(boolean condition): checks that a condition is true.
-  3) void assertFalse(boolean condition): checks that a condition is false.
-  4) void assertNull(Object obj): checks that object is null.
-  5) void assertNotNull(Object obj): checks that object is not null.
-  6) void assertSame(Object expected, Object actual) : tests if two object references point to the same object.
-  7) void assertNotSame(boolean condition) : tests if two object references do not point to the same object.
-  8) void assertArrayEquals(expectedArray, resultArray) : test whether two arrays are equal to each other.
-- Test suite is used to bundle a few unit test cases and run them together. In JUnit, both @RunWith and @Suite annotations are used to run the suite tests. 
+  1) void assertEquals(boolean expected,boolean actual) // Overloaded
+  2) void assertTrue(boolean condition)
+  3) void assertFalse(boolean condition)
+  4) void assertNull(Object obj)
+  5) void assertNotNull(Object obj)
+  6) void assertSame(Object expected, Object actual)
+  7) void assertNotSame(Object expected, Object actual)
+  8) void assertArrayEquals(expectedArray, resultArray) 
+- Test suite is used to bundle a few unit test cases and run them together.
   e.g @RunWith(Suite.class) 
       @Suite.SuiteClasses({ TestJunit1.class, TestJunit2.class })
 	  public class JunitTestSuite {}  	
@@ -61,53 +60,55 @@
  5) Create your test case(s) using the instance variables as the source of the test data.
 ----------------------- Mockito ------------------------------------
 - Mockito is a mocking framework, JAVA-based library that is used for effective unit testing of JAVA applications.
-- Mockito is used to mock "interfaces" so that a dummy functionality can be added to a mock interface that can be used in unit testing.
-- Mocking is a way to test the functionality of a class in isolation. Mocking does not require a database connection or properties file read or file server read 
-  to test a functionality.Mock objects do the mocking of the real service. A mock object returns a dummy data corresponding to some dummy input passed to it.
 -* It uses Java Reflection in order to create mock objects for a given interface.Mock objects are nothing but proxy for actual implementations.
-- @RunWith : attaches a runner (MockitoJUnitRunner) with the test class to initialize the test data.
-- @Mock : annotation is used to create the mock object to be injected.(To ineject dependent object). We can also user Mockito.mock(ServiceClass.class) static 
-  method  to inject mock object.
-- @InjectMocks : annotation is used to create and inject the mock object.It will inject the mocks marked with @Mock to this instance when it is created.
-  (To create object of Real application class/service for which test cases are created in test class with dependet objects injection)
-- Mockito adds a functionality to a mock object using the methods Mockito.when(). e.g Mockito.when( mockObj.method ).thenReturn( returnVal ) or 
-  Mockito.doReturn(returnVal).when(mockObj).method 
-  Mockito.when(customerDao.save(customerObj)).thenReturn(true) , Mockito.when(customerDao.save(any(Customer.class))).thenReturn(true) , 
-  Mockito.when(calcService.add(10.0,20.0)).thenReturn(30.0) ,   Mockito.doReturn(30.0).when(calcService).add(10.0,20.0);  
-  Mockito.when(calcService.add(anyDouble(),anyDouble())).thenReturn(30.0), Mockito.when(calcService.add(any(Double.class), any(Double.class))).thenReturn(30.00) 
-- However, when there are multiple parameters to a method, we cannot mix matchers and actual objects.We either have to use matchers for all 
-  parameters or should pass in real values or objects.
-- Mockito can ensure whether a mock method is being called with reequired arguments or not using the verify() method. e.g Mockito.verify(calcService).add(10.0, 20.0)
-- Mockito provides a special check on the number of calls that can be made on a particular method. e.g 
-  Mockito.verify(calcService, times(2)).add(10.0, 20.0) , Mockito.verify(calcService, never()).subtract(10.0, 20.0) , Mockito.verify(calcService, atLeastOnce()).subtract(20.0, 10.0)
-  Mockito.verify(calcService, atLeast(2)).add(10.0, 20.0) , Mockito.verify(calcService, atMost(3)).add(10.0,20.0)
-- Mockito provides the capability to a mock , to throw exceptions, so exception handling can be tested.  e.g 
-  Mockito.doThrow(new Exception("Add operation not implemented")).when(calcService).add(10.0,20.0)
-- Mockito provides Inorder class which takes care of the order of method calls that the mock is going to make in due course of its action. e.g 
-  InOrder inOrder = Mockito.inOrder(calcService);
-  inOrder.verify(calcService).add(20.0,10.0);
-  inOrder.verify(calcService).subtract(20.0,10.0);
-- Mockito provides a Answer interface which allows stubbing with generic interface. e.g 
-  Mockito.when(calcService.add(20.0,10.0)).thenAnswer(new Answer<Double>() {
-	@Override
-	public Double answer(InvocationOnMock invocation) throws Throwable {
-	  Object[] args = invocation.getArguments();
-	  Object mock = invocation.getMock();	
-	  return 30.0;
-	}
-  });
-- Mockito provides option to create spy on real objects. When spy is called, then actual method (not stubbed method) of real object is called. e.g 
-  CalcService calcService Mockito.spy(new CalculatorServiceImpl())
-- in spy , we don't need to stub the method using when() , as it will call actual method of real object.
-- Mockito provides the capability to a reset a mock so that it can be reused later. e.g  Mockito.reset(calcService)
-- Mockito provides a special Timeout option to test if a method is called within stipulated time frame. e.g 
-  Mockito.verify(calcService,timeout(1000)).add(20.0,10.0)
+- Annotations : 
+  1) @RunWith : to attaches a runner (MockitoJUnitRunner) with the test class to initialize the test data. e.g 
+     @RunWith(MockitoJUnitRunner.class)  (class level)  OR   @Before public void init() { MockitoAnnotations.initMocks(this); } 
+  2) @Mock : is used to create the mock object OR Mockito.mock(ServiceClass.class) 
+  3) @Spy : is used to allow partial mock.We can mock a part of the object by stubbing few methods, while real method invocations will be used for the other.
+  4) @InjectMocks : to create and inject the mock object of service class for which we are writing test cases.
+1) Mockito.when() : 
+   * to mock behavior of mock object 
+   * Syntex : Mockito.when( mockObj.method ).thenReturn( returnVal ) or Mockito.doReturn(returnVal).when(mockObj).method 
+		1) Mockito.when(customerDao.save(customerObj)).thenReturn(true)
+		2) Mockito.when(customerDao.save(any(Customer.class))).thenReturn(true)
+		3) Mockito.when(calcService.add(10,20)).thenReturn(30)
+		4) Mockito.when(calcService.add(anyDouble(),any(Double.class))).thenReturn(30.0)
+		5) Mockito.when(calcService.add(10,20)).thenThrow(new Exception("Error Message"))
+		6) Mockito.doThrow(new Exception("Error Message")).when(calcService).add(10,20)
+		7) Mockito.doReturn(30.0).when(calcService).add(10.0,20.0)
+		8) Mockito.doNothing().when(productRepository).delete(5)		// void method
+		9) Mockito.when(calcService.add(20.0,10.0)).thenAnswer(new Answer<Double>() {
+				@Override
+				public Double answer(InvocationOnMock invocation) throws Throwable {		// to allows stubbing with generic interface
+					Object[] args = invocation.getArguments();
+					Object mock = invocation.getMock();	
+					return 30.0;
+				}
+		   });
+   * we cannot mix matchers and actual objects.
+   
+2) Mockito.verify() : 
+   * to ensure whether a mock method is being called or not.
+		1) Mockito.verify(calcService).add(10.0, 20.0)
+		2) Mockito.verify(calcService, times(2)).add(10.0, 20.0)
+		3) Mockito.verify(calcService, never()).subtract(10.0, 20.0)
+		4) Mockito.verify(calcService, atLeastOnce()).subtract(20.0, 10.0)
+		5) Mockito.verify(calcService, atLeast(2)).add(10.0, 20.0) 
+		6) Mockito.verify(calcService, atMost(3)).add(10.0,20.0)
+		7) Mockito.verify(calcService,timeout(1000)).add(20.0,10.0)
+		
+- Mockito.reset(mockObj) : to a reset a mock object.
+  
 ------------- Power Mockito -------------  
-- Mockito does not allow us to mock private,static and final methods.
 - PowerMock uses a custom classloader and bytecode manipulation to enable mocking of static methods, constructors, final classes and methods,
   private methods, removal of static initializers and more.
-- PowerMockito is used to mock final method,static method and private method. e.g
-  @PrepareForTest({ FinalMethodClass.class , StaticMethodClass.class , PrivateMethodClass })
+  * @PrepareForTest({ FinalMethodClass.class , StaticMethodClass.class , PrivateMethodClass })
+1) Private method mocking : 
+   
+  
+  
+  
   // Case1 : static method
   PowerMockito.mockStatic(StaticMethodClass.class);
   PowerMockito.when(StaticMethodClass.getStaticMethod(Mockito.any(String.class))).thenReturn(1);

@@ -65,8 +65,64 @@ Google cloud platform
 	* A flexible zero ops platform.
 	* Just write code, No Ops dependencies , Scalable , Traffic splitting  
 1.3) Container(Kubernetes) Engine : PaaS
-	* Deploy,manage and scale containerized applications
+    * Deploy,manage and scale containerized applications
 	* No OS dependencies, Scalable production load
+	* Kubernetes is container orchestration platform.
+	* features : 
+	  * Horizonatal scaling
+	  * Self healing 
+	  * Load balancing & service discovery 
+	  * Automated roll outs & Roll backs
+	  * Storage orchestration
+	  * Bach execution
+	  * Configuration management
+	* Kubernetes Architecture : 
+	  1) Kubernetes master node : 
+	     1) API Server : 
+		    *  provides all the operation on cluster using the API.
+		 2) Scheduler : 
+			* service in master responsible for distributing the workload.
+			* responsible for workload utilization and allocating pod to available/new nodes.
+		 3) etcd : 
+		    * key value store that can be distributed among multiple nodes.
+			* It stores the configuration information which can be used by each of the nodes in the cluster.
+			* It is accessible only by Kubernetes API server as it may have some sensitive information.
+		 4) Controller manager : 
+		    * responsible for most of the collectors that regulates the state of cluster and performs a task.
+			* responsible for collecting and sending information to API server
+			* replication controller, endpoint controller, namespace controller, and service account controller.
+	  2) Kubernetes node : 
+         1) kube-proxy : 
+		    * helps in making services available to the external host.
+			* helps in forwarding the request to correct containers and is capable of performing primitive load balancing.
+			* manages pods on node, volumes, secrets, creating new containers’ health checkup.
+         2) Docker engine : 
+         3) kubelet : 
+		    * communicates with the master component to receive commands and work.
+			* interacts with etcd store to read configuration details and write values
+			* manages network rules, port forwarding
+         4) Pod (Docker containers , Volume , IP Address) : node can have multiple pods
+	* deployment strategis : 
+      1) Recreate : 
+	  2) Rolling Update : 
+	  3) BlueGreen : 
+	  4) Canary : 
+    * commands :  
+      1) mvn compile com.google.cloud.tools:jib-maven-plugin:build -Dimage=gcr.io/$GOOGLE_CLOUD_PROJECT/spring-boot-example:v1 		// gcr.io/my-first-project-254606/spring-boot-example:v1
+	  2) gcloud container clusters get-credentials my-cluster-1 --zone us-central1-a		// to login into kubernetes cluster
+	  3) kubectl get pods
+	  4) kubectl get deployments
+	  5) kubectl get services
+	  6) kubectl get all
+	  7) docker run -ti --rm -p 8080:8080 gcr.io/$GOOGLE_CLOUD_PROJECT/spring-boot-example:v1 // to run container locally inside kbernates 
+	  8) kubectl run spring-boot-example --image=gcr.io/$GOOGLE_CLOUD_PROJECT/spring-boot-example:v1 --port=8080	// 1st Approach to create deployment and service object
+	     kubectl expose deployment spring-boot-example --type=LoadBalancer	
+	  9) kubectl apply -f deployment.yml		// 2nd Approach to create deployment and service object
+	     kubectl apply -f service.yml
+	 10) kubectl get svc -w
+	 11) kubectl scale deployment spring-boot-example --replicas=3
+	 12) kubectl log pod-name
+	 13) kubectl delete deployment-name/service-name
 1.4) Cloud Functions : SaaS
 	* Event based serverless environment to build and connect cloud services.
 	* Same as App Engine  but you do not host an application. Used for backend processing.
@@ -87,7 +143,17 @@ gcloud sql connect mysql-instance1 --user=root
 gcloud container clusters create webfrontend --zone $MY_ZONE --num-nodes 2
 kubectl version
 kubectl run nginx --image=nginx:1.10.0
-kubectl get pods
 kubectl expose deployment nginx --port 80 --type LoadBalancer
-kubectl get services
 kubectl scale deployment nginx --replicas 3
+-------------------------------
+AWS
+-------------------------------
+https://drive.google.com/drive/folders/1oXWb6KHotsoS8EMc7ch0awL3HpNoGSLe
+
+- Region is a geographical area (physical location).Each region consists of 2 (or more) Availability Zones.
+- An Availability Zones (AZ) is simply a data center.
+- Edge location : 
+  * Edge locations are endpoints for AWS which are used for caching content.
+  * Typically this consitst of CloudFront,Amazon's Content Delievery Network (CDN)
+  * There are many more Edge locations than Regions. (96 currently)
+- 
