@@ -1,0 +1,151 @@
+- Udemy : Google Professional Cloud Architect Certification !
+  * Skip : 1 - 8 
+- Google cloud platform is a suite of cloud computing services that runs on the same infrastructure that goolge uses internally for its end users products such
+  as Google serach and Youtube.
+- Regions : Independent geographic areas that consists of zones.Main purpose is to host applications near to your users to reduce latency, and availability,durability
+- Zones : Physical locations inside regions.It provides geo redundancy.Used mainly for high availability inside region.
+- GCP Services  : 
+1) Compute : Compute Engine, App Engine, Kubernetes Engine, Cloud Functions
+2) Storage : Datastore, Storage, Bigtable, SQL, Spanner
+3) Networking : VPC Network, Network Services, Interconnect
+4) Identity & Security : 
+5) BigData : 
+6) Machine Learning : 
+- GCP Interfaces : 
+  1) GCP Console (UI) / Mobile App
+  2) Command line interface (Cloud Shell / Cloud SDK ): gcloud, bg, gsutil,kubectl etc
+  3) API/Client libraries : IDE,eidtor,postman,curl etc
+- GCP Project :  To track resource and quote usage.
+  * Enable billing.Manage permissions and credientials. Enbale service and APIs.
+  * Project use three identifying attributes : Project name,Project number, Project ID
+  * Can be managed from cloud console or cloud resource manager API
+- GCP Resources : 1) Zonal : VM instaces, VM discs etc 2) Regional : Static IP address 3) Global : Network,Disk images,Snapshots,Networks 
+
+1) Compute Services : 
+	* Virtal Machine : Server in cloud with auto scaling ,full control of OS.
+	* Code & Container : Container orchestration,Deploy code.In build auto scaling and load balancing.
+	* Serverless : No Ops env.Mostly you don't want to manage any H/W resources.
+1.1) Compute Engine : IaaS 
+	* Compute Engine : Row server.After choosing OS and desired configuration, We need to install necessary software to use it as per or requirement.eg as an 
+	  application server.
+	* Scalable, high-performance virtual machines (which are running in google's inovative data centers and world wide fiber network)
+	* OS dependent, Full control on H/W & N/W , OS Level changes
+	* Commands : 
+	  1) gcloud compute zones list		OR		gcloud compute zones list | grep us-central1  
+	  2) gcloud config set compute/zone us-central1-c
+	  3) gcloud compute instances create "my-vm-1"
+	  4) gcloud compute instances list
+1.2) App Engine : PaaS
+	* Extention of Compute Engine.Generally used for web server configration.We don't have to install required software manually.
+	* A flexible zero ops platform.
+	* Just write code, No Ops dependencies , Scalable , Traffic splitting  
+1.3) Container(Kubernetes) Engine : PaaS
+    * Deploy,manage and scale containerized applications
+	* No OS dependencies, Scalable production load
+	* Kubernetes is container orchestration platform.
+	* features : 
+	  * Horizonatal scaling
+	  * Self healing 
+	  * Load balancing & service discovery 
+	  * Automated roll outs & Roll backs
+	  * Storage orchestration
+	  * Bach execution
+	  * Configuration management
+	* Kubernetes Architecture : 
+	  1) Kubernetes master node : 
+	     1) API Server : 
+		    *  provides all the operation on cluster using the API.
+		 2) Scheduler : 
+			* service in master responsible for distributing the workload.
+			* responsible for workload utilization and allocating pod to available/new nodes.
+		 3) etcd : 
+		    * distributed key value store.
+			* It stores the configuration information which can be used by each of the nodes in the cluster.
+			* It is accessible only by Kubernetes API server as it may have some sensitive information.
+		 4) Controller manager : 
+		    * responsible for most of the collectors that regulates the state of cluster and performs a task.
+			* responsible for collecting and sending information to API server
+			* replication controller, endpoint controller, namespace controller, and service account controller.
+	  2) Kubernetes node (slave node) : 
+         1) kube-proxy : 
+		    * helps in making services available to the external host.
+			* helps in forwarding the request to correct containers and is capable of performing primitive load balancing.
+			* manages pods on node, volumes, secrets, creating new containers’ health checkup.
+         2) Docker engine : 
+         3) kubelet : 
+		    * communicates with the master component to receive commands and work.
+			* interacts with etcd store to read configuration details and write values
+			* manages network rules, port forwarding
+         4) Pod (Docker containers , Volume , IP Address) : 
+		    * node can have multiple pods and pod can have multiple containers. 
+			* Containers of same Pod shares IP Address.
+	* Deployment : 
+	  * represent a set of multiple, identical Pods with no unique identities.
+	  * Deployment runs multiple replicas of your application and automatically replaces any instances that fail or become unresponsive.
+	  * Deployments are managed by the Kubernetes Deployment controller.
+	  * Deployments use a Pod template, which contains a specification for its Pods which determines how each Pod should look like: what applications should run inside
+	    its containers, which volumes the Pods should mount, its labels, and more.
+	* Service : 
+	  * service is a grouping of pods that are running on the cluster.
+	  * An abstract way to expose an application running on a set of Pods as a network service.
+	  * Kubernetes gives Pods their own IP addresses and a single DNS name for a set of Pods, and can load-balance across them.
+	* Kubernetes Deployment Builder : https://static.brandonpotter.com/kubernetes/DeploymentBuilder.html	
+	* Deployment strategis : 
+      1) Recreate : 
+	  2) Rolling Update (default) : 
+	     * without any downtime. 
+		 * new pods will be created and once new pods are up and running and ready to be served than old pods will be destroyed
+	  3) BlueGreen : 
+	     * kubectl apply -f kube-blue-v1.yml			// current deployment and service object (v1 : blue)
+		 * kubectl apply -f kube-green-v2.yml			// new deployment and service object (v2 : green)
+		 * kubectl apply -f kube-blue-v2.yml			// new deployment and service object (v2 : blue). old blue service will now point to v2 deployment obj.
+		 * kubectl delete deployment.apps/spring-boot-example-v1 service/spring-boot-example-green		// delete old v1 deployment and green v2 service obj
+	  4) Canary : 
+    * commands :  
+      1) mvn compile com.google.cloud.tools:jib-maven-plugin:build -Dimage=gcr.io/$GOOGLE_CLOUD_PROJECT/spring-boot-example:v1 		// gcr.io/my-first-project-254606/spring-boot-example:v1
+	  2) gcloud container clusters create cluster-name --zone us-central1-a --num-nodes 2
+	  3) gcloud container clusters get-credentials my-cluster-1 --zone us-central1-a		// to login into kubernetes cluster
+	  4) kubectl get pods
+	  5) kubectl get deployments
+	  6) kubectl get services
+	  7) kubectl get all
+	  8) docker run -ti --rm -p 8080:8080 gcr.io/$GOOGLE_CLOUD_PROJECT/spring-boot-example:v1 // to run container locally inside kbernates 
+	  9) kubectl run spring-boot-example --image=gcr.io/$GOOGLE_CLOUD_PROJECT/spring-boot-example:v1 --port=8080	// 1st Approach to create deployment and service object
+	     kubectl expose deployment spring-boot-example --type=LoadBalancer	
+	 10) kubectl apply -f deployment.yml		// 2nd Approach to create/update deployment and service object
+	     kubectl apply -f service.yml
+	 11) kubectl get svc -w
+	 12) kubectl scale deployment spring-boot-example --replicas=3
+	 13) kubectl autoscale deployment spring-boot-example --min=10 --max=15 --cpu=80
+	 14) kubectl log pod-name
+	 15) kubectl delete deployment-name/service-name
+1.4) Cloud Functions : SaaS
+	* Event based serverless environment to build and connect cloud services.
+	* Same as App Engine  but you do not host an application. Used for backend processing.
+
+2) Storage Services : 
+2.1) Datastore :
+     * to store NoSQL (unstructured) kind of data.  
+2.2) Bigtable : 
+     * to store NoSQL (unstructured) kind of data.Used with hadoop (Bigdata application).  	 
+2.3) Storage : 
+     * File System storage service. Can be used to store application file in storage service.
+	 * It store objects in buckets.
+	 * commands : 
+	   * gsutil mb -l US gs://BUCKET_NAME
+	   * gsutil cp gs://01_storage_bucket/1.txt gs://02_storage_bucket
+	   * gsutil ls gs://01_storage_bucket
+2.4) SQL :  
+     * to store structured data. SQL can not be scaled horizonally.
+2.5) Spanner : 
+     * same as SQL but  it can be scaled horizonally.
+	 
+- VPC Network : Virtual private cloud. To create an network where two application deployed on cloud can talk with each other.
+- Network Services : Load balancing, Cloud DNS, Cloud CDN
+- Interconnect : 
+
+- Commands
+gcloud init
+gcloud sql connect mysql-instance1 --user=root
+
+

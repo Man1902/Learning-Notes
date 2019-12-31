@@ -110,14 +110,15 @@
    * It is a gateway application that handles all the requests and does the dynamic routing of microservice applications.
    * It does not support reactive programming.
    * Add spring-cloud-starter-netflix-zuul dependency and @EnableZuulProxy. 
+   * Add spring-cloud-starter-netflix-eureka-client dependency to configure routes using serviceId
 	  spring.application.name=zuul-server	
 	  server.port=9090
 	  zuul.prefix=/api
 	  zuul.routes.customer-service.path=/customer-service/**
-	  zuul.routes.customer-service.service-id=customer-service
+	  zuul.routes.customer-service.serviceId=customer-service
 	  #zuul.routes.customer-service.url=http://localhost:9091  # actual link of customer ms
 	  zuul.routes.order-service.path=/order-service/**
-	  zuul.routes.order-service.service-id=order-service 
+	  zuul.routes.order-service.serviceId=order-service 
    * Here, http://localhost:9090/api/customer-service/customers will be redirectted to http://customer-service/customers or http://localhost:9091/customers
 
 2.2) Spring Cloud Gateway :   
@@ -143,13 +144,12 @@
 	 * use http://localhost:9091/refresh  actuator link (post method) to get updated properties
   
 4) Hystrix : Fault tolerance / Circuit bre aker : provides fallback option.
-   * Add spring-cloud-starter-hystrix dependency and @EnableHystrix OR @EnableCircuitBreaker 
-     
+   * Add spring-cloud-starter-netflix-hystrix dependency and @EnableHystrix OR @EnableCircuitBreaker 
    * For request API, define @HystrixCommand to provide fallback method
-	   @HytrixCommand(fallbackMethod="greetUserFailOver") OR 
-	   @HytrixCommand(fallbackMethod="greetUserFailOver" , commandKey="greeting" , groupKey ="greeting") OR 
-	   @HytrixCommand(fallbackMethod="greetUserFailOver", commamndProperties={
-			@HytrixProperty(name="execution.isolation.thread.timeoutInMilliseconds", value=500)
+	   @HystrixCommand(fallbackMethod="greetUserFailOver") OR 
+	   @HystrixCommand(fallbackMethod="greetUserFailOver" , commandKey="greeting" , groupKey ="greeting") OR 
+	   @HystrixCommand(fallbackMethod="greetUserFailOver", commamndProperties={
+			@HystrixProperty(name="execution.isolation.thread.timeoutInMilliseconds", value=500)
 	   })
 	   public String greetUser(String userName){ return "Hello "+userName; }
 	   public String greetUserFailOver(String userName){ return "Default greeting"; }
