@@ -288,7 +288,7 @@
      * ListIterator allows you to traverse the list in both the direction, modify (insert, replace, remove) the list during iteration.
   2)Queue(I) : is a "data structure" where elements are added from one end (tail) and elements are removed from another end (head).(FIFO except priority queue)
      * can't have null elements . can have duplicate elements. 
-	 * can't have random access. We can't  get,set or add elements at an arbitrary position in the queues. 
+	 * can't have random access.
   3)Deque(I) (Double Ended Queue) supports insertion and removal of elements from both the ends.(Introduced in Java 1.6)
      * Deque can be used as a both: Queue (FIFO) as well as Stack (LIFO).
 	 * can have null elements. can have duplicate elements. can't have random access.

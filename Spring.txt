@@ -102,7 +102,7 @@
 	   eureka.instance.hostname = peer1 , eureka.client.serviceUrl.defaultZone  = http://peer2:8761/eureka (To handle multiple instance)
   * Eureka client : 
     * Add spring-cloud-starter-netflix-eureka-client dependency and @EnableEurekaClient / @EnableDiscoveryClient
-	* @LoadBalanced with RestTemplate Bean for clinet side load balancing.
+	* @LoadBalanced with RestTemplate Bean for clinet side service discovery and load balancing.
 	  eureka.client.serviceUrl.defaultZone  = http://localhost:8761/eureka (Optional)
 	  eureka.instance.instance-id=${spring.application.name}-${random.int}  // if server port is 0
 
@@ -143,8 +143,9 @@
 		   management.security.enabled = false
 	 * use http://localhost:9091/refresh  actuator link (post method) to get updated properties
   
-4) Hystrix : Fault tolerance / Circuit bre aker : provides fallback option.
-   * Add spring-cloud-starter-netflix-hystrix dependency and @EnableHystrix OR @EnableCircuitBreaker 
+4) Hystrix : Fault tolerance / Circuit breaker : provides fallback option.
+   * Add spring-cloud-starter-netflix-hystrix, spring-boot-starter-actuator dependency and @EnableHystrix OR @EnableCircuitBreaker 
+   * Add management.endpoints.web.exposure.include=hystrix.stream property ( to enable stream API e.g http://localhost:8081/actuator/hystrix.stream )
    * For request API, define @HystrixCommand to provide fallback method
 	   @HystrixCommand(fallbackMethod="greetUserFailOver") OR 
 	   @HystrixCommand(fallbackMethod="greetUserFailOver" , commandKey="greeting" , groupKey ="greeting") OR 
@@ -153,11 +154,11 @@
 	   })
 	   public String greetUser(String userName){ return "Hello "+userName; }
 	   public String greetUserFailOver(String userName){ return "Default greeting"; }
-   * fallback method has to use the same signature as the ‘original method’.
+   * fallback method has to use the same signature as the ‘original method’ (including return type).
    * HystrixDashboard :  To give dashboard view of Hystrix stream for monitoring
-     * Add spring-cloud-starter-hystrix-dashboard,spring-boot-starter-actuator dependency and @EnableHystrixDashboard.
+     * Add spring-cloud-starter-netflix-hystrix-dashboard dependency and @EnableHystrixDashboard.
 	 * To access dashboard :  http://localhost:8080/hystrix 
-	 * To monitor any service : http://localhost:8081/hystrix.stream (inside dashboard)
+	 * To monitor any service : http://localhost:8081/actuator/hystrix.stream (inside dashboard)
 	 
 5) Spring Cloud Sleuth & ZipKin server : For distributed log tracing and monitoring  in Micro Services
    * Add spring-cloud-starter-sleuth dependency 
@@ -165,15 +166,21 @@
      traceid : across MS , spanid :  within MS , zipkin-export : false (default)
    * It send traceid and spanid by setting it inside headers (e.g X-B3-TraceId , X-B3-SpanId)
    * Zipkin server : (monitors and manages the Spring Cloud Sleuth logs) 
-      * Add zipkin-server , zipkin-autoconfigure-ui dependencies and @EnableZipkinServer
-	  * Accces server : http://localhost:9091/zipkin/
+	  * It helps gather timing data needed to troubleshoot latency problems in microservice architectures.
+	  * Spring has deprecated the Zipkin UI and Zipkin server from Spring Boot.
+	  1) To configure the external Zipkin server : 
+	     * Download the zipkin server from https://zipkin.io/pages/quickstart.html.
+		 * execute command : java -jar zipkin.jar
+		 * Accces server : http://localhost:9411/zipkin
+	  2) To configure Zipkin server using Spring Boot (but not supported by the community) : 
+         * Add zipkin-server , zipkin-autoconfigure-ui (2.6.1 version only with spring boot version below 2.0) dependencies and @EnableZipkinServer
    * Zipkin client : 
-	  * Add spring-cloud-sleuth-zipkin dependency
+	  * Add spring-cloud-starter-zipkin dependency
       * Add Always Sampler Bean to export the logs into Zipkin server.
-			@Bean
-			public AlwaysSampler defaultSampler() { return new AlwaysSampler(); }
-	  * Configure Zipkin Server : spring.zipkin.baseUrl = http://localhost:9091/zipkin/ 
-	  * Trace logs by trace id : http://localhost:9091/zipkin/traces/{traceid}/
+			 @Bean
+			 public Sampler defaultSampler() { return Sampler.ALWAYS_SAMPLE; }
+	  * Configure Zipkin Server : spring.zipkin.base-url = http://localhost:9411/
+	  * Trace logs by trace id : http://localhost:9411/zipkin/traces/{traceid}/
    
 6) Ribbon (Client side Load balancing) : 
 - @RibbonClient(name="my-microservice-name", configuration=RibbonConfig.class)   and configuration in property file and @LoadBalanced in RestTemplate Bean
