@@ -1,0 +1,146 @@
+- What is Redis ?  
+  * Redis is an open source, advance key-value store.
+  * It is an in-memory key-value store with persistence.
+  * Redis stands for REmote DIctionary Servr.
+  * It is often referred to as a data structure server,since the keys can contain strings, hashes, lists, sets and sorted sets. 
+  * It can be used as : 
+    1) a NoSQL database (non-relational, structured data storage systems like MongoDB, memcached, CouchDB)
+	2) a memory cache store (cache layer) to improve performance when serving data that is stored in system memory.
+	3) a message broker
+  * Built in Replication
+  * written in C.
+  * To interect with Redis : Once installed in server, run the redis-cli to issue commmands to Redis.
+- Advantages of Redis : 
+  * Very flexible
+  * No schemas & column names
+  * Very fast : can perofrm around 110000 Sets per second, about 81000 Gets per second
+  * Rich data type support
+  * Caching & Disk persistence
+- Redis Data Model : 
+1) Key : Printable ASCII
+2) Value : 
+   1) Primitives :
+	  1) Strings  :  
+	     * key-value pair
+   2) Containers (of Strings) :
+	  2) Hashes : 
+	     * key with field-value pairs
+	  3) Lists :
+		 * Top/Left <- Val1 - Val2 - Val3 -> Bottom/Right
+         * List of strings sorted by insertion order.		  
+	  4) Sets : 
+	     * Unorder collection of unique strings. 
+	  5) Sorted Sets : 
+- Redis-spring-boot example : 
+  * Add spring-boot-starter-web and spring-boot-starter-data-redis dependency. (if yoy are using spring boot version 2+ , add jedis explicitly)
+  * configure JedisConnectionFactory and RedisTemplate beans. e.g 
+	@Bean
+    public JedisConnectionFactory jedisConnectionFactory() {
+         return new JedisConnectionFactory(); // OR
+        /*RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
+        redisStandaloneConfiguration.setHostName("localhost");
+        redisStandaloneConfiguration.setPort(6379);
+        return new JedisConnectionFactory(redisStandaloneConfiguration);*/
+    }
+	@Bean
+    public RedisTemplate<String, User> redisTemplate() {
+		RedisTemplate<String, User> redisTemplate = new RedisTemplate<>();
+        redisTemplate.setConnectionFactory(this.jedisConnectionFactory());
+        return redisTemplate;
+    }
+  * In repository class, inject redisTemplate dependency and configre HashOperations.
+    private RedisTemplate<String, User> redisTemplate;
+    private HashOperations hashOperations;
+    @Autowired
+    public UserRepositoryImpl(RedisTemplate<String, User> redisTemplate) {
+        hashOperations = redisTemplate.opsForHash();
+    }  
+  * Operations in repository class :
+    1) Save   : hashOperations.put("user", user.getId(), user);	// hashOperations.put(key , field , value)
+	2) Get    : hashOperations.get("user", id);					// hashOperations.get(key , field)
+	3) GetAll : hashOperations.entries("user");					// hashOperations.entries(key)
+	4) Update : hashOperations.put("user", user.getId(), user);	// hashOperations.put(key , field , value)
+	5) Delete : hashOperations.delete("user", id);				// hashOperations.delete(key , field)
+	
+- redis-cli commands : 
+1) for String values : 
+   * set key val							// To set/overide key-value pair e.g set name Vishal
+   * setex key sec val						| To set key-value pair with expiry in seconds e.g set name 10 Vishal OR
+   * psetex key milisec val					| To set key-value pair with expiry in milliseconds
+   * setnx key val							// if key is not present than only set else ignore
+   * mset key1 val1 key2 val2				// To set mutlipe key-value pairs
+   * get key								// To get value
+   * del key								// To delete key-value pair
+   * flushall								// to delete all key-value pairs
+   * ttl key								// To check time to live 
+   * keys *									// To list down all keys 
+   * strlen key								// To check length of value
+   * incr key								// To increment number value by 1
+   * decr key								// To decrement number value by 1
+   * incrby key	incrementVal				// To increment number value by mentioned incrementVal e.g incrby num 5
+   * decrby key decrementVal				// To decrement number value by mentioned decrementVal
+   * append key val							// To append new value in existing value e.g append msg " world"
+   * exists key								// TO check whether key is present or not
+   * expire key sec							// To set expiry
+   * persist key							// to remove expiry
+   * rename key newName						// 
+   * 
+   
+2) Hashes values :
+   * hset key field val						// To set key with field-value pair e.g hset stud name max
+   * hmset key field1 val1 field2 val2		// To set key with field-value pairs e.g hmset stud name max age 15 class 8
+   * hgetall key							// To get all fields details
+   * hget key field							// To get particular field details e.g hget stud-1 name
+   * hmget key field1 field2				// To get values of mentioned fields details e.g hget stud-1 name age
+   * hexists key field						// To check wheter field is present or not
+   * hdel key field							// To delete field
+   * hsetnx key field val					// Ti set field-val only if it doesn't exist
+   * hkeys key								// To listdown all fields
+   * vals key								// To listdown all values
+   * hincrby key field incrementVal			// To increment number field value by mentioned incrementVal
+   * hdecrby key field decrementVal			// To decrement number field value by mentioned decrementVal
+   * hlen key								// To check number of fields
+
+3) Lists values : 
+   * lpush key val1 val2 					// To add values into list from top/left side. e.g lpush nameLst Tom Jack Zil
+   * lpushx key val							// To add value into list only if key exist
+   * rpush key val1 val2					// To add values against key from bottom/right side. e.g rpush numLst 1 2 3 4 
+   * lpop key 								// To remove top/left value
+   * rpop key 								// To remove bottom/right value
+   * lrange key start stop					// To get values from top/left to bottom/right side with given range
+   * lrange key 0 -1						// To get all values from top/left to bottom/right side
+   * llen key								// To get size/length of list
+   * lindex key index						// to get value from index
+   * lset key index val						// to set value at particular index (existing value will be replaced)
+   * linsert key before|after pivot val		// to add value before/after pivot value .e.g linsert numLst after 4 5
+
+4) Sets values : 
+   * sadd key val1 val2						// To add values into set   
+   * smembers key							// To get values of set
+   * scard key								// To get size/length of set
+   * sdiff key1 key2						// To get set1 values which are not present in set2
+   * sdiffstore key3 key1 key2				// To get set1 values which are not present in set2 and save into set3
+   * sunion key1 key2						// To get consolidated values of set1 and set2
+   * sunionstore key3 key1 key2				// To get consolidated values of set1 and set2 and save into set3
+   * sinter key1 key2						// To get common values present in both sets
+   * sinterstore key3 key1 key2				// To get common values present in set1 and set2 and save into set3
+   * srem key val1 val2						// To remove values from set e.g srem mySet 3
+   * spop key count							// To remove rendom vale from set e.g spop key 2 (will remove two elements of set)
+   * smove source dest member				// To transefer menbr from one set to antoher set
+ 
+5) Sorted Sets values : 
+   * zadd key score1 mem1 score2 mem2		// To add values(members) into set against score. e.g zadd mySet 1 a 2 b 3 c
+   * zadd key score1 mem1 score1 mem2		// To add multiple values against same score
+   * zrange key start stop					// To get values with given member range   
+   * zrangebyscore key min max				// To get values with given score value range   
+   * zcard key								// To get size/length of set
+   * zcount key min max						// To count no of values between min and max score value
+   * zrem key mem1 mem2						// To remove values from set 
+   * zrank key member						// To get index of value from lowest score value side
+   * zrevrank key member					// To get index of value from reverse/highest score value side
+   * zscore key member						// To get score value of member
+ 
+6) Redis Publish-Subscribe : 
+   * PUBLISH channelName message			// e.g PUBLISH myChannel "Hello World"
+   * SUBSCRIBE channelName					// e.g SUBSCRIBE myChannel
+   * PSUBSCRIBE pattern						// e.g PSUBSCRIBE my*

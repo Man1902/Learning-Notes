@@ -1,11 +1,16 @@
 - Monolitihc Architecture is like a big container wherein all the software components of an application are assembled together and tightly packaged.  
+- Monolitihc Architecture Props / benefits :
+  * Simple to develop - the goal of current development tools and IDEs is to support the development of monolithic applications
+  * Simple to deploy - you simply need to deploy the WAR file (or directory hierarchy) on the appropriate runtime
+  * Simple to scale - you can scale the application by running multiple copies of the application behind a load balancer
 - Monolitihc Architecture Cons / Problems  : 
  * Large and complex application : modularity breaks down.Difficult to understand and implement the new changes. Quality of code decline over time.
  * Slow development : As application grow in size,it is difficult to understand and modify. Makes developer less productive.
  * Block continuous deployment : In order to update one component, need to redeploy whole application.
  * Unscalable (as some compoments are CPU insentive and some are Memory insentive).Each components can not be scale individually.
  * Unreliable (as all component are tighly coupled).If one service fails, It will lead down fall of the entire application.
- * Inflexible (Difficult to adopt new framewrok/language)
+ * Inflexible (Difficult to adopt new framewrok/language) : Requires a long-term commitment to a technology stack 
+ * Obstacle to scaling development : it prevents the teams from working independently. The teams must coordinate their development efforts and redeployments.
 - Microservices is an architectural style that structures an application as a collection of small autonomous services, modelled around a business domain.
 - Advantages / Features of Microservices Architecture :
   1) Independent Development (Easy to build and Maintain).Loosely coupled (Decoupling)
@@ -15,6 +20,10 @@
   5) Granular scaling (single service can be easily scale up without having to scale the entire application)
   6) Small Focused / Bounded context (Componentization) : single business capability
   7) Decentralized Governance
+- Drawbacks  of Microservices Architecture : 
+  * Developers must deal with the additional complexity of creating a distributed system : inter-service communication 
+  * Deployment complexity : operational complexity of deploying and managing a system comprised of many different services.
+  * Increased memory consumption.
 - Best practices to design microservices : 
  * Seprate data store for each microservices
  * Seprate build for each microservices
@@ -28,26 +37,19 @@
   5) Automating the components (Build,Deployment,monitoring etc)
   6) Dynamic Scale Up and Scale Down
   7) Consistency
- 
-				SOA																Microservices
-* Follows “share-as-much-as-possible” architecture approach		* Follows “share-as-little-as-possible” architecture approach
-* Importance is on business functionality reuse					* Importance is on the concept of “bounded context”
-* They have common governance and standards						* They focus on people collaboration and freedom of other options
-* Uses Enterprise Service bus (ESB) for communication			* Simple messaging system
-* They support multiple message protocols						* They use lightweight protocols such as HTTP/REST etc.
-* Multi-threaded with more overheads to handle I/O				* Single-threaded usually with the use of Event Loop features for non-locking I/O handling
-* Maximizes application service reusability						* Focuses on decoupling
-* Traditional Relational Databases are more often used			* Modern Relational Databases are more often used
-* A systematic change requires modifying the monolith			* A systematic change is to create a new service
-* DevOps / Continuous Delivery is becoming popular, but not  	* Strong focus on DevOps / Continuous Delivery
-  yet mainstream
-* Uses Middleware for communication (Messaging Middleware)		* Uses API layer for communication (e.g REST)
-- Cohesion refers to the degree to which the elements inside a module belong together.Good design has high cohrsion and low coupling.
-
+  
 - Microservices architecture patterns :  
 1) Decomposition : 
    1) Decompose by business capability : 
+      * Define services corresponding to business capabilities.business capability is something that a business does in order to generate value. A business 
+	    capability often corresponds to a business object. e.g Order Management is responsible for orders, Customer Management is responsible for customers
+	  * Business capabilities are often organized into a multi-level hierarchy.e.g Product/Service development, Product/Service delivery, Demand generation
+	  * benefits : 
+	    * Stable architecture since the business capabilities are relatively stable
+		* Development teams are cross-functional, autonomous, and organized around delivering business value rather than technical features
+		* Services are cohesive and loosely coupled
    2) Decompose by subdomain : 
+      * 
    3) Self-contained Service : 
    4) Service per team : 
 2) Data management :    
@@ -70,6 +72,69 @@
 		* Runtime coupling : because all services access the same database they can potentially interfere with one another (lock issue)
    3) Saga : 
       * 
+   API Composition
+   CQRS
+   Domain event
+   Event sourcing
+Transactional messaging
+
+Transactional outbox
+Transaction log tailing
+Polling publisher
+Testing
+
+Service Component Test
+Consumer-driven contract test
+Consumer-side contract test
+Deployment patterns
+
+Multiple service instances per host
+Service instance per host
+Service instance per VM
+Service instance per Container
+Serverless deployment
+Service deployment platform
+Cross cutting concerns
+
+Microservice chassis
+Externalized configuration
+Communication style
+
+Remote Procedure Invocation
+Messaging
+Domain-specific protocol
+External API
+
+API gateway
+Backend for front-end
+Service discovery
+
+Client-side discovery
+Server-side discovery
+Service registry
+Self registration
+3rd party registration
+Reliability
+
+Circuit Breaker
+Security
+
+Access Token
+Observability
+
+Log aggregation
+Application metrics
+Audit logging
+Distributed tracing
+Exception tracking
+Health check API
+Log deployments and changes
+UI patterns
+
+Server-side page fragment composition
+Client-side UI composition
+
+	  
 - Patterns for distributed transactions within a microservices architecture : 
 1) 2pc (two-phase commit) : 
 - It has two phases: A prepare phase and a commit phase.
@@ -119,4 +184,20 @@
    * Treat logs as event streams.
 12)Admin processes : 
    * Run admin/management tasks as one-off processes.
+------------------------------------------------------
+ 
+				SOA																Microservices
+* Follows “share-as-much-as-possible” architecture approach		* Follows “share-as-little-as-possible” architecture approach
+* Importance is on business functionality reuse					* Importance is on the concept of “bounded context”
+* They have common governance and standards						* They focus on people collaboration and freedom of other options
+* Uses Enterprise Service bus (ESB) for communication			* Simple messaging system
+* They support multiple message protocols						* They use lightweight protocols such as HTTP/REST etc.
+* Multi-threaded with more overheads to handle I/O				* Single-threaded usually with the use of Event Loop features for non-locking I/O handling
+* Maximizes application service reusability						* Focuses on decoupling
+* Traditional Relational Databases are more often used			* Modern Relational Databases are more often used
+* A systematic change requires modifying the monolith			* A systematic change is to create a new service
+* DevOps / Continuous Delivery is becoming popular, but not  	* Strong focus on DevOps / Continuous Delivery
+  yet mainstream
+* Uses Middleware for communication (Messaging Middleware)		* Uses API layer for communication (e.g REST)
+- Cohesion refers to the degree to which the elements inside a module belong together.Good design has high cohrsion and low coupling.
    

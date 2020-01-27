@@ -31,18 +31,20 @@
 - Object : Entity having state(data) and behaviour (methods acting on data).Class : Collection of objects (logical entity).
 -* Java is pass by value.In method call,java copies and pass references as value,not object.Hence,object state can be modfiy but swap will fail.
 - local variables don’t take default values(before initialization can't be used).But,gloabal variables takes default values. 
--* Stack memory : used for execution purpose.contains only local primitive values and reference to other objects(passed as an argument). 
--* Heap memory : used for storage purpose.Used to allocate memory to objects and JRE classes.Garbage Collection runs on the heap memory.
-- Object created in heap memory has glaobal access.
 - After loading static members, SIB are executed(before main).SIBs are not stored in the heap memory.They just come to stack,execute their tasks and leaves the memory. 
 -* All static components are stored inside single "class level object" (of type java.lang.Class).(common for all objects).
 - Non-static components are stored inside the object memory where each object will have their own copy.
 -* In constructor,1st statement must be either super() or this().After executing it,it will invoke IIB and after that remaining statements are executed.
 - OOP principles : 1) Inheritance 2) Polymorphism 3) Abstraction 4) Encapsulation 5) Association 6) Aggregation 7) Composition
-1) Inheritance : IS-A relationship
-   * used to to reuse already present tried and tested code.
-   * Constructors,SIB and IIB of super class will not be inheriting.But they are executed while creating an object to sub class.(Order : SIB,IIB,Constructor)
-   * To avoid the ambiguity multiple inheritance through class is not supported in java.(Diamond problem)
+1) Inheritance : 
+   * IS-A relationship ( Sub Class IS-A Super class)
+   * used to reuse already present tried and tested code and leveraging Polymorphism by creating a type hierarchy.
+   * allows a class to inherit non-private behavior (methods) and data (fields) from other class.
+   * Constructors,SIB and IIB of super class will not be inherited by subclass.But they are executed while creating an object to sub class.(Order : SIB,IIB,Constructor)
+   * To avoid the ambiguity due to Diamond problem, multiple inheritance through class is not supported in java.
+   * Java supports single, multi-level and multiple inheritances (through interface only)
+   * It's better to use Inheritance for type declaration but for code reuse composition is a better option because it's more flexible. 
+   * final classes can not be extended (inherited)
 - Access modifiers : are used to control the visibility of a field, method, class and constructor.
   * Protected member/method is accesible to classes in same package,as well as all sub classes in other package (through inheritance).
   * If outer class is protected,it should be accesible to the current package as well as sub package.There is no concept of sub package in java.Hence,Outer Class
@@ -51,36 +53,52 @@
   * Sub class can be created from class having protected constructor.But sub class object can't be created outside package.
 - Type casting 1) Primitive (Auto widening and explicit narrowing) 2) Derived (Auto up-cating and explicit down-casting) 
   * Auto-Up Casting : Super class reference sub class object , Explicit down Casting : Sub-class reference Super class object.
-2) Polymorphism : Enity (Method/Constructor) having same name wih multiple behaviour.
+2) Polymorphism : 
+   * Enity (Method/Constructor) having same name wih multiple behaviour.
    * Compile time Polymorphism : Static/Early binding.(Constructor and method overloading)
    * Run time Polymorphism : Dynamic/Late binding.(Method overriding).Type of object is determined at runtime only.
    * Method overloading : Class with same method name and different signature.(Doesn't bother about return type and static/final)(int and Integer is also diffrent)
    * Method overriding : Inherited super(parent) class method is modiefied in sub(child) class.
    * Covariant return type : Return type of the overrided method must be compatible with super class method.(for primitive same and for derived same or its sub class).
    * Visibility of overrided method can't be reduce and method signature can not be change.
--* Static method of CC cannot hide instance method of PC and instance method of CC cannot override a static method of PC. (But static method can be overloded)
--* Static method is invoked according to the type of reference.(method call is decided at comile time) while instance method is invoked according to the type of 
-  object being referred.(method call is decided at run time)
-- You can not override Base class varaibles in sub class.(Because variables are resolved at compile time. A -> i=1, B -> i=2, A a = new B(); , a.i will give 1)
-- Variable hiding : When Parent and child class both have same variable name (even if their types are diffrent),the child class variable hides the parent class
-  variable (will not override)
-- Variable shadowing : When local variable has the same name as one of the instance variable,Then local variable shadows the instance variable inside method/block.
-- Through inheritance we can reuse already existed code and through method overriding we can modify that reused code.
-3) Abstraction : is used to separate "ideas" from their implementation.(Abstract class : 0 to 100% , Interface : 100%)
-   * Class having idea only will inform us "What should be done" while implementing class will tell us "How it should be done"
+   * Static method can not be override because it's resolved at compile time (invoke according to the type of reference) while In order for overriding to work,
+     a method should be virtual and resolved at runtime (instance method is invoked according to the type of object) because objects are only available at runtime.
+   * Static method of CC cannot hide instance method of PC and instance method of CC cannot override a static method of PC.(But static method can be overloded)
+   * Method hiding : when sub class has same static method as parent class's static metohd, it's method hiding.
+   * You can not override Base class varaibles in sub class.(Because variables are resolved at compile time. e.g 
+     A -> int i=1; , B -> int i=2; , A a = new B(); , a.i will give 1
+   * Variable hiding : When Parent and child class both have same variable name (even if their types are diffrent),the child class variable hides the parent class
+     variable (will not override)
+   * Variable shadowing : When local variable has the same name as one of the instance variable,Then local variable shadows the instance variable inside method/block.
+   * Through inheritance we can reuse already existing code and through method overriding (runtime polymorphism) we can modify that reused code.
+3) Abstraction : 
+   * It is used to define common behavior without implementation.(Abstract class : 0 to 100% , Interface : 100%)
+   * Abstraction in Java is implemented using abstract class and interface.
+   * "programming for interface than implementation design principle" is based on abstraction.
+   * Abstraction hides details at the design level.
+   * Class having behavior declaration only will inform us "What should be done" while implementing class will tell us "How it should be done"
    * Object can not be createcd for abstract class/interface(Reason : Abstract class/interface is not a complete class.If we are allowed to have instance of it,
      than it will throw compilatation error for abstract method as it doesn't have implementation). But, abstract class can have constructor. (Diff)
    * We can run an abstract class if it has main() method whereas we can’t run an interface.
    * Abstract method must be overrided (so can't be private or static or final). Only class and method can be abstract.
    * SIB and IIB are not allowed in interfaces.
-- super keyword refers parent class member/method while this keyword refers to current instance(object) of class. 
+- super keyword refers to instance of super/parent class while this keyword refers current instance(object) of class. 
 - final keyword : restricts the further modification of variable,method and class.Class/Method can be either final or abstract(not both).
   * For Final reference variable, we can change state of object being refered.
 - Marker Interface : interface having no fields and methods(empty).used to notify(give some kind of instruction) JVM. e.g Cloneable,Serializable
-4) Encapsulation : process of wrapping data(variables) and code acting on the data (methods) together into a single unit.
-   * It provides control over the data.
-   * The data in a class is hidden from other classes,It will not be visible to the user that how the class is storing values in the variables.
+4) Encapsulation : 
+   * Encapsulation means hiding details of implementation (data hiding) from outside world so that when things change no body gets affected.
+   * e.g private methods.clients  don't care about it, You can change/remove it easily.
+   * Encapsulation is implemented using private, package-private and protected access modifier.
+   * "encapsulate whatever changes design principle" is based upon Encapsulation.
+   * Encapsulation hides details at the implementation level.
+   * It is a process of wrapping data(variables) and code acting on the data (methods) together into a single unit.
+   * It is used to hide the internal details of a class e.g. HashMap encapsulate how to store elements and how to calculate hash values.
+   * It provides control over the data.It allows you to control who can access what.
    * It gives flexibility to make the variables of the class as read-only or write-only.It improves the re-usability.
+   * Encapsulated Code is more flexible and easy to change with new requirements.It makes unit testing easy.
+   * It also helps to write immutable class in Java which is a good choice in multi-threading environment.
+   * Factory pattern , Singleton pattern in Java makes good use of Encapsulation.
 5) Association : 
    * defines the relationship between objects. one-to-one, one-to-many , many-to-many.
    * However, in association, both objects are independent of each other.
@@ -93,11 +111,11 @@
    * When the contained object in “HAS-A” relationship can’t exist on its own, then it’s a case of composition. e.g
      House has-a Room. Here the room can’t exist without the house
    * Composition is said to be better than inheritance. 
+	 * Composition is more flexible because you can change the implementation at runtime.(We can get runtime binding in composition where inheritance binds the classes at compile time)
      * we can control the visibility of other object to client classes and reuse only what we need.
 	 * In inheritance, Any change in the superclass might affect subclass even though we might not be using the superclass methods.
 	 * Inheritance exposes all the superclass methods and variables to the client and if we have no control in designing superclass, it can lead to security holes. 
 	   Composition allows us to provide restricted access to the methods and hence more secure.
-	 * We can get runtime binding in composition where inheritance binds the classes at compile time.So composition provides flexibility in the invocation of methods.	 
 - Nested class 1) Static nested class 2) Non-static nested class/Inner class(Member inner class,Local inner class,Anonymous inner class).
   * Static nested class : can have "static" and "non-static" members. but can access only "static members" of "outer class".
 	* Static method can't be abstract but static nested class can be abstract or final.
@@ -253,6 +271,17 @@
 	3) getters only 
 	4) parametrized constructor to initialize data members 
     5) In the getter method,Perform cloning for object reference data member to return a copy rather than actual object reference.(e.g for Date,other class object) 
+- Singleton class : 
+  * class which has only one instance in whole application.e.g Runtime class
+  * It can maintain state.
+  * It can't be inherited (due to private constructor)
+  * Custom Singleton Class :  
+    * private constructor, private static variable of Custom Singleton class type , public static getInstance method.
+	* Variants : Eagar, Lazy, Thread Safe, With Reflection, Cloning and Serialization handling
+- static class is a Java class, which only contains static methods. e.g java.lang.Math
+- If your Singleton class is not maintaining any state, and just providing global access to methods, than consider using static class, as static methods are much
+  faster than Singleton, because of static binding during compile time.
+ 	
 - Generics (introduced in Java 1.5) : 
   * used to check the "type compatibility" at the "compile time" and hence removing the chances of occuring "ClassCastException" at "run time".
   * Generics works with "derived type" only (primitive type not allowed).
@@ -384,19 +413,74 @@
 	  * static fields are not part of object.so,no use of transient with it.
 	  * final variables are directly serealized by their value.so no use of transient with final varaible also.
 - Deserialization : process of converting stream data created through serialization to Object.
-- Garbage Collection is process to destroy the unused objects("unreferenced").
+
+- Java (JVM) Memory Model – Memory Management in Java : 
+ 
+    <-- Minor GC -->          <---- Major GC ----> 
+	|              |    |    |                   |     	     	   |           |
+	|     Eden     | S0 | S1 |     Old Memory    |    Perm Gen     | JVM Stack |
+	|              |    |    |                   |  (Method Area)  |           |
+	<--- Young Gen (-Xmn) --->    					-XX:PermGen
+    <----------  Jvm Heap (-Xms -Xmx)  ---------->  -XX:MaxPermGen
+  
+  * At broad level, JVM Heap memory is physically divided into two parts – Young Generation and Old Generation.
+  * Young Generation is divided into three parts – Eden Memory and two Survivor Memory spaces.
+  * Most of the newly created objects are located in the Eden memory space.
+  * When Eden space is filled with objects, Minor GC is performed and all the survivor objects are moved to one of the survivor spaces.
+  * Minor GC also checks the survivor objects and move them to the other survivor space. So at a time, one of the survivor space is always empty.
+  * Objects that are survived after many cycles of GC, are moved to the Old generation memory space.Usually, it’s done by setting a threshold for the age of the 
+    young generation objects.(Old Generation memory contains the objects that are long-lived and survived after many rounds of Minor GC)
+  * Usually, garbage collection is performed in Old Generation memory (Major GC) when it’s full and usually it takes a longer time.
+  * Since Young generation keeps short-lived objects, Minor GC is very fast and the application doesn’t get affected by this.
+  * However, Major GC takes a long time because it checks all the live objects. Major GC should be minimized because it will make your application unresponsive 
+    for the garbage collection duration
+  * “Perm Gen” contains the application metadata required by the JVM to describe the classes and methods used in the application
+  * Perm Gen is populated by JVM at runtime based on the classes used by the application.It also contains Java SE library classes and methods. 
+  * Perm Gen objects are garbage collected in a full garbage collection.
+  * Method Area is part of space in the Perm Gen and used to store class structure (runtime constants and static variables) and code for methods and constructors.
+  * Memory Pools (e.g String Pool) are created by JVM memory managers to create a pool of immutable objects if the implementation supports it.It can belong to 
+    Heap or Perm Gen, depending on the JVM memory manager implementation.
+  * Runtime constant pool is per-class runtime representation of constant pool in a class.It contains class runtime constants and static methods. It is part of the method area.
+  * Stack memory : 
+    * It is used for execution purpose execution of a thread).contains only local primitive values and reference to other objects(passed as an argument). 
+  * Heap memory : 
+    * Heap memory is used for storage purpose.Used to allocate memory to objects and JRE classes.Garbage Collection runs on the heap memory.
+    * Object created in heap memory has glaobal access.
+	1) -Xms : For setting the initial heap size when JVM starts
+    2) -Xmx : For setting the maximum heap size.
+    3) -Xmn : For setting the size of the Young Generation, rest of the space goes for Old Generation.
+    4) -XX:PermGen : For setting the initial size of the Permanent Generation memory
+    5) -XX:MaxPermGen : For setting the maximum size of Perm Gen
+    6) -XX:SurvivorRatio : For providing ratio of Eden space and Survivor Space.default is 8.e.g if Young Generation=10m and -XX:SurvivorRatio=2 then 5m will be reserved for Eden Space and 2.5m each for both the Survivor spaces.
+    7) -XX:NewRatio : For providing ratio of old/new generation sizes. The default value is 2.
+- Garbage Collection : 
+  * Garbage Collection is process to destroy the unused objects("unreferenced").
   * Garbage Collection of JVM collects only those objects that are created by new keyword. 
   * If you have created any object without new, you can use finalize method to perform cleanup processing. 
   * Garbage collection is performed by a daemon thread called Garbage Collector(GC). 
   * This thread calls the finalize() method before object is garbage collected.
   * Exceptions occured in finalize() method are not propogated.They are ignore by the garbage collector.
-  * Neither finalization nor garbage collection is guaranteed.
-- Java (JVM) Memory Model – Memory Management in Java : 
- 
-    <-- Minor GC -->          <---- Major GC ----> 
-	|     Eden     | S0 | S1 |     Old Memory    |     	 Perm 	   |           
-	<--- Young Gen (-Xmn) --->    					-XX:PermGen
-    <----------  Jvm Heap (-Xms -Xmx)  ---------->  -XX:MaxPermGen
+  * Neither finalization nor garbage collection is guaranteed.  
+  * basic ways of garbage collection involves three steps:
+    1) Marking : identifies which objects are in use and which ones are not in use.
+    2) Normal Deletion : removes the unused objects.
+    3) Deletion with Compacting: after dele-ting unused objects, all the survived objects can be moved to be together.
+  * Garbage Collection Types : 
+    1) Serial GC (-XX:+UseSerialGC) : 
+	   * It uses the simple mark-sweep-compact approach for young and old generations garbage collection.
+       * It is useful in simple stand-alone applications and machines with smaller CPU.
+    2) Parallel GC (-XX:+UseParallelGC): 
+	   * It is same as Serial GC except that is spawns N threads for young generation garbage collection where N is the number of CPU cores in the system. 
+	   * We can control the number of threads using -XX:ParallelGCThreads=n JVM option.
+       * It is also called throughput collector because it uses multiple CPUs to speed up the GC performance. 
+	   * It uses a single thread for Old Generation garbage collection.
+    3) Parallel Old GC (-XX:+UseParallelOldGC): 
+	   * It is same as Parallel GC except that it uses multiple threads for both Young Generation and Old Generation garbage collection.
+Concurrent Mark Sweep (CMS) Collector (-XX:+UseConcMarkSweepGC): CMS Collector is also referred as concurrent low pause collector. It does the garbage collection for the Old generation. CMS collector tries to minimize the pauses due to garbage collection by doing most of the garbage collection work concurrently with the application threads.
+CMS collector on the young generation uses the same algorithm as that of the parallel collector. This garbage collector is suitable for responsive applications where we can’t afford longer pause times. We can limit the number of threads in CMS collector using -XX:ParallelCMSThreads=n JVM option.
+
+G1 Garbage Collector (-XX:+UseG1GC): The Garbage First or G1 garbage collector is available from Java 7 and its long term goal is to replace the CMS collector. The G1 collector is a parallel, concurrent, and incrementally compacting low-pause garbage collector.
+  
 ----- Java8 -----
 4) JAVA 1.8 : 
 4.1) forEach() method in Iterable interface : 
@@ -539,6 +623,45 @@
   3) Try with Resources (for Automatic resource management in try-statement (AutoCloseable interface)
   4) Diamond operator : Type Inference for Generic Instance Creation  (e.g ArrayList<String> lst = new ArrayList<>(); ) (It will reduce verbosity)
   5) Automatic null Handling (Null-safe operator) : e.g String postalCode = person?.getAddress()?.getPostcode(); (To avoid lots of if checks)
+--------------------
+- Object-Oriented Design Principles (SOLID) : 
+1) Single responsibility principle :
+   * Class should only have one resaon to change.class should always handle single functionality.
+   * more than one functionality in one Class,introduces coupling between two functionality, and even if you change one feature, there is a chance you broke 
+     coupled functionality,  which requires another round of testing
+2) Open-closed principle : 
+   * class should be open for extension but closed for modification.
+   * new functionality should be added by introducing new classes, methods or fields instead of modifying already tried and tested code
+   * One of the way to achieve this is Inheritance where class is extended to introduce new functionality on top of inherited basic features.
+   * By providing object to class at run time and making use of polymorphism to invoke extended functionality,we can make code extensible.
+3) Liskov substitution principle : 
+   * Subtypes must be substitutable for supertype.
+   * methods which use superclass type must be able to work with the object of subclass without any issue.
+   * In order to follow LSP , subclass must enhance functionality, but not reduce them.
+4) Interface segregation principle : 
+   * client should not implement an interface if it doesn't use that.Avoid monolithic interface,reduce pain in client side.
+   * This happens mostly when one interface contains more than one functionality, and the client only needs one functionality and no other.
+5) Dependency Injection/Inversion principle : 
+   * Don't ask for dependency; it will be provided to you by the framework.
+   * any class which is injected by DI framework is easy to test with the mock object and more comfortable to maintain because object creation code is centralized in the framework
+
+6) DRY (Don't repeat yourself) : 
+   * don't write duplicate code for related functionalities,instead use Abstraction to abstract common things in one place.
+   * It Provides benefit during maintenance of code and avoids duplication in code.
+7) Encapsulate What Changes : 
+   * encapsulate the code you expect to be changed in the future.
+   * make variable and methods private by default and increasing access step by step, e.g. from private to protected and not public.
+   * hides implementation details, helps in maintenance
+8) Favor Composition over Inheritance : 
+   * Composition allows changing the behavior of a class at run-time by setting property during run-time.
+9) Programming for Interface not implementation : 
+   * Helps in maintenance, improves flexibility
+   * It will provide flexible code that can work with any new implementation of the interface.
+   * use interface type on variables, return types of method or argument type of methods.
+10) Delegation principles : 
+    * Don't do all stuff by yourself,  delegate it to the respective class.
+	* e.g  equals() and hashCode() method : In order to compare two objects for equality, we ask the class itself to make comparison instead of the Client class
+  	  doing that check.
 ----- JDBC -----
 - Third higest and Third lowest salary
   SELECT MIN(SALARY) FROM (SELECT DISTINCT SALRY FROM EMPLOYEE ORDER BY SALARY DESC FETCH FIRST 3 ROWS ONLY) ; -- MAX : DB2
@@ -552,3 +675,5 @@
 - How to remove duplcate rows in database :   
   DELETE FROM EMPLOYEE WHERE ROWID NOT IN (SELECT MIN(ROWID) FROM EMPLOYEE GROUP_BY EMP_ID,EMP_NAME) ; -- ORACLE
   DELETE FROM (SELECT ROWNUMBER() OVER(PARTITION BY EMP_ID,EMP_NAME) AS PART_WISE_ROW_ID FROM EMPLOYEE) WHERE PART_WISE_ROW_ID > 1 ; -- DB2
+------------------------------------------------------------------------------------
+https://javarevisited.blogspot.com/2018/07/10-object-oriented-design-principles.html

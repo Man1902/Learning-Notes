@@ -1,3 +1,8 @@
+HCL : 4-1-2020
+* What is cybersecrity in java ?
+* How to debug thread safe code ?
+* What is singleton class ? what are its drawbacks ?
+
 Accentuare : 13-12-2019
 * How to handle memory issues in MS ?
 * MS communcation patterns

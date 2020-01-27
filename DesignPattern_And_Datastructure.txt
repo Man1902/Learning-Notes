@@ -1,38 +1,34 @@
 - A design pattern is a general reusable solution to a commonly occurring problem.
--------------------------------
 1) Creational design pattern : 
--------------------------------
-- deal with "object creation mechanisms", trying to create objects in a manner suitable to the situation.
+   * deal with "object creation mechanisms", trying to create objects in a manner suitable to the situation.
 1.1) Singleton pattern : 
-- Define a class that has only one instance and provides a global point of access to it.
-- Private constructor ,  Private static variable , Public static method.
-  1) Eager initialization : at the time of class loading
-  2) Static block initialization : provides option for exception handling
-  3) Lazy Initialization : 
-  4) Thread safe Lazy Initialization : 
-  5) Bill Pugh Singleton Implementation : thread-safe using private static inner class.  
-  6) Enum Singleton : to avoid issue of Reflection problem
-  7) Serialization and Singleton : We have impement readResolve() method to avoid problem during De-Serialization
+     * Define a class that has only one instance and provides a global point of access to it.
+     * Private constructor ,  Private static variable , Public static getInstance method.
+	 * Singleton class can't be inherited (due to private constructor)
+	 * JDK example : Runtime
+	 1) Eager initialization : at the time of class loading
+	 2) Static block initialization : provides option for exception handling
+	 3) Lazy Initialization : 
+	 4) Thread safe Lazy Initialization : with volatile instance variable and synchronized block with double check.
+	 5) Bill Pugh Singleton Implementation : thread-safe using private static inner class.  
+	 6) Enum Singleton : to avoid Reflection problem (or throw exception from private constructor) and serialization issue(serialization of enum is taken care by JVM)
+	 7) Serialization and Singleton : We have to implement readResolve() method to avoid problem during De-Serialization
+	 8) Cloning and Singleton : Don't implement Cloneable(I) If you do than just throw Exception from clone() method.
+	 
 1.2) Factory Pattern (Virtual Constructor) :
-- Factory design pattern is used when we have a super class with multiple sub-classes and based on input, we need to return one of the sub-class.
-- It can be implemented by creating objects via a factory method, which is either specified in an interface and implemented in implementing 
-  classes (concrete classes); or implemented in a base class, which can be overridden when inherited in derived classes; rather than by a 
-  constructor.Here, subclasses are responsible to create the instance of the class.
-- It promotes the loose-coupling by eliminating the need to bind application-specific classes into the code.
-- Factory pattern provides abstraction between implementation and client classes through inheritance.
-- java.util.Calendar, ResourceBundle and NumberFormat getInstance() methods uses Factory pattern. e.g 
-  public final class RBIFactory {
-	private RBIFactory() {}
-	public static RBI getInstance(String bankName,double interestRate,double repoRate) {
-		if (bankName.equalsIgnoreCase("SBI")) {
-			return new SBI(interestRate,repoRate);
-		} else if (bankName.equalsIgnoreCase("BOB")) {
-			return new BOB(interestRate,repoRate);
-		}
-		return null;
-	}
- }
+     * Factory pattern encapsulate object creation logic which makes it easy to change it later.
+     * JDK example : valueOf() method in wrapper class, Calendar.getInstance()
+	 * decouple clients from creating object they need (provides abstraction between implementation and client classes)
+	 * enables the subclasses to provide extended version of an object,because creating an object inside factory is more flexible.
+	 * It is used when we have a super class with multiple sub-classes and based on input, we need to return one of the sub-class.
+	 * It promotes the loose-coupling by eliminating the need to bind application-specific classes into the code.
+	 * Factory pattern uses inheritance and relies on derived class or sub class to create object.
+
 1.3) Abstract Factory pattern :  
+     * Abstract Factory design pattern creates Factory.
+	 * JDK example : DocumentBuilderFactory -> DocumentBuilder factory -> Document Instance
+	 * AbstractFactory pattern uses composition to delegate responsibility of creating object to another class.
+	 
 - It is a factory of factories.In Abstract Factory pattern, we get rid of if-else block and have a factory class for each sub-class.Abstract Factory class will 
   return the sub-class based on the input factory class. 
 - In Abstract Factory pattern an interface is responsible for creating a factory of related objects without explicitly specifying their classes. Each generated 
@@ -1089,33 +1085,3 @@ Service Locator Pattern :
   3) Double Hashing : It is the most practical approach. h(k,i) = ( h(k1)+ i h(k2) ) % m. It works very well in distributing the keys evenly across the various
      slots of the table.
 5) Tree Data Structure : 
-- 
------------------------
-- Class Design Principles (SOLID) : 
-1) Single Responsibility Principle : "One class should have one and only one responsibility".
-- you should write, change and maintain a class for only one purpose. If it is model class then it should strictly represent only one 
-  actor/ entity. This will give you the flexibility to make changes in future without worrying the impacts of changes for another entity.
-  Similarly, If you are writing service/manager class then it should contain only that part of method calls and nothing else. Not even utility
-  global functions related to module. Better separate them in another globally accessible class file. This will help in maintaining the class 
-  for that particular purpose, and you can decide the visibility of class to specific module only.
-
-2) Open Closed Principle : "Software components should be open for extension, but closed for modification"
-- Your classes should be designed such a way that whenever fellow developers wants to change the flow of control in specific conditions in 
-  application, all they need to extend your class and override some functions and that’s it.
-- For example, if you take a look into any good framework like struts or spring, you will see that you can not change their core logic and 
-  request processing, BUT you modify the desired application flow just by extending some classes and plugin them in configuration files.
-
-3) Liskov's Substitution Principle : "Derived types must be completely substitutable for their base types"
-- 
-
-4) Interface Segregation Principle : "Clients should not be forced to implement unnecessary methods which they will not use"
-- This will give the flexibility to user to use only required functionality only.
-
-5) Dependency Inversion Principle : Depend on abstractions, not on concretions
-- You should design your software in such a way that various modules can be separated from each other using an abstract layer to bind them together.
-- The classical use of this principle is BeanFactory in spring framework. In spring framework, all modules are provided as separate components 
-  which can work together by simply injected dependencies in other module. 
-- This has been achieved by dependency inversion and open closed principles. All modules expose only abstraction which is useful in extending 
-  the functionality or plugin in another module.
------------------------
-- Hollywood Principle – “don’t call us, we’ll call you.”.

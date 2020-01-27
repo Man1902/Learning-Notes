@@ -13,10 +13,10 @@
 - Cloud Service Models : 
 1) IaaS (Infrastructure as a Service) (host): Combination of Physical server hardware,Physical storage, Networking components,Power,Cooling, Physical security
 - In this model, Cloud provider owns the physical infrastructure, and offers it to you to host platform and the applications that run on it. 
-- With IaaS, you are purchasing use of raw infrastructure. e.g AWS EC2
+- With IaaS, you are purchasing use of raw infrastructure. e.g AWS EC2 , GCP Compute Engine
 2) PaaS (Platform as a Service) (build): Layer on top of phyhsical infrastructure,which provides virtualization of OS layer.No control ovet the underlying 
  architecture inclding OS, storage, servers etc.The cloud provider gives the ability to the customer to deploy customer created apps using programming language,
- tools etc that are provided by the Cloud provider. e.g AWS Elastic Beanstalk
+ tools etc that are provided by the Cloud provider. e.g AWS Elastic Beanstalk , GCP APP Engine
 - With PaaS, you are purchasing use of say a Unix or a window host in virtual enviroment where in cloud provider manages installation of OS and hypervisor.
 3) SaaS (Software as a Service) (consume) : to layer of the overall cloud infrastructure, which offer complete applications to the cloud user.
 - In SaaS model, cloud provider, provides access and maintainance to the application, and you as a customer can make use of it.

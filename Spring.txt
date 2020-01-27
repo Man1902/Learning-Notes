@@ -103,7 +103,7 @@
   * Eureka client : 
     * Add spring-cloud-starter-netflix-eureka-client dependency and @EnableEurekaClient / @EnableDiscoveryClient
 	* @LoadBalanced with RestTemplate Bean for clinet side service discovery and load balancing.
-	  eureka.client.serviceUrl.defaultZone  = http://localhost:8761/eureka (Optional)
+	  eureka.client.serviceUrl.defaultZone  = http://localhost:8761/eureka
 	  eureka.instance.instance-id=${spring.application.name}-${random.int}  // if server port is 0
 
 2.1) Zuul Proxy Server/Edge Server : API Gateway /Routing : 
@@ -127,21 +127,29 @@
 3) Configuration Server :
    * It is a centralized application that manages all the application related configuration properties.
    * place your client config file in given folder with name as config-client.properties (config-client is name of client app)
+   * As Config service provides configuration info for various other microservices, of which the Eureka service is one, avoid config server a client of eureka.
    * Configuration Server : 
      * Add spring-cloud-config-server dependency and @EnableConfigServer
-	   spring.application.name=config-server
-	   server.port=8090
-	   #spring.cloud.config.server.git.uri=https://github.com/spring-cloud-samples/config-repo		# OR
-	   #spring.cloud.config.server.git.uri=${HOME}/config-repo		# local git repo OR
-	   spring.cloud.config.server.native.searchLocations=classpath:/configs
-	   spring.profiles.active=native
+	 * Add below properties in bootstrap.properties file.
+			#spring.cloud.config.server.git.uri=https://github.com/spring-cloud-samples/config-repo		# OR
+			#spring.cloud.config.server.git.uri=${HOME}/config-repo		# local git repo OR
+			spring.cloud.config.server.native.searchLocations=classpath:/configs
+			spring.profiles.active=native
+	 * Add below properties in application/bootstrap.properties file.  
+			spring.application.name=config-server
+			server.port=8090
+	   
    * Configuration Client : 
      * Add spring-cloud-starter-config, spring-boot-starter-actuator dependency and @RefreshScope
+	 * Add below properties in bootstrap.properties file.
 		   spring.application.name=customer-service
-		   server.port=9091
 		   spring.cloud.config.uri = http://localhost:8090
 		   management.security.enabled = false
-	 * use http://localhost:9091/refresh  actuator link (post method) to get updated properties
+		   management.endpoint.refresh.enabled=true
+		   management.endpoints.web.exposure.include=refresh
+	 * Add below properties in application/bootstrap.properties file.  
+		   server.port=9091
+	 * use http://localhost:9091/actuator/refresh  actuator link (post method) to get updated properties
   
 4) Hystrix : Fault tolerance / Circuit breaker : provides fallback option.
    * Add spring-cloud-starter-netflix-hystrix, spring-boot-starter-actuator dependency and @EnableHystrix OR @EnableCircuitBreaker 

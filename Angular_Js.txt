@@ -56,7 +56,7 @@ Directives
 		var app = angular.module("myApp", []);
 		app.directive("myCustomDirective", function() {
 			return { 
-				restrict : "A",
+				restrict : "EA",
 				template : "<h1>This is my custom Directive!</h1>" 
 			};
 		});
