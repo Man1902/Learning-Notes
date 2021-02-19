@@ -1,0 +1,14 @@
+Domain : https://dev-933231.okta.com/
+manoj.paladiya@gmail.com
+ZAybxcwdv@4321
+Issuer URL : https://dev-215767.okta.com/oauth2/default
+
+Spring-Boot-Okta-Demo
+Client Id : 0oa35e0qyzb6HNcTO4x6
+
+Client secret : C14KcpdAp29pj1-6C-ZhK6TM2SdlU1izUpza82z_
+
+----------------------
+https://www.youtube.com/watch?v=yB9kEMx7fxE
+
+	  

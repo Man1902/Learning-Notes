@@ -149,6 +149,7 @@ kubectl scale deployment nginx --replicas 3
 AWS
 -------------------------------
 https://drive.google.com/drive/folders/1oXWb6KHotsoS8EMc7ch0awL3HpNoGSLe
+- Note : Completedt till 006
 
 - Region is a geographical area (physical location).Each region consists of 2 (or more) Availability Zones.
 - An Availability Zones (AZ) is simply a data center.
@@ -156,4 +157,52 @@ https://drive.google.com/drive/folders/1oXWb6KHotsoS8EMc7ch0awL3HpNoGSLe
   * Edge locations are endpoints for AWS which are used for caching content.
   * Typically this consitst of CloudFront,Amazon's Content Delievery Network (CDN)
   * There are many more Edge locations than Regions. (96 currently)
-- 
+- Compute Services : 
+  1) EC2 : Elastic compute cloud : 
+  2) EC2 Container Service :
+  3) Elastic Beanstalk : 
+  4) Lamda : 
+  5) Lightsail : 
+  6) Batch : 
+- Storage Service : 
+  1) S3 : Simple Storage Service 
+  2) EFS : Elastic File System 
+  3) Glacier :   
+  4) Snowball : 
+  5) Storage Gateway : 
+- Databases Services: 
+  1) RDS : Relational Database Service 
+  2) DynamoDB : 
+  3) Elasticache : 
+  4) Red Shift : 
+- Migration Services : 
+  1) AWS Migration Hub : 
+  2) Application Discovery Service : 
+  3) Database Migration Service : 
+  4) Server Migration Service : 
+- Networking & Content Delivery : 
+  1) VPC : 
+  2) CloudFront : 
+  3) Route53 : 
+  4) API Gateway : 
+  5) Direct Connect : 
+- Developer Tools : 
+  1) CodeStar : 
+  2) CodeCommit : 
+  3) CodeBuild : 
+  4) CodeDeploy : 
+  5) CodePipeline : 
+  6) X-Ray : 
+  7) Cloud9 : 
+- Management Tools : 
+  1) CloudWatch : 
+  2) CloudFormation : 
+  3) CloudTrail : 
+  4) Config : 
+  5) OpsWorks : 
+  6) Service Catalog : 
+  7) Systems Manager : 
+  8) Trusted Advisor : 
+  9) Managed Services : 
+  
+  

@@ -49,14 +49,14 @@
 1) Version Control : Git and GitHub 
 ----------------------------------- 
 - Version control is a system that records changes to a file or set of files over time so that you can recall specific versions later on.
-- Why vwersion control system is required ? - For collaboration, Back up, Analyze
+- Why version control system is required ? - For collaboration, Back up, Analyze
 - Type of Version control system 1) Centralized 2) Distributed
 				Distributed VCS 													Centralized VCS 
-  * It creates a local repository to store everything locally			* It uses a centralized sever to store the changes in the source code.
+ *  It creates a local repository to store everything locally			* It uses a centralized sever to store the changes in the source code.
     instead of using centralized sever.
  *  Network access is not mandatory for every operations.(Requires 		* Network is required for almost all operations
     only for Push/Pull between local and central repository)
- * In working PC, extra space is required for local repository			* In working PC, extra space is not required.
+	
 - Version control tools : 1) Git (distributed VCS,Provides local copy to every one) 2) sub version(svn) (centralized VCS : Don't provide local copy to everbody.
   They have to directly work with cenral repository) 
 - Git is a distributed version control tool while GitHub is a distributed version control system server which allows Git to pull source code from central(Remote) 
@@ -88,51 +88,75 @@
 		| <--------------- Git Merge -------------- |
 - Repository : A directory or storage space where your project's source code is stored.1) Local Repository : local to folder of developer's computer.
   2) Central(Remote) Repository : Store space on GitHub server.
-- Branches are pointers to a specific commit.1) Local branches 2) Remote tracking branches 
+- Branches are pointers to a main code base / specific commit and allow you to create a antoher copy of code base with the all code and history.
+  1) Local branches 2) Remote tracking branches 
 - Merging is a way to combine the work of diffrent branches together.It Allows to branch off, develop a new feature and combine it back. 
-- Rebasing is a way of combining the work between diffrent branches.It can be used to make a linear sequence of commits.
+- Rebasing is a way of combining the work between diffrent branches.It can be used to make a linear sequence of commits. e.g
+  * master branch before creating feature branch : m1 -> m2 
+  * feature branch from master : m1 -> m2
+  * After commit in feature branch : m1 -> m2 -> f1
+  * commit in master before merging feature branch : m1 -> m2 -> m3
+  * master branch after rebase feature branch : m1 -> m2 -> f1 -> m3 (will maintain linear sequence of commits)
+- git fork is remote to remote cloning. 
+  Base remote repo -> fork to user1's account -> clone user1's repo -> push code in user1's repo -> raise pull request to merge uswer1's changes into base repote repo
 
 -- Commands
-- GitHub Account : Mail : mymail@gmail.com Pwd : Vi2Fiwghat2@Wicn3h1an
+- GitHub/Bitbucket Account : Mail : mymail@gmail.com Pwd : Vi2Fiwghat2@Wicn3h1an
 - Open Git Bash from your local repository.
-git init 									// To create local repository
-git clone git@github.com:UserName/Demo.git	// To create local repository and clone data from central repository
-git add Demofile1.txt  // To add file to the staging area.Before commit,file needs to be added to the Git index (staging area)
-git add -A			   // OR git add . : to add all files 
-git commit -m "adding first commit into local repo" 	// To commit file into local repo
-git commit -a -m "commiting all file together"  		//To commit all file
-git status				// to check the state of repository
+git config --system/global/local user.name "UserName"		// 1) Git System level configuration : All users + All repo 
+git config --system/global/local user.email "mail@id.com"	// 2) Git Global level configuration : Specific user + All repo
+git config --system/global/local --list						// 3) Git Local level configuration : Specific user + Specific repo
+git init													// To create local repository
+git add Demofile1.txt  										// To add file to the staging area.Before commit,file needs to be added to the Git index (staging area)
+git add -A			   										// OR git add . : to add all files 
+git rm --cache Demofile1.txt								// To unstage file from staging area
+git commit -m "adding first commit into local repo" 		// To commit file into local repo
+git commit -a -m "commiting all file together"  			// To commit all file
+git status													// to check the state of repository
 git log
 git log --oneline
-ls
-Cat Demofile1.txt				// to check the content of file
-git branch firstbranch			// to create a new branch 
-git checkout firstbranch		// To switch from one branch to another branch
-git checkout -b firstbranch 	// to create and checkout new branch
-git branch 						// To list down all present branches
-git branch -d secondbranch		// To delete the branch
-git merge firstbranch 			// to merge branches.execute this command from master branch.
-git rebase master				// execute command from another branch (e.g firstbranch)
-git rebase firstbranch			// execute command from master branch
-git checkout 62cefc73 revert.txt // to revert back to specific version
-git revert 62cefc73				 // to revert back to specific version
-git revert HEAD					 //  to revert from last commit
-ssh-keygen						// to generate public SSH key
-ssh -T git@github.com
-git remote add origin "https://github.com/UserName/Demo.git"		// To Sync with remote repo for push/pull/fetch
-git push origin firstbranch 	// OR master : to push local repo branch into central repo
-git pull origin master			// To update local repository from central repository
-git stash -u 					// To put all un commited changes into stash to clean working directory
+ls															// to show all files present in working directory
+git ls-files												// to show all staged files
+Cat Demofile1.txt											// to check the content of file
+git stage Demofile1.txt										// OR git stage * : to add modified file into staging area.
+git restore --staged Demofile1.txt							// to remove file from staging area. However file changes will not get removed
+git checkout -- Demofile1.txt								// to revert file changes and replace it with head revison file.
+git reset --soft 62cefc73									// to set revision to specific commit and remove all commits above this specific commit. 
+git checkout 62cefc73 revert.txt 							// to revert back to specific version
+git revert 62cefc73				 							// to revert back to specific version
+git revert HEAD					 							// to revert from last commit
+git stash OR git stash push 								// to put all un commited changes into stash to clean working directory
 git stash list
+git stash apply stash@{0}									// to apply stash changes by its unique stash index 
+git stash drop stash@{0}									// to remove stash from stash list by its unique stash index 
+git stash pop stash@{0}										// to apply stash changes and remove stash from stash list by its unique stash index in single command
 git stash show
-git stash apply
-git config --global user.name "UserName" 
-git config --global user.email "mail@id.com"
-
+git branch firstbranch										// to create a new branch 
+git checkout firstbranch									// To switch from one branch to another branch
+git checkout -b firstbranch 								// to create and checkout new branch
+git branch 													// To list down all present branches
+git branch -d secondbranch									// To delete the branch
+git merge firstbranch 										// to merge firstbranch into master branch.(excute command from master branch)
+git rebase firstbranch										// to merge firstbranch into master branch.will maintain linear sequence of commits
+ssh-keygen													// to generate public SSH key
+ssh -T git@github.com										
+git remote add origin "https://github.com/UsrName/Demo.git" 			// to sync with github remote repo for push/pull/fetch OR
+git remote add github https://github.com/UsrName/Demo.git	
+git remote add bitbcket https://UsrName@bitbucket.org/UsrName/Demo.git	// to sync with bitbcket remote repo for push/pull/fetch
+git remote -v	OR git remote show github|bitbcket						// to check remote repo
+git remote set-url origin https://github.com/UsrName/RepoName.git		// to change remote repo 
+git remote rm origin 													// to remove remote repo.It does not delete the remote repository from the server. It simply removes the remote and its references from your local repository.
+git push origin master|firstbranch 							// to push local repo branch changes into central repo branch
+git push github|bitbcket master								// to push local repo branch changes into central github|bitbcket repo branch
+git pull origin master										// to update local repository branch from central repo branch
+git pull github|bitbcket master								// to update local repository branch from central github|bitbcket repo branch
+git clone git@github.com:UserName/Demo.git					// To create local repository and clone data from central repository
+git fork													// 
+git update-git-for-windows									// to update git version
 --------------------------
 2) Continuous Integration
 --------------------------
-- Continuous Integration (CI) is a development practice in which the developers requires to commit souce code into a shared repository several times a day where
+ - Continuous Integration (CI) is a development practice in which the developers requires to commit souce code into a shared repository several times a day where
   Each check-in is then verified by an automated build, allowing teams to detect problems early. 
   commit code to a shared repositiry -> Jenkins Server -> Build (compile -> Code Review -> Unit Testing -> Integration Testing -> Package (WAR,JAR etc )
 - Jenkins is an open source Continuous Integration tool.(written in java).Its job is to integrate various stage of DevOps.

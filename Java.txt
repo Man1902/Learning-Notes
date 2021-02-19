@@ -22,7 +22,6 @@
   2) visibility : Child ClassLoader can see class loaded by Parent ClassLoader but reverse is not true.
   3) uniqueness : class loaded by Parent should not be loaded by Child ClassLoader again.(Though it is possible to violate Delegation and Uniqueness principles 
      but we should avoid it as it is not beneficial)
-- We can use Class.forName(classname) and Class.forName(classname, initialized, classloader)
 - We can create our own classloader by extending ClassLoader class and overriding loadClass(String name) method.
 -* "ClassNotFoundException" is thrown when JVM  tries to load a particular class and the specified class cannot be found in the classpath.It is a checked 
    exception and thus, must be declared using throws or handled using try catch block.
@@ -116,30 +115,6 @@
 	 * In inheritance, Any change in the superclass might affect subclass even though we might not be using the superclass methods.
 	 * Inheritance exposes all the superclass methods and variables to the client and if we have no control in designing superclass, it can lead to security holes. 
 	   Composition allows us to provide restricted access to the methods and hence more secure.
-- Nested class 1) Static nested class 2) Non-static nested class/Inner class(Member inner class,Local inner class,Anonymous inner class).
-  * Static nested class : can have "static" and "non-static" members. but can access only "static members" of "outer class".
-	* Static method can't be abstract but static nested class can be abstract or final.
-	* Instantiation : OuterClass.StaticInnerClass obj = new OuterClass.StaticInnerClass();
-  * Non-Static nested classe : can have only "non-static" members but can access both "static" and "non-static" members of "outer class".
-    * Member inner class (outside method) and Local inner class(inside method or block) can have static field only if that field is final.
-	* Instantiation : OuterClass.MemberInnerClass obj =  outerClassObj.new MemberInnerClass();
-	* Local Inner Class can’t be static.Because, local inner class is nothing but local variable and local variable can’t be static.
-	* Only final local variables of methods or blocks cab be used inside local inner class.But after JDK 1.8, it is possible to access it (effective final).
-	* Since an anonymous class has no name, it is not possible to define a constructor for an anonymous class.They are accessible only at the point where it is 
-	  defined.
-- Nested interface(static implicitely) must be public if it is declared inside the interface but it can have any access modifier if declared within the class.
-- Enums : used for "grouping similar kind of constants" as a one unit. (Introduced in JDK 1.5 onward)
-  * can have any number of fields,methods and constructors and Each constant will have their own copy.You can delcare main() method inside Enum also.
-  * Enum can have concreate/abstract/static methods.
-  * Every enum extends Enum class.So,it could not extend any other class.But can implement any number of interfaces.
-  * Enums can be declare otside class or inside class (static implicitly) but not inside method.
-  * Enum is type-safe. You can not assign any other value to Enum variable other than Predefined Enum constants.
-  * First line of Enum must be constant decalration only.Every Enum constant represents an object of type Enum.
-  * Every Enum constant is always public static final (can be treated as static inner classes).Since it is static,You can access it through Enum name.Since it is
-    final,You can not create child Enum.
-  * values() method is used to get all value present inside Enum.ordinal() method is used to find index of each Enum constant.
-  * Enum can have private/default constructor and it will be executed seprately for each Enum constant at the time of Enum class loading.
-  * Enum constant can be declared with parameterized values (for that you have to  define parameterized constructor).
 - Wrapper class provides the mechanism to convert primitive into object (Boxing) and object into primitive (Unboxing).
   * Since Java 1.5 , It is happening automatically
   * All the wrapper classes in java are immutable and final.
@@ -150,106 +125,6 @@
   3)It tries to perform "auto-widening" conversion 
   4) It checks for the method which takes "super class type" (up casting) 
   5) gives compile time error.
-- Reflection API provides the ability to inspect and modify the runtime behavior of java application. 
-  * We can inspect a java class, interface, enum and get their methods and field details. 
-  * Reflection API usage can break the design pattern such as Singleton pattern by invoking the private constructor i.e violating the rules of access modifiers.
-- Exception Handling : 
-  * try block : used to enclose the code that might throw an exception.
-  * catch block : used to handle the exceptions thrown by try block.
-  * finally block : will be always execute Whether exception is thrown or not and thrown exception is caught or not.
-  * From Java 1.7, Multiple exceptions thrown by the try block can be handled by a single catch block  using pipe (|) operator.
-  * Order of catch blocks should be from "most specific" to "most general".(Sub classe Exception first and super class later).
-  * If finally block does not return a value then both try and catch blocks must return a value.
-  * finally block will be always executed even though try and catch blocks are returning the control.
-  1) Checked exception : 
-     * checked at "compile time".Thus, have to handle it using throws or try/catch block to avoid compilation error.
-     * All Sub class of Exception class except RuntimeException class)e.g SQLException,IOException,InterruptedException
-  2) UnChecked exception : 
-     * checked at run time.All sub class of RuntimeException and Error class. e.g ArithmeticException, NumberFormatException, NullPointerException, 
-	   ArrayIndexOutOfBoundsException,ClassCastException
-  * Exception Hierarchy : Exception and Error class -> Throwable class -> Object class.
-  * An object of Throwable or to it's sub classes can be "explicitly" created and thrown using "throw" keyword.
-  * If a method is capable of throwing an exception(propogating an exception) that it could not handle, then it should specify that exception using "throws keyword". 
-  * Unchecked exceptions propogate in calling chain automatically while Checked exceptions can't propogate automatically.
-		  Super Class						Sub Class
-	  1) No Exception				No Exception / Uncheked Exception
-	  2) Uncheked Exception         Same / subclass of Uncheked Exception / No Exception
-	  3) Checked Exception          Same / subclass of Checked Exception / No Exception
-  * We can create our custom exception by exxtenig Exception or it's sub classes.
-- Array :  is a collection of similar type of elements that have contiguous memory location.
-  * Data type of Array can be primitive,object or user defiend.
-  * Array copy ways : 1) Direct asign source array reference to dest array ref. 2) Using for loop 3) Using Array.copyOf() 4) Using Objerct class clone() method
-    5) Using System.arraycopy() method.
-  * Array can hold the references to any type of objects. Array can contain only references to the objects, not the objects itself.(default is null)
-  * Declaration and instantiating of an array strictly must be of same type. No auto-widening, auto-boxing and auto-unboxing is allowed. But only auto-upcasting 
-    is allowed. (An array containing super class reference variables can point to sub class objects.)
-  * When an array is passed to a method, reference of an array object is passed not the copy of the object.
-  * Size of an array can not be changed once you define it.(drawback)
-- for-each loop in java is the enhanced version of for loop (Java 1.5 Onwards)
-- Multi Threading : 
-  * Thread is a smallest executable unit of a process.
-  * Thread shares a common memory of process.Hence, Inter Thread Communication is fast. 
-  * Context switching from one thread to another thread is also less expensive.
-  * Every thread maintains its own separate stack (Runtime Stack). But, they share the same memory.
-  * Ways to create threads : 1) By extending Thread class (by overriding run() method) 2) By implementing Runnable interface (by implementing run() method)
-    * When multiple threads need to execute same task, then use Runnable interface. 
-	* If multiple threads need to execute different tasks, then go for Thread class.
-  * If you will start already started thread again , It will throw IllegalThreadStateException.
-  * If we call run() directly before start(), than object will be treated as normal object not thread object.
-  * User threads are created by application/user (High priority) while Daemon threads are created by the JVM (Low priority).JVM will not wait for Daemon thread.
-  * You can convert user thread into daemon thread by calling "setDaemon()" method before "start()" method (else IllegalThreadStateException at run time)
-  * "currentThread()" static method of Thread class returns the reference of currently executing thread.
-  * From Java 1.5, "getId()" method is added into Thread class which returns the unique long number associated with a thread.(To identifier each thread uniqely). 
-    * Thread Id remains the same for a thread during its whole life term. It may be reused when the thread is terminated.
-	* It doesn't change when the name of a thread is changed. 
-	* We can't assign our own Id to the thread. But, we can change the way getId() returns the thread Id as it is not a final method.
-  * setPriority() and getPriority() methods are used to get and set the priority of a thread. (MIN_PRIORITY - 1 , NORM_PRIORITY - 5 ,MAX_PRIORITY - 10)
-    * Setting Priority of a thread is just an advice to OS not an instruction. It is up to OS to consider this advice.
-  * Thread.sleep() method makes the "currently executing thread" (even though you are calling sleep() method on another thread object) to pause its execution
-    for a specified period of time.
-	* It is a bad practice to call sleep() method with an instance of Thread class.
-	* If you want a particular thread to sleep for a while, then call sleep() method inside the run() method of that thread.
-	* When the thread is going for sleep, it does not release the "synchronized locks" it holds.
-  * join() method is used to make currently executing thread to wait for a thread to finish its task "on which it is called".
-  * Thread.sleep() / join() method throws InterruptedException (checked type) if a thread is interrupted by other threads. 
-  * "Thread interference" is a condition which occurs when more than one threads, executing simultaneously, access same piece of data.(not thread safe code)
-  * Synchronization : process to overcome thread interference to any shared resource and protecting the data from inconsistency.(way to make code thread safe)
-    * Through synchronization, we can make the threads to execute particular method or block in "sync" not "simultaneously".
-	* Synchronization is implemented using synchronized keyword.(can be used with methods or blocks only).
-	* Synchronization is built around an entity called "object lock" or "monitor".
-	* Whenever an object is created, an "object lock" or "monitor" is created and is stored inside the object.
-	* One object will have only one object lock associated with it.
-	* To enter into static synchronized methods/blocks, threads have to acquire "class lock" associated with that class.
-	* If any thread wants to enter into synchronized methods/blocks of any shared object,they must acquire object lock associated with that shared object and 
-      release the lock after they are done with the execution.
-	* Synchronized Blocks are used to synchronized some part of method/block.It takes one argument(mutex).for non-static methods,IIB and constructors,mutex must be 
-      shared object.While for static methods and SIB, mutex must be like ClassName.class.
-	* static synchronized and non-static synchronized methods can run simultaneously.
-	* Synchronization can be nested.It is Re-entrant in nature (in nested calling,Thread can acquire a lock that it already owns)
-    * Deadlock is a condition which occurs when two or more threads get blocked waiting for each other to release the resources(Locks) they hold.
-	  * Try to avoid nested synchronized blocks to overcome possible deadlock issue.
-  * Threads can communicate with each other using wait(), notify() and notifyAll() final methods of Object class.
-    * These three methods must be called within synchronized method or block. Any thread which calls these methods must have lock of that object.
-	* wait() method tells the currently executing thread to "release the lock" of shared object and wait until some other thread acquires the same lock and 
-	  notify it using either notify() or notifyAll() methods. This method throws InterruptedException if waiting thread is interrupted.
-    * DIFF: In sleep() method call, thread doesn't release object lock while on wait() method call , thread release the object lock.
-    * wait(), notify() and notifyAll() all three methods throw IllegalMonitorStateException if the calling thread does not owns the object lock.
-	* Thread "interruption" is a mechanism in which a thread which is either sleeping or waiting can be made to stop sleeping or waiting.
-  * Thread State : NEW, RUNNABLE, BLOCKED, WAITING, TIMED_WAITING and TERMINATED (new -> runnable -> running -> non-runnable -> terminated)
-  * Before notification thread will be in WAITING state.Once it is notified,it moves to BLOCKED state.It remains in BLOCKED state until it gets the lock.
-    Once it gets the lock,it moves from BLOCKED state to RUNNING state. 
-  * ThreadGroup is used to group similar kind of threads into one unit.ThreadGroup can also contain other ThreadGroups.
-  * Exception is thread wise not execution wise.exception effects only in the thread in which it occurs.Other threads will execute normally.
-  * Ways to stop a thread 1) using boolean variable 2) using interrupt() method
-  * volatile variable is used to Read/Write variable value directly from main memory only.(Instead of caching it).
-	* It also guarantees visibility and ordering.(provides "happens-beofore" guaranty)
-	* Atomic operations are take place in one step.
-	* Reading/Writing 64 bit long or double is not atomic(as it occurs in two steps).Hence, it is not thread safe.To ensure atomic/thread safety, it is essential
-	  to use volatile (or synchronized block) 
-- The shutdown hook can be used to perform cleanup resource or save the state when JVM shuts down normally or abruptly.
-- Java Runtime class is used to interact with java runtime environment.
-  * It provides methods to execute a process, invoke GC, get total and free memory etc.
-  * There is only one instance of Runtime class is available for one java application.
 - String :   
   * Why String class is immutable / final (Once created can't modify it) in java ?
 	  * String Pool Requirement : If string is not immutable, changing the string with one reference will lead to the wrong value for the other references.
@@ -281,9 +156,17 @@
 - static class is a Java class, which only contains static methods. e.g java.lang.Math
 - If your Singleton class is not maintaining any state, and just providing global access to methods, than consider using static class, as static methods are much
   faster than Singleton, because of static binding during compile time.
- 	
+- Array :  is a collection of similar type of elements that have contiguous memory location.
+  * Data type of Array can be primitive,object or user defiend.
+  * Array copy ways : 1) Direct asign source array reference to dest array ref. 2) Using for loop 3) Using Array.copyOf() 4) Using Objerct class clone() method
+    5) Using System.arraycopy() method.
+  * Array can hold the references to any type of objects. Array can contain only references to the objects, not the objects itself.(default is null)
+  * Declaration and instantiation of an array strictly must be of same type.Only auto-upcasting is allowed.(Object a[] = new String[])
+  * When an array is passed to a method, reference of an array object is passed not the copy of the object.
+  * Size of an array can not be changed once you define it.(drawback)
+- for-each loop in java is the enhanced version of for loop (Java 1.5 Onwards)
 - Generics (introduced in Java 1.5) : 
-  * used to check the "type compatibility" at the "compile time" and hence removing the chances of occuring "ClassCastException" at "run time".
+  * used to check the "type compatibility" at the "compile time" and hence avoid the chances of occuring "ClassCastException" at "run time".
   * Generics works with "derived type" only (primitive type not allowed).
   * Only "generic classes" can implement "generic interfaces". 
   * Normal class can implement generic interface only if type of parameter of generic interface is "wrapper class".
@@ -403,16 +286,30 @@
     * It uses equality operator “==” instead of the equals method for comparing keys and values.
 	* It doesn’t require keys to be immutable.
  24)EnumMap : is specialized implementation of Map which contains key of Enum type.
-- For financial calculations,One should use "BigDecimal" (as floating point calculation may not be exact).Here, if you use BigDecimal constuctor which accept
-  double as argument,you will get the incorrect result.So alway use BigDecimal with string constuctor.  	 
-- Serialization  : convertion of a Java object to an Stream.Once an object is converted to Stream, it can be saved to file or send over the network.
-  * object should implement Serializable (I) and we can use ObjectOutputStream to write object to file or to any OutputStream object.
-  * transient keyword is used in serealization.
-	  * transient data member can not be serealized.
-	  * For transient varaibles, JVM takes defualt value at the time of serealization. e.g we don't want to save private data in file.
-	  * static fields are not part of object.so,no use of transient with it.
-	  * final variables are directly serealized by their value.so no use of transient with final varaible also.
-- Deserialization : process of converting stream data created through serialization to Object.
+ 
+- Exception Handling : 
+  * try block : used to enclose the code that might throw an exception.
+  * catch block : used to handle the exceptions thrown by try block.
+  * finally block : will be always execute Whether exception is thrown or not and thrown exception is caught or not.
+  * From Java 1.7, Multiple exceptions thrown by the try block can be handled by a single catch block  using pipe (|) operator.
+  * Order of catch blocks should be from "most specific" to "most general".(Sub classe Exception first and super class later).
+  * If finally block does not return a value then both try and catch blocks must return a value.
+  * finally block will be always executed even though try and catch blocks are returning the control.
+  1) Checked exception : 
+     * checked at "compile time".Thus, have to handle it using throws or try/catch block to avoid compilation error.
+     * All Sub class of Exception class except RuntimeException class)e.g SQLException,IOException,InterruptedException
+  2) UnChecked exception : 
+     * checked at run time.All sub class of RuntimeException and Error class. e.g ArithmeticException, NumberFormatException, NullPointerException, 
+	   ArrayIndexOutOfBoundsException,ClassCastException
+  * Exception Hierarchy : Exception and Error class -> Throwable class -> Object class.
+  * An object of Throwable or to it's sub classes can be "explicitly" created and thrown using "throw" keyword.
+  * If a method is capable of throwing an exception(propogating an exception) that it could not handle, then it should specify that exception using "throws keyword". 
+  * Unchecked exceptions propogate in calling chain automatically while Checked exceptions can't propogate automatically.
+		  Super Class						Sub Class
+	  1) No Exception				No Exception / Uncheked Exception
+	  2) Uncheked Exception         Same / subclass of Uncheked Exception / No Exception
+	  3) Checked Exception          Same / subclass of Checked Exception / No Exception
+  * We can create our custom exception by extenig Exception or it's sub classes.
 
 - Java (JVM) Memory Model – Memory Management in Java : 
  
@@ -428,8 +325,8 @@
   * Most of the newly created objects are located in the Eden memory space.
   * When Eden space is filled with objects, Minor GC is performed and all the survivor objects are moved to one of the survivor spaces.
   * Minor GC also checks the survivor objects and move them to the other survivor space. So at a time, one of the survivor space is always empty.
-  * Objects that are survived after many cycles of GC, are moved to the Old generation memory space.Usually, it’s done by setting a threshold for the age of the 
-    young generation objects.(Old Generation memory contains the objects that are long-lived and survived after many rounds of Minor GC)
+  * Objects that are survived after many cycles of Minor GC, are moved to the Old generation memory space.Usually, it’s done by setting a threshold for the age 
+    of the young generation objects.(Old Generation memory contains the objects that are long-lived and survived after many rounds of Minor GC)
   * Usually, garbage collection is performed in Old Generation memory (Major GC) when it’s full and usually it takes a longer time.
   * Since Young generation keeps short-lived objects, Minor GC is very fast and the application doesn’t get affected by this.
   * However, Major GC takes a long time because it checks all the live objects. Major GC should be minimized because it will make your application unresponsive 
@@ -478,9 +375,109 @@
 	   * It is same as Parallel GC except that it uses multiple threads for both Young Generation and Old Generation garbage collection.
 Concurrent Mark Sweep (CMS) Collector (-XX:+UseConcMarkSweepGC): CMS Collector is also referred as concurrent low pause collector. It does the garbage collection for the Old generation. CMS collector tries to minimize the pauses due to garbage collection by doing most of the garbage collection work concurrently with the application threads.
 CMS collector on the young generation uses the same algorithm as that of the parallel collector. This garbage collector is suitable for responsive applications where we can’t afford longer pause times. We can limit the number of threads in CMS collector using -XX:ParallelCMSThreads=n JVM option.
-
 G1 Garbage Collector (-XX:+UseG1GC): The Garbage First or G1 garbage collector is available from Java 7 and its long term goal is to replace the CMS collector. The G1 collector is a parallel, concurrent, and incrementally compacting low-pause garbage collector.
-  
+
+- Enums : used for "grouping similar kind of constants" as a one unit. (Introduced in JDK 1.5 onward)
+  * can have any number of fields,methods and constructors and Each constant will have their own copy.You can delcare main() method inside Enum also.
+  * Enum can have concreate/abstract/static methods.
+  * Every enum extends Enum class.So,it could not extend any other class.But can implement any number of interfaces.
+  * Enums can be declare otside class or inside class (static implicitly) but not inside method.
+  * Enum is type-safe. You can not assign any other value to Enum variable other than Predefined Enum constants.
+  * First line of Enum must be constant decalration only.Every Enum constant represents an object of type Enum.
+  * Every Enum constant is always public static final (can be treated as static inner classes).Since it is static,You can access it through Enum name.Since it is
+    final,You can not create child Enum.
+  * values() method is used to get all value present inside Enum.ordinal() method is used to find index of each Enum constant.
+  * Enum can have private/default constructor and it will be executed seprately for each Enum constant at the time of Enum class loading.
+  * Enum constant can be declared with parameterized values (for that you have to  define parameterized constructor).
+- Serialization  : convertion of a Java object to an Stream.Once an object is converted to Stream, it can be saved to file or send over the network.
+  * object should implement Serializable (I) and we can use ObjectOutputStream to write object to file or to any OutputStream object.
+  * transient keyword is used in serealization.
+	  * transient data member can not be serealized.
+	  * For transient varaibles, JVM takes defualt value at the time of serealization. e.g we don't want to save private data in file.
+	  * static fields are not part of object.so,no use of transient with it.
+	  * final variables are directly serealized by their value.so no use of transient with final varaible also.
+- Deserialization : process of converting stream data created through serialization to Object.
+- Multi Threading : 
+  * Thread is a smallest executable unit of a process.
+  * Thread shares a common memory of process.Hence, Inter Thread Communication is fast. 
+  * Context switching from one thread to another thread is also less expensive.
+  * Every thread maintains its own separate stack (Runtime Stack). But, they share the same memory.
+  * Ways to create threads : 1) By extending Thread class (by overriding run() method) 2) By implementing Runnable interface (by implementing run() method)
+    * When multiple threads need to execute same task, then use Runnable interface. 
+	* If multiple threads need to execute different tasks, then go for Thread class.
+  * If you will start already started thread again , It will throw IllegalThreadStateException.
+  * If we call run() directly before start(), than object will be treated as normal object not thread object.
+  * User threads are created by application/user (High priority) while Daemon threads are created by the JVM (Low priority).JVM will not wait for Daemon thread.
+  * You can convert user thread into daemon thread by calling "setDaemon()" method before "start()" method (else IllegalThreadStateException at run time)
+  * "currentThread()" static method of Thread class returns the reference of currently executing thread.
+  * From Java 1.5, "getId()" method is added into Thread class which returns the unique long number associated with a thread.(To identifier each thread uniqely). 
+    * Thread Id remains the same for a thread during its whole life term. It may be reused when the thread is terminated.
+	* It doesn't change when the name of a thread is changed. 
+	* We can't assign our own Id to the thread. But, we can change the way getId() returns the thread Id as it is not a final method.
+  * setPriority() and getPriority() methods are used to get and set the priority of a thread. (MIN_PRIORITY - 1 , NORM_PRIORITY - 5 ,MAX_PRIORITY - 10)
+    * Setting Priority of a thread is just an advice to OS not an instruction. It is up to OS to consider this advice.
+  * Thread.sleep() method makes the "currently executing thread" (even though you are calling sleep() method on another thread object) to pause its execution
+    for a specified period of time.
+	* It is a bad practice to call sleep() method with an instance of Thread class.
+	* If you want a particular thread to sleep for a while, then call sleep() method inside the run() method of that thread.
+	* When the thread is going for sleep, it does not release the "synchronized locks" it holds.
+  * join() method is used to make currently executing thread to wait for a thread to finish its task "on which it is called".
+  * Thread.sleep() / join() method throws InterruptedException (checked type) if a thread is interrupted by other threads. 
+  * "Thread interference" is a condition which occurs when more than one threads, executing simultaneously, access same piece of data.(not thread safe code)
+  * Synchronization : process to overcome thread interference to any shared resource and protecting the data from inconsistency.(way to make code thread safe)
+    * Through synchronization, we can make the threads to execute particular method or block in "sync" not "simultaneously".
+	* Synchronization is implemented using synchronized keyword.(can be used with methods or blocks only).
+	* Synchronization is built around an entity called "object lock" or "monitor".
+	* Whenever an object is created, an "object lock" or "monitor" is created and is stored inside the object.
+	* One object will have only one object lock associated with it.
+	* To enter into static synchronized methods/blocks, threads have to acquire "class lock" associated with that class.
+	* If any thread wants to enter into synchronized methods/blocks of any shared object,they must acquire object lock associated with that shared object and 
+      release the lock after they are done with the execution.
+	* Synchronized Blocks are used to synchronized some part of method/block.It takes one argument(mutex).for non-static methods,IIB and constructors,mutex must be 
+      shared object.While for static methods and SIB, mutex must be like ClassName.class.
+	* static synchronized and non-static synchronized methods can run simultaneously.
+	* Synchronization can be nested.It is Re-entrant in nature (in nested calling,Thread can acquire a lock that it already owns)
+    * Deadlock is a condition which occurs when two or more threads get blocked waiting for each other to release the resources(Locks) they hold.
+	  * Try to avoid nested synchronized blocks to overcome possible deadlock issue.
+  * Threads can communicate with each other using wait(), notify() and notifyAll() final methods of Object class.
+    * These three methods must be called within synchronized method or block. Any thread which calls these methods must have lock of that object.
+	* wait() method tells the currently executing thread to "release the lock" of shared object and wait until some other thread acquires the same lock and 
+	  notify it using either notify() or notifyAll() methods. This method throws InterruptedException if waiting thread is interrupted.
+    * DIFF: In sleep() method call, thread doesn't release object lock while on wait() method call , thread release the object lock.
+    * wait(), notify() and notifyAll() all three methods throw IllegalMonitorStateException if the calling thread does not owns the object lock.
+	* Thread "interruption" is a mechanism in which a thread which is either sleeping or waiting can be made to stop sleeping or waiting.
+  * Thread State : NEW, RUNNABLE, BLOCKED, WAITING, TIMED_WAITING and TERMINATED (new -> runnable -> running -> non-runnable -> terminated)
+  * Before notification thread will be in WAITING state.Once it is notified,it moves to BLOCKED state.It remains in BLOCKED state until it gets the lock.
+    Once it gets the lock,it moves from BLOCKED state to RUNNING state. 
+  * ThreadGroup is used to group similar kind of threads into one unit.ThreadGroup can also contain other ThreadGroups.
+  * Exception is thread wise not execution wise.exception effects only in the thread in which it occurs.Other threads will execute normally.
+  * Ways to stop a thread 1) using boolean variable 2) using interrupt() method
+  * volatile variable is used to Read/Write variable value directly from main memory only.(Instead of caching it).
+	* It also guarantees visibility and ordering.(provides "happens-beofore" guaranty)
+	* Atomic operations are take place in one step.
+	* Reading/Writing 64 bit long or double is not atomic(as it occurs in two steps).Hence, it is not thread safe.To ensure atomic/thread safety, it is essential
+	  to use volatile (or synchronized block) 
+- The shutdown hook can be used to perform cleanup resource or save the state when JVM shuts down normally or abruptly.
+- Java Runtime class is used to interact with java runtime environment.
+  * It provides methods to execute a process, invoke GC, get total and free memory etc.
+  * There is only one instance of Runtime class is available for one java application.
+- Reflection API provides the ability to inspect and modify the runtime behavior of java application. 
+  * We can inspect a java class, interface, enum and get their methods and field details. 
+  * Reflection API usage can break the design pattern such as Singleton pattern by invoking the private constructor i.e violating the rules of access modifiers.
+- For financial calculations,One should use "BigDecimal" (as floating point calculation may not be exact).Here, if you use BigDecimal constuctor which accept
+  double as argument,you will get the incorrect result.So alway use BigDecimal with string constuctor.  	   
+- Nested class 1) Static nested class 2) Non-static nested class/Inner class(Member inner class,Local inner class,Anonymous inner class).  
+  * Static nested class : can have "static" and "non-static" members. but can access only "static members" of "outer class".
+	* Static method can't be abstract but static nested class can be abstract or final.
+	* Instantiation : OuterClass.StaticInnerClass obj = new OuterClass.StaticInnerClass();
+  * Non-Static nested classe : can have only "non-static" members but can access both "static" and "non-static" members of "outer class".
+    * Member inner class (outside method) and Local inner class(inside method or block) can have static field only if that field is final.
+	* Instantiation : OuterClass.MemberInnerClass obj =  outerClassObj.new MemberInnerClass();
+	* Local Inner Class can’t be static.Because, local inner class is nothing but local variable and local variable can’t be static.
+	* Only final local variables of methods or blocks cab be used inside local inner class.But after JDK 1.8, it is possible to access it (effective final).
+	* Since an anonymous class has no name, it is not possible to define a constructor for an anonymous class.They are accessible only at the point where it is 
+	  defined.
+- Nested interface(static implicitely) must be public if it is declared inside the interface but it can have any access modifier if declared within the class.
 ----- Java8 -----
 4) JAVA 1.8 : 
 4.1) forEach() method in Iterable interface : 
