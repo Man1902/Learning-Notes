@@ -3,7 +3,7 @@ Account : docerId : username Mail Id : mail@gmail.com
 - Note : For Window7, add C:\Program Files\Docker Toolbox into path variable.
 
 - Virtualization : process of creating a guest OS (Virtul machine) on a top of host OS.It is a virtualization at hardware level.
-  Host OS -> Hypervisor (Virtual machine monitor) -> VM1(Guest OS -> App1) |  VM2(Guest OS -> App2) 
+  Host OS -> Hypervisor (Virtual machine monitor) -> VM1(Guest OS -> Bins&Libs -> App1) |  VM2(Guest OS -> Bins&Libs -> App2) 
 - Pros : 
   * Multiple OS in same machine. 
 - Cons : 
@@ -12,7 +12,7 @@ Account : docerId : username Mail Id : mail@gmail.com
   * Long boot-up process.
 - Containerization (Container based) is an OS level virtualization method for deploying and running distributed applications without launching an entire VM for
   each application. 
-  Host OS -> Docker Engine -> Container1(App1) | Container2(App2)
+  Host OS -> Docker Engine (Container Engine) -> Container1(Bins&Libs -> App1) | Container2(Bins&Libs -> App2)
 - Cons : 
   * Container on same host OS are lighter and smaller
   * Better resource utilization
@@ -39,6 +39,9 @@ Account : docerId : username Mail Id : mail@gmail.com
      * Docker image is the collection of all files, libraries, binaries and other dependencies forming an executable software application.
   2) Docker container : 
      * Docker container is an isolated application platform.It contains everthing needed to run the application.It can be build from one and more images.
+	 * A way to package application with all the necessary dependecies and configuration.
+	 * Portable artifact, easily shared and moved around.
+	 * Makes development and deployment more efficient.
   3) Docker registry : 
      * Docker registry is a storage component for Docker images.We can store the images in either public/private repositories.
      * Docker Hub is docker's own cloud repository.
