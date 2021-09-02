@@ -1,27 +1,54 @@
 ---------- SpringBoot ----------
-- SpringBoot has been built on top of existing spring framework.Using SpringBoot we can avoid all the boilerplate code and configurations that we have to do in 
-  normal spring application.
-- SpringBoot makes it easy to create stand-alone,production grade spring based application that you can just run.
-- SpringBoot helps us use the existing spring functionalites more robustly and with minimum efforts.
-- SpringBoot favors convention over configration.It provides automatic configuration.  
-- SpringBoot Advantages : 
- * Embedded servers (Tomcat,Jetty and Undertow) which are easy to deploy with the containers
- * It helps in monitoring the multiple components
- * It helps in configuring the components externally
-- Annotations : @SpringBootApplication or @EnableAutoConfiguation, @ComponentScan, @EnableJpaRepositories, @EntityScan
--  @SpringBootApplication = @EnableAutoConfigueation + @SpringBootConfiguration + @ComponentScan
-- SpringBoot Features : 
-1) AutoConfiguration : 
-   * It detects the presence of certain Class/JAR in the Classpath and then automatically configure it for you.
-   * Note that the auto-configuration is only in effect if the auto-configured beans are not defined in the application.If you define your bean, then the default
-     one will be overridden.
-   * using the exclude/excludeName attribute or spring.autoconfigure.exclude property, we can disable a specific auto-configuration. e.g 
-	 @SpringBootApplication(exclude = DataSourceAutoConfiguration.class) OR
-	 spring.autoconfigure.exclude = org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration	 
-   * To Create a Custom Auto-Configuration : 
-     * we need to create a class annotated as @Configuration.
-	 * register the class as an auto-configuration candidate, by adding the name of the class in the standard file resources/META-INF/spring.factories : 
-	   org.springframework.boot.autoconfigure.EnableAutoConfiguration=\com.baeldung.autoconfiguration.MySQLAutoconfiguration
+- What is Spring Boot ? 
+  * SpringBoot is essentially a framework for rapid application development built on top of existing spring framework.
+  * SpringBoot makes it easy to create stand-alone,production grade spring based application that you can just run.
+  * SpringBoot favors convention over configration.It provides automatic configuration.  
+
+- What are the differences Between Spring and Spring Boot?
+  * While Spring is unopinionated, Spring Boot takes an opinionated view of the platform and libraries, letting us get started quickly.
+  * SpringBoot helps us use the existing spring functionalites more robustly and with minimum efforts.
+  * Using SpringBoot we can avoid all the boilerplate code and configurations that we have to do in normal spring application.
+
+- What are the main Features of Spring Boot ?
+  1) Starter POMs : 
+     * It take away pain by finding and adding common dependencies in your project.
+  2) AutoConfiguration : 
+     * It detects the presence of certain Class/JAR in the Classpath and then automatically configure it for you.
+	 * Note that the auto-configuration is only in effect if the auto-configured beans are not defined in the application.If you define your bean, then the 
+	   default one will be overridden.	 
+  3) Actuator : 
+     * Spring Boot Actuator provides secured endpoints for monitoring and managing your Spring Boot application.By default, all actuator endpoints are secured.
+	 * To enable Spring Boot actuator endpoints , add spring-boot-starter-actuator maven dependency
+     * management.endpoints.web.exposure.include = *
+	 * management.security.enabled = false
+     * Important Actuator endpoints : /metrics , /env , /beans , /health , /info , /mappings , /refresh	
+  4) Spring Boot CLI : 
+     * It allows you to create Spring based web application using Groovy programming language.
+  5) Spring Boot Initializer (What is Spring Initializr ?): 
+     * It is a web application that can be used to generate Spring Boot project structure(to bootstrap a Spring Boot application). 
+	 * It  creates a skeleton project for us and saves setup time so that we can concentrate on adding business logic.
+  6) Security : 
+  7) Logging : 
+  
+- What are the Advantages of Spring Boot ?  
+  * Embedded servers (Tomcat,Jetty and Undertow) which are easy to deploy with the containers
+  * It helps in monitoring the multiple components
+  * It helps in configuring the components externally
+
+- What Are the Basic Annotations that Spring Boot Offers ?
+  * @SpringBootApplication or @EnableAutoConfiguation, @ComponentScan, @EnableJpaRepositories, @EntityScan
+  * @SpringBootApplication = @EnableAutoConfigueation + @SpringBootConfiguration + @ComponentScan
+
+- How to Disable a Specific Auto-Configuration ?
+  * using the exclude/excludeName attribute or spring.autoconfigure.exclude property, we can disable a specific auto-configuration. e.g 
+		@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class } ) OR
+		@EnableAutoConfiguration(excludeName = {"org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration" } ) OR
+		spring.autoconfigure.exclude = org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+
+- How to Create/Register a Custom Auto-Configuration ?  
+  * we need to create a class annotated as @Configuration.
+  * register the class as an auto-configuration candidate, by adding the name of the class in the standard file resources/META-INF/spring.factories : 
+    org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.learing.autoconfiguration.MySQLAutoconfiguration
 	   @ConditionalOnClass(DataSource.class) 			// if class present OR 
 	   @ConditionalOnMissingClass (DataSource.class)    // if class not present OR
 	   @ConditionalOnBean(name = "dataSource")			// if bean present OR
@@ -32,19 +59,9 @@
 	   public class MySQLAutoconfiguration {
 			//...
 	   }
-	 * we can also define custom conditions by extending the SpringBootCondition class and overriding the getMatchOutcome() method.
-2) Starter POMs : 
-   * It take away pain by finding and adding common dependencies in your project.
-3) Spring Boot CLI : 
-   * It allows you to create Spring based web application using Groovy programming language.
-4) Actuator : 
-   * Spring Boot Actuator provides secured endpoints for monitoring and managing your Spring Boot application.By default, all actuator endpoints are secured.
-   * To enable Spring Boot actuator endpoints , add spring-boot-starter-actuator maven dependency
-   * management.security.enabled = false
-   * Important Actuator endpoints : /metrics , /env , /beans , /health , info , /trace	
-5) Spring Boot Initializer : 
-   * It is a web application that can be used to generate Spring Boot project structure(to bootstrap a Spring Boot application).
-- Spring Boot - Tomcat Deployment : 
+  * we can also define custom conditions by extending the SpringBootCondition class and overriding the getMatchOutcome() method.
+
+- How to Deploy Spring Boot Web Applications as War Files in external server (e.g Tomcat)?
   1) extend SpringBootServletInitializer class in Spring Boot Application main class.
       @Override
       protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
@@ -54,7 +71,49 @@
   3) mvn package
   4) Run the Tomcat Server, and deploy the WAR file under the webapps directory.
   5) Access http://localhost:8080/SpringBootDemo-0.0.1-SNAPSHOT/
-- ApplicationRunner and CommandLineRunner interfaces lets you to execute the code after the Spring Boot application is started.
+
+- How we can run spring boot application from cmd ?  
+  1) mvn spring-boot:run 				// for that spring-boot-maven-plugin should be added in pom.xml file
+  2) java -jar spring-boot-demo.jar   
+  
+- What is the use of ApplicationRunner and CommandLineRunner interfaces ?
+  * ApplicationRunner and CommandLineRunner interfaces lets you to execute the code after the Spring Boot application is started.
+  * Both will get execute, just after applicationcontext is created and before spring boot application startup.
+  * CommandLineRunner.run() accepts String array[] while ApplicationRunner.run() accepts ApplicationArguments.
+
+- What are Possible Sources of External Configuration ?
+  1) properties files (e.g application.proerties)
+  2) YAML files (e.g application.yml)
+  3) environment variables : (e.g JAVA_HOME ) @Autowired private Environment env; env.getProperty("JAVA_HOME");
+  4) system properties : 
+     @Profile("prod")
+	 @Component
+	 public class ProductionPropertySetter {
+		@PostConstruct
+		public void setProperty() {
+			System.setProperty("http.maxConnections", "15");
+		}
+	}
+  5) command-line option arguments : 
+     java -jar -Dspring.profiles.active=prod application.jar			// Java system property (VM arg)
+	 java -jar application.jar --spring.profiles.active=prod			// Program arg
+	 mvn spring-boot:run -Dspring.profiles.active=dev
+
+- What Does it Mean that Spring Boot Supports Relaxed Binding ?
+  * Relaxed binding in Spring Boot is applicable to the type-safe binding of configuration properties.
+  * With relaxed binding, the key of a property doesn't need to be an exact match of a property name
+  * For example, if a property in a bean class with the @ConfigurationProperties annotation is named myProp, it can be bound to any of these 
+    environment properties : myProp, my-prop, my_prop, or MY_PROP.
+ 
+- Which Embedded Servers does Spring Boot Support, and How to Change the Default ?
+  * 
+
+- How to reduce spring boot application start up time ? 
+  * Lazy Initialization is already possible in previous versions of spring boot but then to enable lazy initialization one need to implement BeanFactoryPostProcessor. 
+  * Spring boot 2.2.0 offers a simple way to enable lazy initialization of beans.
+	spring.main.lazy-initialization = true				// 
+	springApplication.setLazyInitialization(true)		// in main method		
+	
 - Exception Handling : 
   @ControllerAdvice
   public class ProductExceptionHandler {
@@ -63,6 +122,7 @@
 		return new ResponseEntity<>("Product not found", HttpStatus.NOT_FOUND);
    }
  }
+
 - Interceptor : You can use the Interceptor to perform operations Before sending the request to the controller and Before sending the response to the client.
   * you can use an interceptor to add the request header before sending the request to the controller and add the response header before sending the response to the client
   * implement HandlerInterceptor (I) or   HandlerInterceptorAdapter (C) : preHandle() , postHandle() , afterCompletion()
@@ -76,6 +136,7 @@
 			registry.addInterceptor(productServiceInterceptor);
 		}
 	}
+
 - RestTemplate : is used to consume RESTful Web Services.
   HttpHeaders headers = new HttpHeaders();
   headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
@@ -86,6 +147,7 @@
   HttpEntity<Product> entity = new HttpEntity<Product>(product,headers);
   ResponseEntity<ProductResponse> resonse = restTemplate.exchange("http://localhost:8080/products/1", HttpMethod.PUT, entity, ProductResponse.class); // 3)
   ResponseEntity<String> resonse = restTemplate.exchange("http://localhost:8080/products/1", HttpMethod.DELETE, entity, String.class); // 4)
+
 - Scheduling : is a process of executing the tasks for the specific time period.@EnableScheduling annotation is used to enable the scheduler for your application.
   @Scheduled(cron = "0 * 9 * * ?")			// every minute starting at 9:00 AM and ending at 9:59 AM, every day
   @Scheduled(fixedRate = 1000)				// to execute the tasks at the specific time.It does not wait for the completion of previous task
@@ -93,7 +155,20 @@
   public void cronJobSch() throws Exception {
 		// scheduler task
   }
-  
+
+- Difference between CrudRepository and JpaRepository interfaces in Spring Data JPA : 
+  * JpaRepository extends PagingAndSortingRepository which in turn extends CrudRepository.
+  * CrudRepository mainly provides CRUD functions.
+  * PagingAndSortingRepository provides methods to do pagination and sorting records.
+  * JpaRepository provides some JPA-related methods such as flushing the persistence context and deleting records in a batch.
+  * Because of the inheritance, JpaRepository will have all the functions of CrudRepository and PagingAndSortingRepository.
+
+- JPA Query creation : 
+  * findByFirstName , findByFirstNameAndLastName , findByFirstNameOrLastName , findDistinctByFirstNameAndLastName , findByAgeLessThan , findByAgeLessThanEqual , 
+    findByAgeGreaterThan , findByAgeGreaterThanEqual , findByBirthDateBetween , findByBirthDateAfter , findByBirthDateBefore , findByFirstnameLike , 
+	findByFirstnameNotLike , findByFirstnameStartingWith , findByFirstnameEndingWith , findByFirstnameContaining , findByAgeOrderByLastnameDesc , 
+	findByLastnameNot , findByAgeIn , findByAgeNotIn , findByActiveTrue , findByActiveFalse , findByFirstnameIgnoreCase
+	 
 1) Eureka Server (Discovery Server): Service Registry and Discovery :  
    * Eureka server : 
 	 * Add spring-cloud-starter-netflix-eureka-server dependency and @EnableEurekaServer 
@@ -106,8 +181,20 @@
 	  eureka.client.serviceUrl.defaultZone  = http://localhost:8761/eureka
 	  eureka.instance.instance-id=${spring.application.name}-${random.int}  // if server port is 0
 
-2.1) Zuul Proxy Server/Edge Server : API Gateway /Routing : 
-   * It is a gateway application that handles all the requests and does the dynamic routing of microservice applications.
+2.2) Spring Cloud Gateway :   
+	 * It is a gateway application that handles all the requests and does the dynamic routing of microservice applications.
+	 * Add spring-cloud-starter-gateway dependency and provide configurations in properties file.
+       spring.cloud.gateway.routes[0].id=ms-department-service
+	   spring.cloud.gateway.routes[0].uri=lb://ms-department-service
+	   spring.cloud.gateway.routes[0].predicates[0]=Path=/api/departments/**	 
+	   spring.cloud.gateway.routes[0].filters[0].name=CircuitBreaker
+	   spring.cloud.gateway.routes[0].filters[0].args[0].name=ms-department-service
+	   spring.cloud.gateway.routes[0].filters[0].args[0].fallbackuri=forward:/departmentServiceFallBack
+	 * spring.cloud.gateway.discovery.locator.enabled=true
+	   spring.cloud.gateway.discovery.locator.lowerCaseServiceId=true  
+	  
+	
+2.2) Zuul Proxy Server/Edge Server : API Gateway /Routing : 
    * It does not support reactive programming.
    * Add spring-cloud-starter-netflix-zuul dependency and @EnableZuulProxy. 
    * Add spring-cloud-starter-netflix-eureka-client dependency to configure routes using serviceId
@@ -120,9 +207,6 @@
 	  zuul.routes.order-service.path=/order-service/**
 	  zuul.routes.order-service.serviceId=order-service 
    * Here, http://localhost:9090/api/customer-service/customers will be redirectted to http://customer-service/customers or http://localhost:9091/customers
-
-2.2) Spring Cloud Gateway :   
-   * Add spring-cloud-starter-gateway dependency
    
 3) Configuration Server :
    * It is a centralized application that manages all the application related configuration properties.
@@ -130,20 +214,22 @@
    * As Config service provides configuration info for various other microservices, of which the Eureka service is one, avoid config server a client of eureka.
    * Configuration Server : 
      * Add spring-cloud-config-server dependency and @EnableConfigServer
-	 * Add below properties in bootstrap.properties file.
+	 * Add below properties in application.properties file.
+			spring.application.name=config-server
+			server.port=8888
 			#spring.cloud.config.server.git.uri=https://github.com/spring-cloud-samples/config-repo		# OR
 			#spring.cloud.config.server.git.uri=${HOME}/config-repo		# local git repo OR
 			spring.cloud.config.server.native.searchLocations=classpath:/configs
 			spring.profiles.active=native
-	 * Add below properties in application/bootstrap.properties file.  
-			spring.application.name=config-server
-			server.port=8090
-	   
+	 * To test property file loaded by config server : http://localhost:8888/{app-name}/{profile}		e.g
+			http://localhost:8888/limits-service/default OR http://localhost:8888/limits-service/dev 
+			
    * Configuration Client : 
      * Add spring-cloud-starter-config, spring-boot-starter-actuator dependency and @RefreshScope
 	 * Add below properties in bootstrap.properties file.
 		   spring.application.name=customer-service
-		   spring.cloud.config.uri = http://localhost:8090
+		   spring.cloud.config.uri = http://localhost:8888			// OR
+		   spring.config.import=optional:configserver:http://localhost:8888			// since Spring Boot 2.4 (mandatory)
 		   management.security.enabled = false
 		   management.endpoint.refresh.enabled=true
 		   management.endpoints.web.exposure.include=refresh
@@ -169,7 +255,7 @@
 	 * To monitor any service : http://localhost:8081/actuator/hystrix.stream (inside dashboard)
 	 
 5) Spring Cloud Sleuth & ZipKin server : For distributed log tracing and monitoring  in Micro Services
-   * Add spring-cloud-starter-sleuth dependency 
+   * Add spring-cloud-starter-sleuth dependency in micro services.
    * Spring cloud Sleuth logs are printed in the following format : [application-name,traceid,spanid,zipkin-export] 
      traceid : across MS , spanid :  within MS , zipkin-export : false (default)
    * It send traceid and spanid by setting it inside headers (e.g X-B3-TraceId , X-B3-SpanId)
@@ -183,10 +269,10 @@
 	  2) To configure Zipkin server using Spring Boot (but not supported by the community) : 
          * Add zipkin-server , zipkin-autoconfigure-ui (2.6.1 version only with spring boot version below 2.0) dependencies and @EnableZipkinServer
    * Zipkin client : 
-	  * Add spring-cloud-starter-zipkin dependency
-      * Add Always Sampler Bean to export the logs into Zipkin server.
+	  * Add spring-cloud-starter-zipkin dependency in micro services.
+      * /*Add Always Sampler Bean to export the logs into Zipkin server.
 			 @Bean
-			 public Sampler defaultSampler() { return Sampler.ALWAYS_SAMPLE; }
+			 public Sampler defaultSampler() { return Sampler.ALWAYS_SAMPLE; } */
 	  * Configure Zipkin Server : spring.zipkin.base-url = http://localhost:9411/
 	  * Trace logs by trace id : http://localhost:9411/zipkin/traces/{traceid}/
    
@@ -226,7 +312,7 @@
     * Spring Security default behaviour in spring boot (After adding spring-boot-starter-security dependency)
 		* Adds mandatory authentication for all URLs.
 		* Adds login form.
-		* Handle login error
+		* Handles login error.
 		* Creates a user and sets a default password. (Spring secrity generates a new password each time you start the app).
 	    * To override user and password for Spring Security default behaviour, configure spring.security.user.name, spring.security.user.password in properties file.
 	* Configure Authentication Manager and Authorization: 
@@ -254,12 +340,23 @@
 					.dataSource(dataSource)
 					.usersByUsernameQuery("select username,password,enabled from users where username = ? ")
 					.authoritiesByUsernameQuery("select username,authority from authorities where username = ? ");
+					
+				 // Approach4 : LDAP Authentication provider
+				auth.ldapAuthentication()
+					.userDnPatterns("uid={0},ou=people")
+					.groupSearchBase("ou=groups")
+					.contextSource()
+					.url("ldap://localhost:8389/dc=springframework,dc=org")
+					.and()
+					.passwordCompare()
+					.passwordEncoder(passwordEncoder())
+					.passwordAttribute("userPassword");
 			}
-			
+				
 			@Override	// 2) Configure Authorization
 			protected void configure(HttpSecurity http) throws Exception {
 				http.authorizeRequests()
-					.antMatchers("/admin").hasRole("ADMIN")
+					.antMatchers("/admin").hasRole("ADMIN")					// Note : Most restrictive urls should be first
 					.antMatchers("/user").hasAnyRole("USER", "ADMIN")
 					.antMatchers("/", "/authenticate").permitAll()
 					.anyRequest().authenticated()
@@ -271,23 +368,45 @@
 				return new BCryptPasswordEncoder();
 			}
 	 }
-	 
-8.2) JWT (JSON Web Token) Authorization : 	 
-	* 
+	
+	* Authentication flow : (DelegatingFilterProxy)
+	                      input (Authentication (credencials))
+	      |              |------------------------------------>|              |          |-------> AuthenticationProvider1 -------> UserDetailsService
+	Req ->|Authentication| output(Authentication (principal))  |Authentication|Provider  |-------> AuthenticationProvider2
+	      |    Filter    |<------------------------------------|Manager(I)    |Manager(C)|-------> AuthenticationProvider3
+	
+		* Here AuthenticationProvider can be in memory, DAO, JDBC, LDAP or OAuth 
+		* After success full autthentication, spring security store principal into security context using Thread Local for further request processing.
+		
+8.2) JWT (JSON Web Token) Authorization : 
+	* Session token : Refrence token (Contains Refrence to a state of an user on server)
+	* JWT token : Value token.
+	* JWT token comprise of three parts : 
+	  1) Header    : Algoritham and token type (Base 64 enocoded)
+	  2) Payload   : Data (Base 64 enocoded)
+	  3) Signature : encoded header + encoded payload + 256 bit secret key (which only server knows)
+    * Create /authenticate endpoint to generate JWT token using custom JwtUtil service.
+    * Create custom request filter of OncePerRequestFilter type to extract JWT from request header and add it into SecurityContext (if valid)
+	* configure custom request filter before UsernamePasswordAuthenticationFilter using addFilterBefore in security Authorization configuration.
 	  
 8.3) Spring Cloud security using OAuth : @EnableAuthorizationServer, @EnableResourceServer, @EnableOAuth2Client
 	* OAuth is an open authorization protocol,which allows accessing and sharing of resources on one site with another site without using their credentials.
 	* OAuth2 is a protocol for token basded authorization.
+	* OAuth is used for authorization between services using which third pary service can be authorize to access other service on behalf of user.
 	* It's a way of delegate access without sharing credencials. It can grant a client to perform certain action on behalf of user.
-	* We can have 3rd party oAuth providers such as Google,Facebook,Github or own oAuth server.
 	* OAuth2  terminologies : 
-	  1) Resourse : Protected resource which client needs to access. e.g freecharge client needed profile,mailId of google to login into freecharge using google account.
+	  1) Resourse : Protected resource which client needs to access. e.g freecharge client needed profile,mailId of google to login into freecharge using user's  google account.
 	  2) Resourse Owner : An entity capable of granting access to a protected resource. e.g google account holder who can grant access of his google accont's
   	     protected resorces to login into freecharge using google account.
 	  3) Resourse Server : The server hosting the protected resources. e.g google server
-	  4) Client : An application making protected resource reqqest on behalf of the resource owner and with its authorization. e.g freecharge app server.
+	  4) Client : An application/service making protected resource reqqest on behalf of the resource owner and with its authorization. e.g freecharge app server.
 	  5) Authorization Server : The server that issuing access tokens to the client.
-	  6) Grant Types : Authorization Code (Auth token & Aceess token), Implicit (Access token only), Password, Device Code
+	  6) Grant Types/OAuth Flow : 
+	     1) Authorization Code (Auth token & Aceess token) : 
+		 2) Implicit (Access token only) : Not as secure as Authorization Code.Primarily used with short-lived access tokens used with JavaScript apps.
+		 3) Client credentials (Password) : When the client is well trusted (confidential clients) (authorization between microservices)
+		 4) Device Code : 
+	* We can have 3rd party oAuth providers such as Google,Facebook,Github or own oAuth server. With these provider we can authenticate users also using OAuth.
 	 
 9) Spring Kafka : 
    * Add spring-kafka dependency.

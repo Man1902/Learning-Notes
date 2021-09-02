@@ -1,0 +1,26 @@
+* Bootstrap is a free front-end framework to create responsive designs.
+* Containers : 
+  1) .container class : provides a responsive fixed width container
+     <div class="container"></div>			// By default, containers have 15px left and right padding, with no top or bottom padding.
+	 <div class="container pt-3 my-3 bg-dark text-white border"></div>		// with padding, margin, background and border
+	 container-sm , container-md, container-lg , container-xl
+  2) .container-fluid class : provides a full width container, spanning the entire width of the viewport 
+  
+* Spacing : 
+  m - for classes that set margin
+  p - for classes that set padding
+  t - for classes that set margin-top or padding-top
+  b - for classes that set margin-bottom or padding-bottom
+  l - for classes that set margin-left or padding-left
+  r - for classes that set margin-right or padding-right
+  x - for classes that set both *-left and *-right
+  y - for classes that set both *-top and *-bottom
+  blank - for classes that set a margin or padding on all 4 sides of the element
+  
+* Grid : 
+  * Bootstrap's grid system is built with flexbox and allows up to 12 columns across the page.
+  * row, col, col-*-* (col-sm|md|lg|xl-6)   
+	<div class="row">
+		<div class="col-6">First Column</div>
+		<div class="col-6">Second Column</div>
+	</div>

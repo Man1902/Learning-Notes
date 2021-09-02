@@ -1,78 +1,136 @@
+- Angular is a TypeScript-based open-source framework to build client side application. It is a great choice for SPAs.
+- Angular follows modular approach which helps in write reusable code.
+- Development in angular is quicker and easier and also unit testable.
 - It follows Component based approach.Every angular component is a mainly TypeScript class.Where HTML and CSS files are its extra attachments. 
   Component class : handles data and functionality. HTML template : determines the UI. styles : define the look and feel.  
 - Components define areas of responsibility in the UI, that let you reuse sets of UI functionality.
 - An Angular application comprises a tree of components, in which each Angular component has a specific purpose and responsibility.
+
 - Setting up the Local Environment and Workspace
-  1) node -v , npm -v                 : Angular requires Node.js version 10.9.0 or later.
+  1) install node.js				  : 
+  2) node -v , npm -v                 : Angular requires Node.js version 10.9.0 or later.
   2) npm install -g @angular/cli      : Install Angular CLI 
   3) ng version					      : To check installed Angular CLI version
   4) ng new my-app                    : Create a workspace and initial application 
   5) cd my-app , ng serve / npm start : Run the application (http://localhost:4200/)
+
 - Project Structure : 
 my-angular-app
 	node_modules
-	package.json
+	package.json					// contains dependencies and dev dependencies
 	src
 		index.html
-		main.ts			// to bootstrap App module and set app env
-		styles.css		// to add global styles
+		main.ts						// enty point to bootstrap App module and set app env
+		styles.css					// to add global styles
 		app
-			app.component.ts
+			app.component.ts		// root component
 			app.component.html
 			app.component.css
-			my-custom-componets
+			app.module.ts			// root module
+			custom-componets		
+
 - ng generate component home : To create and register angular component,you have to provide metadata to your typescript class.
   @Component Decorator = View (HTML) + Code (Typescript Class : Data & Methods) + CSS metadata
   @Component({
-	selector: 'home',
+	selector: 'app-home',
 	templateUrl: './home.component.html',
 	styleUrls: ['./home.component.css']
   })
-- Three ways to specify selectors : 1) selector: 'home' && <home></home> 2) selector: '.home' && <div class="home"> 3) selector: '[home]' && <div home>
-- Inline template : template : "<div> Hello </div>" or template :`-<div> Hello </div>` (for multiple lines)
+- Three ways to specify selectors : 
+  1) selector: 'app-home' && <app-home></app-home> 
+  2) selector: '.app-home' && <div class="app-home"></div>
+  3) selector: '[app-home]' && <div app-home></div>
+- Inline template : template : "<div> Hello </div>" OR template :`<div> Hello </div>` (for multiple lines)
 - Inline styles : styles : [`div { color : red}`]
-- Data binding (Property binding) in Angular refers to binding the data in the component instance to the HTML template.Any changes to the data automatically get
-  updated in the view.
-- One way databinding : <input type="text" [value]="userName" > or <input type="text" [ngModel]="userName" > or <app-address-card [user]="userFromAppComp" />
-- Two way databinding : <input type="text" [(ngModel)]="userName" >  // Syntax : [(ngModel)] or <app-address-card [(user)]="userFromAppComp" />
-- To use ngModel directive for databinding, You have to import "FormsModule" in app.module.ts file.
-- Event binding : <button (click)="eventHandler($event)" >Click</button>  (in html) // $event optional
-  eventHandler(event) { // method llogic }		(in component ts file)
-- Template interpolation : {{ userName }} , {{ getFullName() }} , {{ count + 1 }}
-- Interpolation {{ }} lets you render the property value as text; property binding [ ] lets you use the property value in a template expression.
-- @Input is used (inside ts file) to bind "attribute" of component selector. (to pass data from parent comp to child comp) e.g 
-  <app-address-card userName="Vishal Gana"></app-address-card>  OR (in html file)
-  <app-address-card [userName]="userNameFromParentComp"></app-address-card>
-  @Input('userName') userName: string; (in ts file). 
-  This userName value can't be used inside constructor of ts class. as Angular will populate component's attrribute value after creation of component.
-  However we can use it inside ngOnInit life cycle method. 
-- To notify parent from child : 
-  1) Inside child : 
-	  @Output() notify = new EventEmitter();
-	  onChildCompBtnClick(event){
-			notify.emit();
-			// child comp logic
-	  }
-	  <button (click)="onChildCompBtnClick($event)" >Child Click </button> OR
-	  <button (click)="notify.emit()" >Child Click </button>  
-  2) Inside parent : 
-	 <child-comp (notify)="onNotify()" ></child-comp>
-	 onNotify(){
-			// parent comp logic
-	 }
+
+- Angular lifecycle :  
+ * component instance has a lifecycle that starts when Angular instantiates the component class and renders the component view along with its child views.
+ * Lifecycle continues with change detection, as Angular checks to see when data-bound properties change, and updates both the view and the component instance as needed. 
+ * The lifecycle ends when Angular destroys the component instance and removes its rendered template from the DOM.
+ * Directives have a similar lifecycle, as Angular creates, updates, and destroys instances in the course of execution.
+ * You can respond to events in the lifecycle of a component or directive by implementing one or more of the lifecycle hook interfaces.
+ * Lifecycle event sequence : 
+   * After your application instantiates a component or directive by calling its constructor, Angular calls the hook methods you have implemented at the
+     appropriate point in the lifecycle of that instance.
+   1) ngOnChanges() : 
+      * Respond when Angular sets or resets data-bound input properties ("attribute" of component selector)
+	  * The method receives a SimpleChanges object of current and previous property values.
+	  * It will be Called before ngOnInit() (if the component has bound inputs) and whenever one or more data-bound input properties change.
+   2) ngOnInit() : 
+      * Initialize the directive or component after Angular first displays the data-bound properties and sets the directive or component's input properties.
+   3) ngDoCheck() : 
+      * Detect and act upon changes that Angular can't or won't detect on its own.
+      * Called immediately after ngOnChanges() on every change detection run, and immediately after ngOnInit() on the first run.
+   4) ngAfterContentInit() : 
+      * Respond after Angular projects external content into the component's view, or into the view that a directive is in.
+      * Called once after the first ngDoCheck()
+   5) ngAfterContentChecked() : 
+      * Respond after Angular checks the content projected into the directive or component.
+      * Called after ngAfterContentInit() and every subsequent ngDoCheck()
+   6) ngAfterViewInit() : 
+      * Respond after Angular initializes the component's views and child views, or the view that contains the directive.
+      * Called once after the first ngAfterContentChecked()	
+   7) ngAfterViewChecked() : 
+      * Respond after Angular checks the component's views and child views, or the view that contains the directive.
+      * Called after the ngAfterViewInit() and every subsequent ngAfterContentChecked()
+   8) ngOnDestroy() : 
+      * Cleanup just before Angular destroys the directive or component. Unsubscribe Observables and detach event handlers to avoid memory leaks.
+      * Called immediately before Angular destroys the directive or component.
+
+- Template interpolation : 
+  * It is used to bind data from class (ts) to template (html). e.g   
+    {{ userName }} , {{ "Welcome " + userName }} , {{ getFullName() }} , {{ count + 1 }} , {{ userName.length }} ,  {{ userName.toUpperCase() }}
+  * Interpolation can not be used for assignment. e.g {{ name = "Vishal" }}
+  * You can not use global javascript variables direclty inside interpolation. e.g {{ window.location.href }}
+
+- Property binding / Data binding : (Component Class -> HTML Template)
+  * Attribute and Properties are not the same. Attributes are defined by HTML. However, Properties are defined by DOM (Document Object Model)
+  * Attributes initialize DOM properties and then they are done. Attributes value can not change once they are initialized.
+  * Properties value however can change.
+  * Using property binding in angular, we can bind value to property of DOM element. e.g 
+    <input type="text" [id]="myId" > or <input type="text" bind-id="myId" > 
+  * The same we can bind with interpolation. e.g <input type="text" id="{{myId}}" > However, interpolation only works with string value (limitation) e.generate
+    <input type="text" disabled="{{isDisabled}}" >		// will not work
+  * Interpolation {{ }} lets you render the property value as text; property binding [ ] lets you use the property value in a template expression.
+  * Data binding (Property binding) in Angular refers to binding the data in the component instance to the HTML template.Any changes to the data automatically 
+    get updated in the view.
+  * One way databinding : <input type="text" [value]="userName" > or <input type="text" [ngModel]="userName" > or <app-address-card [user]="userFromAppComp" />
+  
+- CSS Class binding : 
+  1) Class binding : <div [class]="succClassFromComp"></div>  (Without class binding : <div class="text-success"></div> )
+  2) Conditionally apply single class   : <div [class.text-danger]="hasError"></div> (text-danger class will be applied if hasError comp property is true) 
+  3) Conditionally apply multiple class : <div [ngClass]="cssClassObj"></div> , cssClassObj = {text-success : !this.hasError , text-special : this.hasSpecial }
+
+- CSS Style binding : used to bind inline style to html element
+  1) <div [style.color]="'red'"></div> OR <div [style.color]="colorFromComp"></div> 
+  2) <div [style.color]="hasError ? 'red' : 'green'"></div> 
+  3) <div [ngStyle]="styleObjFromComp"></div> , styleObjFromComp = {color : "red" , fontStyle : "italic" }
+	
+- If you will add style details in component's css file. It will be applied on that component only.The [property] selector is used in CSS to style elements that
+  have that particular property. e.g <div property></div> or <div _ngcontent-c1></div>  by which angualr handle styling to be apply to that particular component's
+  elelent only
+- To add global styling, add it into src/style.css file.
+
+- Event binding : ( HTML template -> Component Class )
+  1) <button (click)="eventHandler($event)" >Click</button>  (in html) // $event optional
+     eventHandler(event: any) { // method logic }		     (in component ts file)
+  2) <button (click)="greetMessage=''">Clear</button>		// without Event Handler
+  
 - Template reference variable : 
-  <input #myInput type="text>
+  * It is used to access DOM elements and its properties.
+  <input #myInput type="text">
   <button (click)="logMessage(myInput.value)" > Log </button>
-- CSS Class binding : <div class="success-class"></div> OR <div [class]="succClassFromComp"></div>
-  Conditional : 1) <div [class.isError]="errClassFromComp"></div> (if isError comp property is true) 
-                2) <div [ngClass]="cssClassObj"></div> , cssClassObj = {succClss : !this.isError , errClss : this.isError}
-- CSS Style bindining : <div [style.color]="'red'"></div> OR <div [style.color]="colorFromComp"></div> 
-  <div [style.color]="hasError ? 'red' : 'green'"></div> 
-  <div [ngStyle]="styleObjFromComp"></div> , styleObjFromComp = {color : "red" , fontStyle : "italic" }
-- If you will add style details in component's css file. It will be applied on that component only. To add global styling add it into src/style.css file.
-- setInterval is a javascript API that lets you run a function at regular time intervals. setInterval( () => { console.log("Hello") } , 2000);
+ 
+- Two way databinding : (Property + Event Binding)
+  * <input type="text" [(ngModel)]="userName" >  // Syntax : [(ngModel)] or <app-address-card [(user)]="userFromAppComp" />
+  * To use ngModel directive for databinding, You have to import "FormsModule" in app.module.ts file.
+
 - Structural directives : 
-  1) *ngFor directive is used to iterator over array e.g <p *ngFor="let phoneNo of user.phone; index as i">{{ i + 1 }} {{ phoneNo }}</p>
+  * Use to add/remove HTML elements.
+  1) *ngFor directive is used to iterator over array e.g 
+	 <div *ngFor="let phoneNo of user.phone; index as i; first as f; last as l; odd as o; even as e">
+		{{ i + 1 }} {{ phoneNo }}
+	</div>
   2) *ngIf directive is used for conditional check e.g  
      <div *ngIf="user.phone.length > 0; else elseBlock"> User Details </div>  OR
 	 <div *ngIf="displayName; then thenBlock; else elseBlock;"></div> 
@@ -83,52 +141,88 @@ my-angular-app
 		<div *ngSwitchCase="'blue'"> Blue Color </div>
 		<div *ngSwitchCaseDefault> Select again </div>
 	  </div>
+
+- Component Interaction : 	  
+  1) @Input decorator : 
+     * @Input is used to bind "attribute" of component selector. It can be used to pass data from parent comp to child comp. e.g 
+			<app-address-card userName="Vishal Gana"></app-address-card> (in parent comp html file) OR 
+			<app-address-card [userName]="userNameFromParentComp"></app-address-card>
+			@Input('userName') userName: string; (in child comp ts file). 
+	 * This userName value can't be used inside constructor of ts class. as Angular will populate component's attrribute value after object creation of component.
+       However we can use it inside ngOnInit life cycle method. 
+	   
+  2) @Output decorator : 
+     * @Output is used to notify parent from child. e.g 
+	  1) Inside child : 
+		  @Output() childEvent = new EventEmitter();	
+		  onChildCompBtnClick(){
+				this.childEvent.emit(this.childData);
+				// child comp logic
+		  }
+		  <button (click)="onChildCompBtnClick()" >Child Click </button> OR
+		  <button (click)="childEvent.emit(childData)" >Child Click </button>  
+	  2) Inside parent : 
+		 <child-comp (childEvent)="onEventFromChildToParent($event)" ></child-comp>
+		 onEventFromChildToParent(name: string){
+				// parent comp logic
+		 }
+
 - Built in pipe : 
   1) <h2> {{ name | lowercase }} </h2>	  
   2) <h2> {{ name | upperrcase }} </h2>	  
   3) <h2> {{ name | titlecase }} </h2>	  
-  4) <h2> {{ name | slice:3 }} </h2> OR <h2> {{ name | slice:3:7 }} </h2>		  
-  5) <h2> {{ 5.67 | number:'2.2-3' }} </h2>	  // 05.670
-  6) <h2> {{ 0.25 | percent }} </h2>	  // 25%
-  7) <h2> {{ 0.25 | currency }} </h2>	// $0.25 OR <h2> {{ 0.25 | currency:'EUR' }} </h2> OR <h2> {{ 0.25 | currency:'EUR':'code'  }} </h2>
-  8) <h2> {{ date | date:'short' }} </h2> OR <h2> {{ date | date:'shortDate' }} </h2> OR <h2> {{ date | date:'shortTime' }} </h2>
-- ng g pipe truncate : to create custom pipe
-- ng generate module view			        :  to create new module
-  ng generate component view/view-component : to create new component in specific module (Here it is view module)
-- If you are creating new module and you want to allow its usage in other module also than you have to export it's component e.g  exports: [ViewModuleComponent] 
-  and in dependent module you have to import that module e.g imports : [ViewModule]
-- ng generate service test		: to create new service 
-- @Component() : Angular component, @NgModule() : Angular module, @Injectable() : Angular service
-- To use service in your module,Befeor Angular 6, You have to explicitly decalre it inside module.ts file. e.g  providers: [TestService]. Here, We don't have to declare it for 
-  it's child modules also.(global service space). After Angular 6 , you can declare it using @Injectable({ providedIn : 'root' }) 
-- The providers property of @NgModule lets you specify the services or providers that you want to declare for your Angular App.
-- To use service inside component, You have to define it inside constructor.Angular will automatically inject Service dependency. e.g 
-  constructor(private testService: TestService) { }
-- @Injectable() in service is must required if our service has dependency on another service.
-- To use built in HttpClient service, you have to import HttpClientModule.
-- Observables : A sequence of items that arrives aynchronously ovr time. HTTP call - sinlge Item (HTTP response)
-  1) let observableObj = this.http.get('https://api.github.com/users/koushikkothagal');
-	 observableObj.subscribe((response) => console.log(response));
-  2) Inside EmployeeService : 
-		 getEmployees() : Observable<IEmployee[]> {
-			return this.http.get<IEmployee[]>(this.url)
-			                .catch(this.errorHandler);
-		 }	 
-		 errorHandler(error : HttpErrorResponse){
-			return Observable.throw(error.message || "Server Error");
-		 }
-     Inside EmployeeDetails comp : 
-	     public employees = [];
-		 ngOnInit(){
-			this.employeeService.getEmployees().subscribe(data => this.employees = data , error => this.errorMsg = error );
-		 }
-- ng build is used to build and package angular app into dist folder which can later be hosted using http-server. Here we don't need ng serve to start the app.
-  1) ng build or ng build --prod  2) http-server dist/my-app/ 
+  4) <h2> {{ name | slice:3 }} </h2> OR <h2> {{ name | slice:3:7 }} </h2>	
+  5) <h2> {{ employee | json }} </h2>	   
+  6) <h2> {{ 5.67 | number:'2.2-3' }} </h2>	  // 05.67
+  7) <h2> {{ 0.25 | percent }} </h2>	  // 25%
+  8) <h2> {{ 0.25 | currency }} </h2>	// $0.25 OR <h2> {{ 0.25 | currency:'EUR' }} </h2> OR <h2> {{ 0.25 | currency:'EUR':'code'  }} </h2>
+  9) <h2> {{ date | date:'short' }} </h2> OR <h2> {{ date | date:'shortDate' }} </h2> OR <h2> {{ date | date:'shortTime' }} </h2>
+  ng g pipe truncate : to create custom pipe
+
+- Angular module : 
+  * ng generate module view			        :  to create new module
+  * ng generate component view/view-component : to create new component in specific module (Here it is view module)
+  * If you are creating new module and you want to allow its usage in other module also than you have to export it's component e.g  exports: [ViewModuleComponent] 
+    and in dependent module you have to import that module e.g imports : [ViewModule]
+  
+- Angular services : 
+  * Angluar service is a class with a specific purpose. It can be used to share data, implement application logic, external interaction.
+  * ng generate service test		: to create new service 
+  * @Component() : Angular component, @NgModule() : Angular module, @Injectable() : Angular service
+  * To use service in your module,Befeor Angular 6, You have to explicitly decalre it inside module.ts file. e.g  providers: [TestService]. Here, We don't have 
+    to declare it for it's child modules also.(global service space). After Angular 6 , you can declare it using @Injectable({ providedIn : 'root' }) annotation
+  * The providers property of @NgModule lets you specify the services or providers that you want to declare for your Angular App.
+  * To use service inside component, You have to define it inside constructor.Angular will automatically inject Service dependency. e.g 
+	constructor(private testService: TestService) { }
+  * @Injectable() in service is must required if our service has dependency on another service.
+  * Built in HttpClient service : 
+    * To use built in HttpClient service, you have to import HttpClientModule.
+	* Observables : A sequence of items that arrives aynchronously over time. HTTP call - sinlge Item (HTTP response)
+      1) EmployeeService : 
+			 getEmployees() : Observable<IEmployee[]> {
+				return this.http.get<IEmployee[]>(this.url)
+								.pipe(catchError(this.errorHandler));
+			 }	 
+			 errorHandler(error : HttpErrorResponse){
+				return throwError(error.message || "Server Error");
+			 }
+      2) EmployeeDetails comp : 
+			employees: Employee[] = [];
+			ngOnInit(){
+				this.employeeService.getEmployees()
+									.subscribe(
+										(data: any) => this.employees = data , 
+										error => this.errorMsg = error 
+									);
+			}
+	  3) Employee model : 
+			constructor(public id: number, public name: string, public age: number) {}
+  
 - ng new routing-demo --routing		:  to create new project with routing support
 - URL based routing + Component based routing 
   1) Define your route URLs
   2) Create Angular components for each view (one for each route)
-  3) Configure Angular to map route URLs to components
+  3) Configure Angular to map route URLs to components	
 - // Routing config in app-routing.module.ts
 const routes: Route[] = [
   { path: '', redirectTo: '/home' , pathMatch: 'full' }, // for default routing OR { path: '', component: HomeComponent }, 
@@ -136,7 +230,7 @@ const routes: Route[] = [
   { 
     path: 'settings', 
     component: SettingsComponent,
-    children : [      // child route
+    children : [      // child route. add <router-outlet></router-outlet> in settings component's html file also
       { path: '', redirectTo: 'profile' , pathMatch: 'full' },
       { path: 'profile', component: SettingsProfileComponent },
       { path: 'contacts', component: SettingsContactsComponent },
@@ -167,23 +261,256 @@ export class AppRoutingModule { }
 			this.deptId = id;
 		});
   }
+
+- ng build is used to build and package angular app into dist folder which can later be hosted using http-server. Here we don't need ng serve to start the app.
+  1) ng build or ng build --prod (AOT:Ahead of time compilation)	2) npm install http-server -g  (one time)	3) http-server dist/my-app/ 
+ 
+- Angular Forms : 
+1) Tempalte driven forms : 
+   * Most of the code and logic reside in the componet template (html) . It is similar to Angular JS forms.
+   * It uses two way databinding with ngModel.
+   * Have to import FormsModule.
+   * Automatically tracks the form and form elements state and validity.
+   * Unit testing is a challenge.
+   * Redability decreases with complex forms and validation. Hence, suitable for simple scenarios.
+   * in html Directive : ngForm, ngModel, ngModelGroup (to create sub group within the form) , ngSubmit
+   * When ngModel is used within a form tag, either the name attribute must be set or the form control must be defined as 'standalone' in ngModelOptions.
+   * Track control state and validity : 
+				State						Class if true		Class if false		Property if true		Property if false
+	 The control has been visited.			ng-touched			ng-untouched		touched					untouched
+	 The control's value has changed.		ng-dirty			ng-pristine			dirty					pristine
+	 The control's value is valid.			ng-valid			ng-invalid			valid					invalid
    
+2) Reative forms (Model driven) : 
+   * Most of the code and logic resides in the component class (ts file).
+   * No two way binding. 
+   * have to import ReactiveFormsModule.
+   * Well suited for complex scenarios.
+   * Provide support for Dynamic form fields.
+   * Can do custom and Dynamic/Conditional validation. To add dynamic validation, forrmGroup refrence shoud be created inside ngOnInit method.
+   * Unit testing is possible.
+   * in ts , class : FormGroup, FormControl OR using FormBuilder service, Validators, AbstractControl (for custom validator), FormArray (to maintain dynamic list of control)
+   * in html, Directive : formGroup , formControlName, formGroupName (to create sub group within the form) , formArrayName
+   * In cross field custom validator function input 'control' parameter doesn't refer to individual form control instead it refers to form group refrence.
+   
+- Tempalte Driven Forms Example : 
+	<div class="container-fluid mb-5">
+		<h1>User Enrollment Form</h1>
+		<form #userFormRef="ngForm" *ngIf="!isUserFormSubmitted" (ngSubmit)="onUserFormSubmit()" novalidate>
+			<div class="form-group mb-3">
+				<input type="text" name="userName" #userNameRef="ngModel" [(ngModel)]="user.userName" [class.is-invalid]="userNameRef.touched && userNameRef.invalid" class="form-control" placeholder="Name" required>
+				<small class="text-danger" [class.d-none]="userNameRef.untouched || userNameRef.valid">User Name is required</small>
+			</div>
+			<div class="form-group mb-3">
+				<input type="number" name="phone" #phoneRef="ngModel" [(ngModel)]="user.phone" [class.is-invalid]="phoneRef.touched && phoneRef.invalid" class="form-control" pattern="^[1-9]{1}[0-9]{9}$" placeholder="Phone" required>
+				<div *ngIf="phoneRef.errors && (phoneRef.touched || phoneRef.invalid)">
+					<small class="text-danger" *ngIf="phoneRef.errors.required">Phone number is required</small>
+					<small class="text-danger" *ngIf="phoneRef.errors.pattern">Phone number must be 10 digits</small>
+				</div>
+			</div>
+			<div class="form-group mb-3">
+				<select name="topic" #topicRef="ngModel" [(ngModel)]="user.topic" [class.is-invalid]="topicRef.touched && isTopicHasErr" (blur)="validateTopic(topicRef.value)" (change)="validateTopic(topicRef.value)" class="form-select">
+					<option value="default">I am interested in</option>
+					<option *ngFor="let topic of topics">{{topic}}</option>
+				</select>
+				<small class="text-danger" [class.d-none]="topicRef.untouched || !isTopicHasErr">Please select a topic</small>
+			</div>
+			<div ngModelGroup="address">
+				<div class="form-group mb-3">
+					<input type="text" class="form-control" name="city" [(ngModel)]="user.address.city" placeholder="City">
+				</div>
+				<div class="form-group mb-3">
+					<input type="text" class="form-control" name="postalCode" [(ngModel)]="user.address.postalCode" placeholder="Postal Code">
+				</div>
+			</div>
+			<button type="submit" [disabled]="userFormRef.form.invalid || isTopicHasErr" class="btn btn-primary">Submit</button>
+		</form>
+		<div class="alert alert-success" *ngIf="successMsg"> {{successMsg}} </div>
+		<div class="alert alert-danger" *ngIf="errorMsg"> {{errorMsg}} </div>
+	</div
+
+- Reactive Forms Example : 
+	<div class="container-fluid">
+		<h2>User Registration Form</h2>
+		<form [formGroup]="registratrionForm" *ngIf="!isFormSubmitted" (ngSubmit)="onRegistrationFormSubmit()">
+			<div class="form-group mb-3">
+				<input formControlName="userName" [class.is-invalid]="userNameRef.invalid && userNameRef.touched" type="text" class="form-control" placeholder="Username">
+				<div *ngIf="userNameRef.invalid && userNameRef.touched">
+					<small class="text-danger" *ngIf="userNameRef.errors?.required">Username is required</small>
+					<small class="text-danger" *ngIf="userNameRef.errors?.minlength">Username must be atleast 3 characters</small>
+					<small class="text-danger" *ngIf="userNameRef.errors?.forbiddenName">{{userNameRef.errors?.forbiddenName.value}} Username not allowed</small> <!-- using custom validator -->
+				</div>
+			</div>
+			<div class="form-group mb-3">
+				<button (click)="addAlternateEmail()" class="btn btn-secondary btn-sm m-2" type="button">Add Email</button>
+				<input formControlName="email" type="email" [class.is-invalid]="emailRef.invalid && emailRef.touched" class="form-control" placeholder="Email">
+				<small class="text-danger" [class.d-none]="emailRef.valid || emailRef.untouched">Email is required</small> 
+				<div formArrayName="alternateEmails" *ngFor="let email of alternateEmailsRef.controls; let i=index">	<!-- Dynamic form field -->
+					<input [formControlName]="i" type="email" class="form-control my-1" placeholder="Alternate Email">
+				</div>
+			</div>
+			<div class="form-check mb-3">
+				<input formControlName="subscribe" type="checkbox" class="form-check-input">
+				<label class="form-check-label">Send me promotional offers</label>
+			</div>
+			<div class="form-group mb-3">
+				<input formControlName="password" type="password" [class.is-invalid]="registratrionForm.get('password').invalid && registratrionForm.get('password').touched" class="form-control" placeholder="Password">
+				<small class="text-danger" [class.d-none]="registratrionForm.get('password').valid || registratrionForm.get('password').untouched">Password is required</small>
+			</div>
+			<div class="form-group mb-3">
+				<input formControlName="confirmPassword" type="password" [class.is-invalid]="registratrionForm.errors?.passwordMismatch" class="form-control" placeholder="Confirm Password">
+				<small class="text-danger" *ngIf="registratrionForm.errors?.passwordMismatch">Password Mismatch</small> <!-- using cross field custom validator -->
+			</div>
+			<div formGroupName="address">
+				<div class="form-group mb-3">
+					<input formControlName="city" type="text" class="form-control" placeholder="City">
+				</div>
+				<div class="form-group mb-3">
+					<input formControlName="postalCode" type="text" class="form-control" placeholder="Postal Code">
+				</div>
+			</div>
+			<button [disabled]="registratrionForm.invalid" class="btn btn-primary" type="submit">Register</button>
+		</form>
+		<div class="alert alert-success" *ngIf="successMsg"> {{successMsg}}  </div>
+		<div class="alert alert-danger" *ngIf="errorMsg"> {{errorMsg}} </div>
+	</div>
+	export class ReactiveFormsComponent implements OnInit {
+	  registratrionForm: any;
+	  isFormSubmitted = false;
+	  successMsg: string = ""; errorMsg: string = "";
+
+	  constructor( private _formBuilder: FormBuilder, private _userRegistrationService: UserRegistrationService ) {}
+
+	  ngOnInit(): void {
+		this.registratrionForm = this._formBuilder.group(
+		  {
+			userName: ["Default Value", [Validators.required, Validators.minLength(3), forbiddenNameValidator] ],
+			email: [""],
+			subscribe: [false],
+			password: ["", Validators.required],
+			confirmPassword: [""],
+			address: this._formBuilder.group({
+			  city: [""],
+			  state: [""],
+			  postalCode: [""]
+			}),
+			alternateEmails: this._formBuilder.array([])
+		  },
+		  { validator: passwordValidator } // cross field validation
+		);
+
+		this.registratrionForm.get("subscribe")										// Dynamic/Conditional validation
+		  .valueChanges.subscribe((checkedValue: boolean) => {
+			const emailRef: FormControl = this.registratrionForm.get("email");
+			if (checkedValue) {
+			  emailRef.setValidators(Validators.required);
+			} else {
+			  emailRef.clearValidators();
+			}
+			emailRef.updateValueAndValidity();
+		  });
+	  }
+	  loadAPIData() {
+		//this.registratrionForm.setValue({								 // 1) to set values to all form controls
+		this.registratrionForm.patchValue({								 // 2) to set values to selective form controls
+		  userName: "Vihan",
+		  email: "a@b.com",
+		});
+	  }
+	  get userNameRef() {
+		return this.registratrionForm.get("userName");
+	  }
+	  get alternateEmailsRef() {
+		return this.registratrionForm.get("alternateEmails") as FormArray;
+	  }
+	  addAlternateEmail() {
+		this.alternateEmailsRef.push(this._formBuilder.control(""));
+	  }
+	  onRegistrationFormSubmit() {
+		console.log(this.registratrionForm.value);
+	  }
+	}
+
+- Angular Authentication : 
+
+
+- Angular Material :
+  * UI component library.
+  * Provides us with components to build awesome user interfaces in quick time.
+  * Implementation of Google's material design specification.
+  * To add Angular Material into project : ng add @angular/material  
+  * Pending from sidenav 
+
+- How can we make multiple projects share node_modules directory ?
+  1) Main directory (e.g Angular_Projects) should look like this
+     Angular_Projects
+		node_modules
+		Project1
+		Project2
+  2) Open the file Project1/angular.json  and change the $schema value to "./../node_modules/@angular/cli/lib/config/schema.json"
+  3) Create empty node_modules folder inside each project (e.g Project1) directory
+
+- How to update angular-cli ?
+  1) For Global package
+	  npm uninstall -g angular-cli
+	  npm cache clean
+	  npm install -g angular-cli@latest
+  2) Local project package
+	  rmdir /s /q node_modules dist tmp
+	  npm install --save-dev angular-cli@latest
+	  npm install
+	  ng init
+	  
+- express-server for api : 
+  * create folder e.g express-server
+  * npm init --yes  (to create package.json file)
+  * npm install --save express body-parser cors 
+  * create server.js file and write below code : 
+		const express = require("express");
+		const bodyParser = require("body-parser");
+		const cors = require("cors");
+
+		const port = 3000;
+		const app = express();
+		app.use(bodyParser.json());
+		app.use(cors());
+
+		app.get("/", (req, res) => {
+			res.send("Hello from express server!");
+		});
+
+		app.listen(port, () => {
+			console.log(`Express server running on http://localhost:${port}`);
+		});
+   * node server		(to start express server)
+
+- setInterval is a javascript API that lets you run a function at regular time intervals. setInterval( () => { console.log("Hello") } , 2000);
+		 
 - Commands : 
-  npm install -g @angular/cli 		// To install angular CLI
-  ng version						// to check the installed version
-  ng new first-project				// To create new project
+  node -v  and npm -value			// to verify node and npm installed or not
+  npm install -g @angular/cli 		// To install angular CLI globally
+  ng version						// to check the installed angular CLI version
+  ng new first-project				// to create new project
+  ng new second-proj --style=scss	// to create new project with scss CSS format
   ng serve							// to start angualr application on http://localhost:4200/
-  ng generate component hello-world  or ng g c hello-word 	// to create new component 
-  ng g c employee --it --is 		// comp with inline style and css 
+  ng serve --port 4201				// to start angualr application on diffrent port 				
+  ng serve --configuration production	// to start angualr application with prod mode 				
+  ng generate component hello-world // to create new component 
+  ng g c hello-word 				// to create new component (short format)
+  ng g c employee -it -is 			// to create comp with inline template and css 
+  ng g c employee --skipTests		// to skip test file
   ng generate module view			// to create new module
-  ng generate component view/view-component		//  to create new component in specific module (Here it is view module)
+  ng g c view/view-component		// to create new component in specific module (Here it is view module)
   ng generate service test 			// to create new service
-  ng build or ng build --prod	  	// To build and package angualr app in one folder (dist) which can be deploy independently (withot angular CLI)
-  npm install http-server -g	  	//  to install http-server which can be used to host local directory. 
+  ng build or ng build --prod	  	// to build and package angualr app in one folder (dist) which can be deploy independently (without angular CLI)
+  npm install http-server -g	  	// to install http-server which can be used to host local directory. 
   http-server dist/first-project/	// to run http-server to host application
   ng new routing-demo --routing		// to create new project with routing support
-  ng new component-indepth --style=scss
-  ng g class blog-post
-  ng g pipe truncate
-  
-  npm i express body-parser --save	// to install express (web server) and body-parser (Middleware to handle form data sch as User registration/login)
+  ng g class blog-post				// to create new class
+  ng g pipe truncate				// to create new pipe
+  ng g interceptor auth				// to create new interceptor
+  ng test							// to execute test cases  
+  ng test --code-coverage			// to execute test cases with code coverage
+  ng add @angular/material 			// to add angular material into project
+    
+  npm i --save express body-parser cors	// to install express (web server) and body-parser (Middleware to handle form data such as User registration/login)

@@ -1,3 +1,10 @@
+* Web service is a sofware system designed to support interoperable machine to machine interaction over a network.
+  * Designed for machine to machine (or application to application) interaction.
+  * Should be interoperable - not platform dependent
+  * Should allow communication over a network
+
+
+---------------------------------------------------------
 - Service Oriented Architecture or SOA is a design pattern. It is designed to provide services to other applications through protocol. It is a concept only and
   not tied to any programming language or platform.
 - Web service is a client server communication application.It is language independent.
@@ -23,7 +30,7 @@
 	4) Message Headers
   * Collection resource URIs : /profiles, /messages, /messages/{messageId}/comments
   * Instance resource URIs : /profiles/{profileName}, /messages/{messageId}, /messages/{messageId}/comments/{commentId}
-  * GET,PUT, and DELETE are idempotent(can be repeatable) methods while POST is non-idempotent (can't be repeatable will duplcate) method.So,It is better to use 
+  * GET,PUT, and DELETE are idempotent(can be repeatable) methods while POST is non-idempotent (can't be repeatable will duplicate) method.So,It is better to use 
     PUT for update operation.
 		GET : /messages (all messages) , GET : /messages/{messageId} (single message)  
 		POST : /messages (to add new)
@@ -69,7 +76,7 @@
     * In request scope, instance will be created after request call, so we can use path/query param as a member variables. But, for singleton resource,instance
       will be created before request call.so, we can't use path/query param as a member variables.
   * To convert String value of path/query param into custom type, we have to implement ParamConverterProvider interface.
-  * We can implement MessageBodyWriter for converting out custom Java types to a stream. 
+  * We can implement MessageBodyWriter for converting our custom Java types to a stream. 
   * We can define our custom media type by writing custom MessageBodyReader/MessageBodyWriter.
   * Invocation builder is used to prepare client request, which can be latter invoked by client by calling invoke method.
   * GenericType needs to be pass in respective HTTP method call, to get response of that particular type.
@@ -95,8 +102,8 @@
 
 - Spring REST vs JAX-RS annotation : 
 				Spring Rest												JAX-RS Annotation
-	@RequestMapping("/getUsers")									@Path("/getUsers")
-	@RequestMapping(path="/getUsers",method=RequestMethod.GET)		@GET("/getUsers")
+	@RequestMapping("/users")										@Path("/users")
+	@RequestMapping(path="/users",method=RequestMethod.GET)			@GET("/users")
 	@RequestMapping(method=RequestMethod.GET)						@GET
 	@RequestMapping(method=RequestMethod.POST)						@POST
 	@RequestMapping(method=RequestMethod.DELETE)					@DELETE

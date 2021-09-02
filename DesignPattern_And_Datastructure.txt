@@ -3,7 +3,7 @@
    * deal with "object creation mechanisms", trying to create objects in a manner suitable to the situation.
 1.1) Singleton pattern : 
      * Define a class that has only one instance and provides a global point of access to it.
-     * Private constructor ,  Private static variable , Public static getInstance method.
+     * Private constructor ,  Private static variable of Singleton class type , Public static getInstance method which return object of Singleton class type.
 	 * Singleton class can't be inherited (due to private constructor)
 	 * JDK example : Runtime
 	 1) Eager initialization : at the time of class loading
@@ -16,13 +16,12 @@
 	 8) Cloning and Singleton : Don't implement Cloneable(I) If you do than just throw Exception from clone() method.
 	 
 1.2) Factory Pattern (Virtual Constructor) :
-     * Factory pattern encapsulate object creation logic which makes it easy to change it later.
-     * JDK example : valueOf() method in wrapper class, Calendar.getInstance()
+     * Defines an interface for creating an object, but let subclasses decide which class to instantiate.
+	 * Factory design pattern uses inheritance and relies on derived class or sub class to create object
+	 * This pattern delegates the responsibility of initializing a class from the client to a particular factory class by creating a type of virtual constructor
 	 * decouple clients from creating object they need (provides abstraction between implementation and client classes)
-	 * enables the subclasses to provide extended version of an object,because creating an object inside factory is more flexible.
 	 * It is used when we have a super class with multiple sub-classes and based on input, we need to return one of the sub-class.
-	 * It promotes the loose-coupling by eliminating the need to bind application-specific classes into the code.
-	 * Factory pattern uses inheritance and relies on derived class or sub class to create object.
+	 * JDK example : valueOf() method in wrapper class, Calendar.getInstance()
 
 1.3) Abstract Factory pattern :  
      * Abstract Factory design pattern creates Factory.

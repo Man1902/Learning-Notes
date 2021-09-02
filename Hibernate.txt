@@ -37,14 +37,15 @@
   persistent context and tracked for any changes, passed object is not tracked.
 - save(),persist() and saveOrUpdate() methods adds the entity object to persistent context and track any further changes.Any further changes are saved at the 
   time of committing transaction.
-- Java Persistence API (JPA) provides specification for managing the relational data in applications.
+- Java Persistence API (JPA) is the java standard for mapping Java object to a relational database. It provides specification for managing the relational data 
+  in applications. Popular implementation : Hibernate, Apache OpenJPA, EclipseLink
 - Hibernate provides implementation of Java Persistence API.Hibernate EntityManager implements the interfaces and life cycle defined by the JPA specification.
 - JPA basic Annotations : @Entity, @Access, @Table, @Id, @EmbeddedId, @Column, @GeneratedValue, @PrimaryKeyJoinColumn, @OneToOne, @OneToMany, @ManyToOne etc
 - Hibernate Annotations : @GenericGenerator, @Cascade
 - Hibernate configuration file contains database specific configurations and used to initialize SessionFactory.It also contains Dialect information, so that 
   hibernate knows the database type and mapping file or class details.
 - Hibernate mapping file is used to define the entity bean fields and database table column mappings.JPA annotations can be used for mapping but sometimes XML 
-  mapping file comes handy when we are using third party classes and we can’t use annotations.
+   mapping file comes handy when we are using third party classes and we can’t use annotations.
 - SessionFactory sessionFactory = new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();
 - We can create our own id generator by implementing IdentifierGenerator(I).
 - We can map collection elements (List,Set,Map,Collection) of persistent class in hibernate.
