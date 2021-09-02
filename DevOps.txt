@@ -102,6 +102,8 @@
 
 -- Commands
 - GitHub/Bitbucket Account : Mail : mymail@gmail.com Pwd : Vi2Fiwghat2@Wicn3h1an
+Note : For pull and push use Personal access tokens (Github account -> Settings -> Developer settings -> Personal access tokens)
+
 - Open Git Bash from your local repository.
 git config --system/global/local user.name "UserName"		// 1) Git System level configuration : All users + All repo 
 git config --system/global/local user.email "mail@id.com"	// 2) Git Global level configuration : Specific user + All repo
