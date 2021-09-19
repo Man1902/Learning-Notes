@@ -48,6 +48,7 @@
 -* Java is pass by value.In method call,java copies and pass references as value,not object.Hence,object state can be modfiy but swap will fail.
 - local variables don’t take default values(before initialization can't be used).But,gloabal variables takes default values. 
 - After loading static members, SIB are executed(before main).SIBs are not stored in the heap memory.They just come to stack,execute their tasks and leaves the memory. 
+- You can define multiple SIB.They will be executed sequentially.
 -* All static components are stored inside single "class level object" (of type java.lang.Class).(common for all objects).
 - Non-static components are stored inside the object memory where each object will have their own copy.
 -* In constructor,1st statement must be either super() or this().After executing it,it will invoke IIB and after that remaining statements are executed.
@@ -95,7 +96,7 @@
    * Class having behavior declaration only will inform us "What should be done" while implementing class will tell us "How it should be done"
    * Object can not be createcd for abstract class/interface(Reason : Abstract class/interface is not a complete class.If we are allowed to have instance of it,
      than it will throw compilatation error for abstract method as it doesn't have implementation). But, abstract class can have constructor. (Diff)
-   * We can run an abstract class if it has main() method whereas we can’t run an interface.
+   * We can run an abstract class if it has main() method whereas we can’t run an interface. (Diff)
    * Abstract method must be overrided (so can't be private or static or final). Only class and method can be abstract.
    * SIB and IIB are not allowed in interfaces.
 - super keyword refers to instance of super/parent class while this keyword refers current instance(object) of class. 
@@ -240,10 +241,12 @@
      * Maitains insertion order. not synchronized.
 	 * ArrayList internally uses an array to store its elements(Object[] elementData). It provides methods to manipulate the size of this array.
 	 * Whenever the "size" of the ArrayList exceeds it's "capacity"(internal array size : Default is 10),the capacity is increased by "half" of the "current capacity".
+	 * ArrayList extends AbstractList class and implements List, RandomAccess, Cloneable, Serializable inteface.
   8)Vector(C) : Legacy class. synchronized(thread safe). 
      * Default initial capacity:10. capacity will be doubled automatically when size exceed
 	 * can traverse using Enumeration
   9)LinkedList(C) : in java is implementation of "doubly Linked List".can be used both as a List and Queue.
+    * LinkedList extends AbstractSequentialList class and implements List, Deque, Cloneable, Serializable inteface.
 					ArrayList									 						LinkedList
 	  * Insertion/Removal is slower of O(n) dueto element shifting		* Insertion/Removal is faster of O(1) due to no element shifting 
 	  * Retrival is faster of O(1) due to index based data structure    * Retrival is slower of O(n) due to searching from head/tail till element
@@ -280,14 +283,14 @@
   * HashMap doesn't maintain any order of elements.LinkedHashMap maintains insertion order while TreeMap places elements according to the supplied Comparator. 
   * HashMap,LinkedHashMap and TreeMap are not synchronized.
   * Use Collections.synchronizedCollection(c) or Collections.synchronizedList/Set/Map(obj) to make ArrayList/HashSet/HashMap synchronized.
- 17)HashTable(C) : extends Dictoonary class(legacy class) and implements Map,cloneable and Serializable interface.
+ 17)HashTable(C) : extends Dictionary class(legacy class) and implements Map,cloneable and Serializable interface.
      * It is internally synchronized. 
 	 * HashTable does not allow even a single null key and null value.It returns  Iterator as well as Enmeration.
  18)Iterator :  return by HashMap/ArrayList/HashSet is fail-fast. 
     * It will throw ConcurrentModificationException if modified during iteration other than iterator's remove method.
     * Fail-safe iterator does not throw any exception if collection is modified during iteration.Because, it operates on the clone of collection.
     * All collection types maintain an internal array of objects (Object[]) to stores the elements.Fail-fast iterators directly fetch the elements from this 
-	  array.They always consider that this inernal array mst not be changed during iteration. 
+	  array.They always consider that this inernal array must not be changed during iteration. 
  18)Enmeration(I) : legacy, fail-safe, can be used with legacy classes only (Vector, HashTable and Stack)
  19)Comparable(I) : provides single sorting sequence while. affects the original class.
  20)Comparator(I) : provides multiple sorting sequence.doesn't affects the original class.
@@ -438,7 +441,7 @@ G1 Garbage Collector (-XX:+UseG1GC): The Garbage First or G1 garbage collector i
 	* We can't assign our own Id to the thread. But, we can change the way getId() returns the thread Id as it is not a final method.
   * setPriority() and getPriority() methods are used to get and set the priority of a thread. (MIN_PRIORITY - 1 , NORM_PRIORITY - 5 ,MAX_PRIORITY - 10)
     * Setting Priority of a thread is just an advice to OS not an instruction. It is up to OS to consider this advice.
-  * Thread.sleep() method makes the "currently executing thread" (even though you are calling sleep() method on another thread object) to pause its execution
+  * Thread.sleep() static method makes the "currently executing thread" (even though you are calling sleep() method on another thread object) to pause its execution
     for a specified period of time.
 	* It is a bad practice to call sleep() method with an instance of Thread class.
 	* If you want a particular thread to sleep for a while, then call sleep() method inside the run() method of that thread.
@@ -525,7 +528,7 @@ G1 Garbage Collector (-XX:+UseG1GC): The Garbage First or G1 garbage collector i
 	   });
   
 4.2) default and static methods in Interfaces :
-     * help us to introduce new functionality without breaking  breaking the existing code.
+     * help us to introduce new functionality without breaking the existing code.
 	 * Multiple inheritance problem can occur, when we have two interfaces with the default methods of same signature.In this case implementation class must have
    	   to overide default method so as to avoid ambiguity.In this case You can also resuse existing implementation of any of interface class default method. e.g 
 	   interface InterfaceA {
@@ -559,10 +562,10 @@ G1 Garbage Collector (-XX:+UseG1GC): The Garbage First or G1 garbage collector i
 	 * @FunctionalInterface annotation is optional.However, it avoids accidental addition of another abstract method.
 	 * Through lamda expression we can create anonymous classes of functional interfaces.
        Runnable r1 = () -> { System.out.println("My Runnable"); };
-	 * Consumer : 
-	 * Supplier : 
-	 * Function : 
-	 * Predicate : 
+	 * Consumer :  void accept(T t);
+	 * Supplier :  T get();
+	 * Function :  R apply(T t);
+	 * Predicate : boolean test(T t);
 	 * If functional interface have one non-Object abstract method with other Object class public method as an abstract method, it will be still trited as a 
 	   functional interface.
 	 * If interface A will extends two functional interface B and C which have same signature, than A will be still trited as a functional interface.Here it will

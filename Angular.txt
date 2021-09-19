@@ -89,7 +89,7 @@ my-angular-app
   * Properties value however can change.
   * Using property binding in angular, we can bind value to property of DOM element. e.g 
     <input type="text" [id]="myId" > or <input type="text" bind-id="myId" > 
-  * The same we can bind with interpolation. e.g <input type="text" id="{{myId}}" > However, interpolation only works with string value (limitation) e.generate
+  * The same we can bind with interpolation. e.g <input type="text" id="{{myId}}" > However, interpolation only works with string value (limitation) e.g 
     <input type="text" disabled="{{isDisabled}}" >		// will not work
   * Interpolation {{ }} lets you render the property value as text; property binding [ ] lets you use the property value in a template expression.
   * Data binding (Property binding) in Angular refers to binding the data in the component instance to the HTML template.Any changes to the data automatically 
@@ -287,7 +287,7 @@ export class AppRoutingModule { }
    * have to import ReactiveFormsModule.
    * Well suited for complex scenarios.
    * Provide support for Dynamic form fields.
-   * Can do custom and Dynamic/Conditional validation. To add dynamic validation, forrmGroup refrence shoud be created inside ngOnInit method.
+   * Can do custom and Dynamic/Conditional validation. To add dynamic validation, formGroup refrence shoud be created inside ngOnInit method.
    * Unit testing is possible.
    * in ts , class : FormGroup, FormControl OR using FormBuilder service, Validators, AbstractControl (for custom validator), FormArray (to maintain dynamic list of control)
    * in html, Directive : formGroup , formControlName, formGroupName (to create sub group within the form) , formArrayName
@@ -514,3 +514,14 @@ export class AppRoutingModule { }
   ng add @angular/material 			// to add angular material into project
     
   npm i --save express body-parser cors	// to install express (web server) and body-parser (Middleware to handle form data such as User registration/login)
+  
+  
+------------------------------------------------------------------------------------  
+* Angular interview questions : 
+https://www.interviewbit.com/angular-interview-questions/
+https://intellipaat.com/blog/interview-question/angular-interview-questions/
+
+https://github.com/sudheerj/angular-interview-questions#what-is-angular-framework
+
+  
+  

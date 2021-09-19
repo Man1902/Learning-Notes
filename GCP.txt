@@ -49,7 +49,7 @@
 	  * Load balancing & service discovery 
 	  * Automated roll outs & Roll backs
 	  * Storage orchestration
-	  * Bach execution
+	  * Batch execution
 	  * Configuration management
 	* Kubernetes Architecture : 
 	  1) Kubernetes master node : 

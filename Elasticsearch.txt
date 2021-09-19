@@ -1,0 +1,10 @@
+Note : 
+1) Download Elastic search from https://www.elastic.co/downloads/elasticsearch#ga-release
+   Start Elastic search by runnig %Elastic_Search_Home%/bin/elasticsearch.bat file 
+   Access it from http://localhost:9200/
+2) Download Kibana from https://www.elastic.co/downloads/kibana
+   Open config/kibana.yml and Set elasticsearch.hosts to point at your Elasticsearch instance.
+   Start kibana by runnig %Kibana_Home%/bin/kibana.bat file
+   Access Kibana from http://localhost:5601
+3) Download Logstash from https://www.elastic.co/downloads/logstash
+   

@@ -169,31 +169,38 @@
 	findByFirstnameNotLike , findByFirstnameStartingWith , findByFirstnameEndingWith , findByFirstnameContaining , findByAgeOrderByLastnameDesc , 
 	findByLastnameNot , findByAgeIn , findByAgeNotIn , findByActiveTrue , findByActiveFalse , findByFirstnameIgnoreCase
 	 
-1) Eureka Server (Discovery Server): Service Registry and Discovery :  
+1) Eureka Server (Discovery Server / Naming server): Service Registry and Discovery :  
    * Eureka server : 
 	 * Add spring-cloud-starter-netflix-eureka-server dependency and @EnableEurekaServer 
 	   eureka.client.register-with-eureka=false
 	   eureka.client.fetch-registry=false
-	   eureka.instance.hostname = peer1 , eureka.client.serviceUrl.defaultZone  = http://peer2:8761/eureka (To handle multiple instance)
+	   eureka.instance.hostname = peer1 , eureka.client.serviceUrl.defaultZone  = http://peer2:8761/eureka (To handle multiple eureka server instance)
   * Eureka client : 
     * Add spring-cloud-starter-netflix-eureka-client dependency and @EnableEurekaClient / @EnableDiscoveryClient
 	* @LoadBalanced with RestTemplate Bean for clinet side service discovery and load balancing.
 	  eureka.client.serviceUrl.defaultZone  = http://localhost:8761/eureka
+	  eureka.instance.hostname = localhost		// Optional // OR
+	  eureka.instance.preferIpAddress = true 	
 	  eureka.instance.instance-id=${spring.application.name}-${random.int}  // if server port is 0
 
 2.2) Spring Cloud Gateway :   
 	 * It is a gateway application that handles all the requests and does the dynamic routing of microservice applications.
-	 * Add spring-cloud-starter-gateway dependency and provide configurations in properties file.
-       spring.cloud.gateway.routes[0].id=ms-department-service
-	   spring.cloud.gateway.routes[0].uri=lb://ms-department-service
-	   spring.cloud.gateway.routes[0].predicates[0]=Path=/api/departments/**	 
-	   spring.cloud.gateway.routes[0].filters[0].name=CircuitBreaker
-	   spring.cloud.gateway.routes[0].filters[0].args[0].name=ms-department-service
-	   spring.cloud.gateway.routes[0].filters[0].args[0].fallbackuri=forward:/departmentServiceFallBack
-	 * spring.cloud.gateway.discovery.locator.enabled=true
-	   spring.cloud.gateway.discovery.locator.lowerCaseServiceId=true  
-	  
-	
+	 * Add spring-cloud-starter-gateway dependency , spring-cloud-starter-netflix-eureka-client , 
+	   spring-cloud-starter-netflix-hystrix / spring-cloud-starter-circuitbreaker-resilience4j (> 2.4.0.M1) (to provide centralized fallback option for all MS)
+	   spring-boot-starter-actuator (to enable hystrix.stream for hystrix-dashboard service)
+	 * 1) Approach1 : 
+		   spring.cloud.gateway.routes[0].id=ms-department-service
+		   spring.cloud.gateway.routes[0].uri=lb://ms-department-service
+		   spring.cloud.gateway.routes[0].predicates[0]=Path=/api/departments/**	 
+		   spring.cloud.gateway.routes[0].filters[0].name=CircuitBreaker
+		   spring.cloud.gateway.routes[0].filters[0].args[0].name=ms-department-service
+		   spring.cloud.gateway.routes[0].filters[0].args[0].fallbackuri=forward:/departmentServiceFallBack
+		   hystrix.command.fallbackcmd.execution.isolation.thread.timeoutInMilliseconds = 4000
+		   management.endpoints.web.exposure.include = hystrix.stream
+	 * 2) Approach2 : 
+		  spring.cloud.gateway.discovery.locator.enabled=true
+		  spring.cloud.gateway.discovery.locator.lowerCaseServiceId=true  
+	   
 2.2) Zuul Proxy Server/Edge Server : API Gateway /Routing : 
    * It does not support reactive programming.
    * Add spring-cloud-starter-netflix-zuul dependency and @EnableZuulProxy. 
@@ -217,24 +224,25 @@
 	 * Add below properties in application.properties file.
 			spring.application.name=config-server
 			server.port=8888
-			#spring.cloud.config.server.git.uri=https://github.com/spring-cloud-samples/config-repo		# OR
-			#spring.cloud.config.server.git.uri=${HOME}/config-repo		# local git repo OR
-			spring.cloud.config.server.native.searchLocations=classpath:/configs
+			#spring.cloud.config.server.git.uri=https://github.com/spring-cloud-samples/config-repo		# 1) OR
+			#spring.cloud.config.server.git.clone-on-startup=true
+			#spring.cloud.config.server.git.uri=${HOME}/config-repo		# 2) local git repo OR
+			spring.cloud.config.server.native.searchLocations=classpath:/configs		# 3)
 			spring.profiles.active=native
 	 * To test property file loaded by config server : http://localhost:8888/{app-name}/{profile}		e.g
 			http://localhost:8888/limits-service/default OR http://localhost:8888/limits-service/dev 
 			
    * Configuration Client : 
      * Add spring-cloud-starter-config, spring-boot-starter-actuator dependency and @RefreshScope
-	 * Add below properties in bootstrap.properties file.
-		   spring.application.name=customer-service
-		   spring.cloud.config.uri = http://localhost:8888			// OR
-		   spring.config.import=optional:configserver:http://localhost:8888			// since Spring Boot 2.4 (mandatory)
-		   management.security.enabled = false
-		   management.endpoint.refresh.enabled=true
-		   management.endpoints.web.exposure.include=refresh
-	 * Add below properties in application/bootstrap.properties file.  
-		   server.port=9091
+	 * 1) Add below properties in application.properties file (Spring Boot > 2.4 New Way) (no need to add in bootstrap.properties file)
+			spring.application.name=customer-service
+		    spring.config.import=optional:configserver:http://localhost:8888 
+	   2) Add below properties in bootstrap.properties file (Spring Boot < 2.4)
+			spring.application.name=customer-service
+			spring.cloud.config.uri = http://localhost:8888
+			management.security.enabled = false
+			management.endpoint.refresh.enabled=true
+			management.endpoints.web.exposure.include=refreshd
 	 * use http://localhost:9091/actuator/refresh  actuator link (post method) to get updated properties
   
 4) Hystrix : Fault tolerance / Circuit breaker : provides fallback option.
@@ -251,6 +259,7 @@
    * fallback method has to use the same signature as the ‘original method’ (including return type).
    * HystrixDashboard :  To give dashboard view of Hystrix stream for monitoring
      * Add spring-cloud-starter-netflix-hystrix-dashboard dependency and @EnableHystrixDashboard.
+	 * Add hystrix.dashboard.proxy-stream-allow-list = "*" in properties file.
 	 * To access dashboard :  http://localhost:8080/hystrix 
 	 * To monitor any service : http://localhost:8081/actuator/hystrix.stream (inside dashboard)
 	 
