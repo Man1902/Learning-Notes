@@ -1,9 +1,7 @@
-HCL : 4-1-2020
 * What is cybersecrity in java ?
 * How to debug thread safe code ?
 * What is singleton class ? what are its drawbacks ?
 
-Accentuare : 13-12-2019
 * How to handle memory issues in MS ?
 * MS communcation patterns
 * how to handle logging in Async MS communication
@@ -11,10 +9,8 @@ Accentuare : 13-12-2019
 * Fault tolerance in Async MS communication
 * Secrity in MS
 * 12 factors to desgin springboot application 
-* how to deply MS ?
-*
+* how to deploy MS ?
 
-Cybase : R1 : 27-03-2019
 Diffrence between 
 1 ConcurrentHashMap and Collections.SynchronizedMap() - Done
 2 Overloading vs Overriding - Done
@@ -60,10 +56,8 @@ Diff between
 Rest Webservice Version and impl
 Different Scope
  
-Topics : CoreJava,Spring(week),Hibernate,Rest webservice,Jenkins,Sonar,Angualar Op,Selenium Op
-----------
-Cybase : 19-05-2018
-----------
+Topics : CoreJava,Spring,Hibernate,Rest webservice,Jenkins,Sonar,Angualar Op,Selenium Op
+
 - How you will verify that your code is thread safe 
 - Print 5th largest number
 - a[], s, print all pairs having sum s
@@ -91,9 +85,7 @@ Cybase : 19-05-2018
 - Sort List<Emp> by age.
 - Java 8 features
 - find common element count of two array (1st array has duplicate also)
-----------
-Cybase : 06-01-2018
-----------
+
 * Generic non-Generic List Diffrence ?
 * Java design principles (SOLID)
 * input : List<Emp> , return List<Emp> based on different filter criteria. (Kind of statrgy pattern) 
@@ -110,9 +102,7 @@ Cybase : 06-01-2018
 * Design online movie booking site.
 * What challeges you have faced till now ?
 * which version control tool is used in your project ?
-----------
-synechron
-----------
+
 * What is encapsulation and abstraction?
 * Can we create custom marker interface ? Can it be used in real context ?
 * In singleton class how to do lazy initialization ?
@@ -152,9 +142,7 @@ synechron
 * J2EE design pattern. 
 * What is cusor in PL/SQL ?
 * Use of self join (ex emp-manager example)
-----------
-Eclinical
-----------
+
 - What is Sytstem.out.println() ?
 - Difference between "==" and equals() method.
 - You have one static block,main method, and another static method, is to possible to execute another method before static block and main method ?
@@ -170,9 +158,7 @@ Eclinical
 - What is ORM ? Why it should be used ?
 - Can we use multiple DispatcherServlet in single application ?
 - If you want to get two context root in single application (e.g MyApp/WEB-INF/abc/ and MyApp/WEB-INF/xyz/) than how we can achive using DispatcherServlet?
-----------
-Elitecore
-----------
+
 * Why constructor can't be final,abstract or static ?
 * What is RDBMS ?
 * Which one is better Recusion or Iteration ?
@@ -184,9 +170,7 @@ Elitecore
  3) Find Second max no in array
  4) Impl binary search tree.
  5) Find four digit no , when multiply by 4 , result will be reverse of number. (ABCD * 4 = DCBA) (2178)
-----------
-Cygnet
-----------
+
 - Expplain flow of request to response in your current project.
 -  In rest web service , How to impl authentication ?
 - In rest web service , how to handle exception ?
